@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job_ostad/screens/home.dart';
 import 'package:job_ostad/utils/constants.dart';
 
 class Landing extends StatefulWidget {
@@ -58,7 +59,7 @@ class _LandingState extends State<Landing> {
           ),
         ],
       ),
-      body: Center(child: Text("Welcome to MCQ OSTAD!")),
+      body: Home(),
       bottomNavigationBar: Stack(
         alignment: Alignment.bottomCenter,
         children: [

@@ -8,13 +8,13 @@ class TAppbarThemeData {
     elevation: 0,
     centerTitle: false,
     backgroundColor: SECONDARY_BACKGROUND,
-    iconTheme: IconThemeData(size: 24, color: TEXT),
-    actionsIconTheme: IconThemeData(size: 24, color: TEXT),
+    iconTheme: IconThemeData(size: 24, color: Colors.white),
+    actionsIconTheme: IconThemeData(size: 24, color: Colors.white),
     surfaceTintColor: SECONDARY_BACKGROUND,
     titleTextStyle: TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.w600,
-      color: TEXT,
+      color: Colors.white,
     ),
   );
 
