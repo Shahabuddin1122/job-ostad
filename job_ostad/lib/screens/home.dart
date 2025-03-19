@@ -93,20 +93,31 @@ class Home extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CategoryItem(
-                      imagePath:
-                          "assets/images/Lamp, books and objects for studying.png",
-                      title: "47th BCS CRASH COURSE",
-                    ),
-                    CategoryItem(
-                      imagePath:
-                          "assets/images/Online lesson and distance learning.png",
-                      title: "BANK PROSTUTI",
-                    ),
-                  ],
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 0.9,
+                  ),
+                  itemCount: 2,
+                  itemBuilder: (context, index) {
+                    final items = [
+                      CategoryItem(
+                        imagePath:
+                            "assets/images/Lamp, books and objects for studying.png",
+                        title: "47th BCS CRASH COURSE",
+                      ),
+                      CategoryItem(
+                        imagePath:
+                            "assets/images/Young woman doing her homework.png",
+                        title: "BANK PROSTUTI",
+                      ),
+                    ];
+                    return items[index];
+                  },
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -126,20 +137,31 @@ class Home extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CategoryItem(
-                      imagePath:
-                          "assets/images/notebook with glasses and pencil.png",
-                      title: "HSE 2025",
-                    ),
-                    CategoryItem(
-                      imagePath:
-                          "assets/images/Back to school, items for studying.png",
-                      title: "48th BCS",
-                    ),
-                  ],
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 0.9,
+                  ),
+                  itemCount: 2,
+                  itemBuilder: (context, index) {
+                    final items = [
+                      CategoryItem(
+                        imagePath:
+                            "assets/images/Back to school, items for studying.png",
+                        title: "48th BCS",
+                      ),
+                      CategoryItem(
+                        imagePath:
+                            "assets/images/notebook with glasses and pencil.png",
+                        title: "HSE 2025",
+                      ),
+                    ];
+                    return items[index];
+                  },
                 ),
               ],
             ),
