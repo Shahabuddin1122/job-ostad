@@ -61,7 +61,7 @@ class _LandingState extends State<Landing> {
           ),
         ],
       ),
-      body: Exam(),
+      body: _getBody(),
       bottomNavigationBar: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -86,10 +86,10 @@ class _LandingState extends State<Landing> {
               onTap: _onItemTapped,
               items: [
                 _buildNavItem(Icons.home, "Home", 0),
-                _buildNavItem(Icons.book, "Book", 1),
+                _buildNavItem(Icons.book, "Book", 3),
                 BottomNavigationBarItem(icon: SizedBox.shrink(), label: ""),
-                _buildNavItem(Icons.bar_chart, "Result", 3),
-                _buildNavItem(Icons.person, "Profile", 4),
+                _buildNavItem(Icons.bar_chart, "Result", 5),
+                _buildNavItem(Icons.person, "Profile", 6),
               ],
             ),
           ),
@@ -98,7 +98,7 @@ class _LandingState extends State<Landing> {
             child: FloatingActionButton(
               onPressed: () {
                 setState(() {
-                  _selectedIndex = 2;
+                  _selectedIndex = 4;
                 });
               },
               backgroundColor: PRIMARY_COLOR,
@@ -110,6 +110,37 @@ class _LandingState extends State<Landing> {
         ],
       ),
     );
+  }
+
+  Widget _getBody() {
+    switch (_selectedIndex) {
+      case 0:
+        return Home(
+          onTextClicked: () {
+            setState(() {
+              _selectedIndex = 1;
+            });
+          },
+        );
+      case 1:
+        return Courses(
+          onTextClicked: () {
+            setState(() {
+              _selectedIndex = 2;
+            });
+          },
+        );
+      case 2:
+        return Exam();
+      default:
+        return Home(
+          onTextClicked: () {
+            setState(() {
+              _selectedIndex = 1;
+            });
+          },
+        );
+    }
   }
 
   BottomNavigationBarItem _buildNavItem(

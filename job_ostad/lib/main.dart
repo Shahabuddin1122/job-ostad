@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/exam-script',
+      initialRoute: '/',
       theme: Scheme.lightTheme,
       darkTheme: Scheme.darkTheme,
       themeMode: ThemeMode.system,
