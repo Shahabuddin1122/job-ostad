@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_ostad/screens/courses.dart';
+import 'package:job_ostad/screens/exam.dart';
 import 'package:job_ostad/screens/home.dart';
 import 'package:job_ostad/utils/constants.dart';
 
@@ -60,7 +61,7 @@ class _LandingState extends State<Landing> {
           ),
         ],
       ),
-      body: Home(),
+      body: Exam(),
       bottomNavigationBar: Stack(
         alignment: Alignment.bottomCenter,
         children: [
