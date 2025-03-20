@@ -38,7 +38,12 @@ class Examcard extends StatelessWidget {
             children: [
               ElevatedButton(onPressed: () {}, child: Text("Syllabus")),
               ElevatedButton(onPressed: () {}, child: Text("Archive")),
-              ElevatedButton(onPressed: () {}, child: Text("Exam")),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/exam-script');
+                },
+                child: Text("Exam"),
+              ),
             ],
           ),
         ],

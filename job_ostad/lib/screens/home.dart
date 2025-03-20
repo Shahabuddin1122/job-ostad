@@ -5,7 +5,8 @@ import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/categoryItem.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  final VoidCallback onTextClicked;
+  const Home({required this.onTextClicked, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,10 @@ class Home extends StatelessWidget {
                   runSpacing: 10,
                   children:
                       categories.map((category) {
-                        return CategoryCard(category: category);
+                        return GestureDetector(
+                          onTap: onTextClicked,
+                          child: CategoryCard(category: category),
+                        );
                       }).toList(),
                 ),
                 const SizedBox(height: 20),

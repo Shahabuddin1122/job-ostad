@@ -4,7 +4,8 @@ import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/categoryItem.dart';
 
 class Courses extends StatelessWidget {
-  const Courses({super.key});
+  final VoidCallback onTextClicked;
+  const Courses({super.key, required this.onTextClicked});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,10 @@ class Courses extends StatelessWidget {
                     title: "BANK PROSTUTI",
                   ),
                 ];
-                return items[index];
+                return GestureDetector(
+                  onTap: onTextClicked,
+                  child: items[index],
+                );
               },
             ),
             const SizedBox(height: 20),
