@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 extension CustomThemeData on ThemeData {
   EdgeInsets get defaultPadding =>
-      const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5);
+      const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10);
   EdgeInsets get largemainPadding =>
       const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0);
   EdgeInsets get largeHorizontalAndVerticalPadding =>
