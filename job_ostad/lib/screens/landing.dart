@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:job_ostad/screens/book.dart';
+import 'package:job_ostad/screens/book_view.dart';
 import 'package:job_ostad/screens/courses.dart';
 import 'package:job_ostad/screens/exam.dart';
 import 'package:job_ostad/screens/home.dart';
@@ -61,7 +63,7 @@ class _LandingState extends State<Landing> {
           ),
         ],
       ),
-      body: _getBody(),
+      body: BookView(),
       bottomNavigationBar: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -132,6 +134,8 @@ class _LandingState extends State<Landing> {
         );
       case 2:
         return Exam();
+      case 3:
+        return Book();
       default:
         return Home(
           onTextClicked: () {
