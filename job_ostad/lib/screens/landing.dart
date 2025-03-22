@@ -3,7 +3,11 @@ import 'package:job_ostad/screens/book.dart';
 import 'package:job_ostad/screens/book_view.dart';
 import 'package:job_ostad/screens/courses.dart';
 import 'package:job_ostad/screens/exam.dart';
+import 'package:job_ostad/screens/exam_script.dart';
 import 'package:job_ostad/screens/home.dart';
+import 'package:job_ostad/screens/overview.dart';
+import 'package:job_ostad/screens/profile.dart';
+import 'package:job_ostad/screens/results.dart';
 import 'package:job_ostad/utils/constants.dart';
 
 class Landing extends StatefulWidget {
@@ -15,11 +19,13 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   bool _isSearching = false;
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; // Tracks the bottom navigation bar selection
+  int _currentPageIndex = 0; // Tracks the current page being displayed
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _currentPageIndex = index;
     });
   }
 
@@ -34,6 +40,7 @@ class _LandingState extends State<Landing> {
                 ? TextField(
                   controller: _searchController,
                   autofocus: true,
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: "Search...",
                     border: InputBorder.none,
@@ -63,7 +70,7 @@ class _LandingState extends State<Landing> {
           ),
         ],
       ),
-      body: BookView(),
+      body: _getBody(),
       bottomNavigationBar: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -88,10 +95,13 @@ class _LandingState extends State<Landing> {
               onTap: _onItemTapped,
               items: [
                 _buildNavItem(Icons.home, "Home", 0),
-                _buildNavItem(Icons.book, "Book", 3),
-                BottomNavigationBarItem(icon: SizedBox.shrink(), label: ""),
-                _buildNavItem(Icons.bar_chart, "Result", 5),
-                _buildNavItem(Icons.person, "Profile", 6),
+                _buildNavItem(Icons.book, "Book", 1),
+                BottomNavigationBarItem(
+                  icon: SizedBox.shrink(),
+                  label: "",
+                ), // Empty item for FAB
+                _buildNavItem(Icons.bar_chart, "Result", 3),
+                _buildNavItem(Icons.person, "Profile", 4),
               ],
             ),
           ),
@@ -100,7 +110,8 @@ class _LandingState extends State<Landing> {
             child: FloatingActionButton(
               onPressed: () {
                 setState(() {
-                  _selectedIndex = 4;
+                  _selectedIndex = 2; // Index for the floating action button
+                  _currentPageIndex = 2; // Navigate to Exam
                 });
               },
               backgroundColor: PRIMARY_COLOR,
@@ -115,32 +126,46 @@ class _LandingState extends State<Landing> {
   }
 
   Widget _getBody() {
-    switch (_selectedIndex) {
+    switch (_currentPageIndex) {
       case 0:
         return Home(
           onTextClicked: () {
             setState(() {
-              _selectedIndex = 1;
+              _currentPageIndex = 5; // Navigate to Courses
             });
           },
         );
       case 1:
-        return Courses(
-          onTextClicked: () {
+        return Book(
+          onClicked: () {
             setState(() {
-              _selectedIndex = 2;
+              _currentPageIndex = 7;
             });
           },
         );
       case 2:
-        return Exam();
+        return Overview();
       case 3:
-        return Book();
+        return Results();
+      case 4:
+        return Profile();
+      case 5:
+        return Courses(
+          onTextClicked: () {
+            setState(() {
+              _currentPageIndex = 6; // Navigate to Exam
+            });
+          },
+        );
+      case 6:
+        return Exam();
+      case 7:
+        return BookView();
       default:
         return Home(
           onTextClicked: () {
             setState(() {
-              _selectedIndex = 1;
+              _currentPageIndex = 5;
             });
           },
         );

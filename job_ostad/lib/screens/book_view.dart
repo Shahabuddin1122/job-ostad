@@ -22,7 +22,6 @@ class _BookViewState extends State<BookView> {
   }
 
   void _findPage() {
-    // Show a dialog to input the page number
     showDialog(
       context: context,
       builder: (context) {
@@ -46,7 +45,7 @@ class _BookViewState extends State<BookView> {
             TextButton(
               onPressed: () {
                 if (pageNumber > 0) {
-                  _pdfViewerController.jumpToPage(pageNumber - 1);
+                  _pdfViewerController.jumpToPage(pageNumber);
                 }
                 Navigator.pop(context);
               },
