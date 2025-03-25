@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
@@ -57,7 +58,37 @@ class Results extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 10,
                 children: [
-                  Container(height: 200, color: PRIMARY_COLOR),
+                  SizedBox(
+                    height: 200,
+                    child: PieChart(
+                      PieChartData(
+                        sections: [
+                          PieChartSectionData(
+                            value: 67,
+                            color: Colors.green,
+                            title: '67%',
+                            radius: 50,
+                            titleStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          PieChartSectionData(
+                            value: 33,
+                            color: Colors.red,
+                            title: '33%',
+                            radius: 50,
+                            titleStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -92,6 +123,54 @@ class Results extends StatelessWidget {
                   Text(
                     "Exam Details",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 200,
+                    child: BarChart(
+                      BarChartData(
+                        barGroups: [
+                          BarChartGroupData(
+                            x: 1,
+                            barRods: [
+                              BarChartRodData(toY: 80, color: Colors.green),
+                            ], // Exam 1
+                          ),
+                          BarChartGroupData(
+                            x: 2,
+                            barRods: [
+                              BarChartRodData(toY: 85, color: Colors.green),
+                            ], // Exam 2
+                          ),
+                          BarChartGroupData(
+                            x: 3,
+                            barRods: [
+                              BarChartRodData(toY: 90, color: Colors.blue),
+                            ], // Exam 3
+                          ),
+                          BarChartGroupData(
+                            x: 4,
+                            barRods: [
+                              BarChartRodData(toY: 75, color: Colors.red),
+                            ],
+                          ),
+                        ],
+                        titlesData: FlTitlesData(
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          leftTitles: AxisTitles(),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (double value, TitleMeta meta) {
+                                return Text('Exam ${value.toInt()}');
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Text(
