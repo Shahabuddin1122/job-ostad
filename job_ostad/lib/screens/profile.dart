@@ -91,13 +91,13 @@ class Profile extends StatelessWidget {
                   child: Row(
                     spacing: 10.0,
                     children: [
-                      Icon(Icons.edit, color: Colors.white),
+                      Icon(Icons.edit, color: Colors.black),
                       Text(
                         "Edit Profile",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -112,13 +112,13 @@ class Profile extends StatelessWidget {
                   child: Row(
                     spacing: 10.0,
                     children: [
-                      Icon(Icons.update, color: Colors.white),
+                      Icon(Icons.update, color: Colors.black),
                       Text(
                         "Update Package",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -133,13 +133,13 @@ class Profile extends StatelessWidget {
                   child: Row(
                     spacing: 10.0,
                     children: [
-                      Icon(Icons.notifications, color: Colors.white),
+                      Icon(Icons.notifications, color: Colors.black),
                       Text(
                         "Notification",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -154,13 +154,13 @@ class Profile extends StatelessWidget {
                   child: Row(
                     spacing: 10.0,
                     children: [
-                      Icon(Icons.abc, color: Colors.white),
+                      Icon(Icons.abc, color: Colors.black),
                       Text(
                         "About us",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -175,13 +175,55 @@ class Profile extends StatelessWidget {
                   child: Row(
                     spacing: 10.0,
                     children: [
-                      Icon(Icons.help, color: Colors.white),
+                      Icon(Icons.rate_review, color: Colors.black),
+                      Text(
+                        "App rating",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: Theme.of(context).insideCardPadding,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.grey,
+                  ),
+                  child: Row(
+                    spacing: 10.0,
+                    children: [
+                      Icon(Icons.share, color: Colors.black),
+                      Text(
+                        "App Share",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: Theme.of(context).insideCardPadding,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.grey,
+                  ),
+                  child: Row(
+                    spacing: 10.0,
+                    children: [
+                      Icon(Icons.help, color: Colors.black),
                       Text(
                         "Help",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                     ],
