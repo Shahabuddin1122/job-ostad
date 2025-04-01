@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job_ostad/screens/add-book.dart';
 import 'package:job_ostad/screens/landing.dart';
 import 'package:job_ostad/utils/scheme.dart';
 
@@ -17,7 +18,10 @@ class MyApp extends StatelessWidget {
       darkTheme: Scheme.darkTheme,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      routes: {'/': (context) => Landing()},
+      routes: {
+        '/': (context) => Landing(),
+        '/add-book': (context) => AddBook(),
+      },
     );
   }
 }

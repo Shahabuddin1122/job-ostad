@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job_ostad/screens/book.dart';
 import 'package:job_ostad/screens/overview.dart';
 import 'package:job_ostad/utils/constants.dart';
 
@@ -122,7 +123,7 @@ class _LandingState extends State<Landing> {
       case 0:
         return Overview();
       case 1:
-        return Overview();
+        return Book();
       case 2:
         return Overview();
       case 3:
