@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_ostad/screens/add-book.dart';
+import 'package:job_ostad/screens/add-course.dart';
 import 'package:job_ostad/screens/landing.dart';
 import 'package:job_ostad/utils/scheme.dart';
 
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Landing(),
         '/add-book': (context) => AddBook(),
+        '/add-course': (context) => AddCourse(),
       },
     );
   }

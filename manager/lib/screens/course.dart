@@ -22,7 +22,9 @@ class Course extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/add-course');
+                },
                 child: Text("Add New Course"),
               ),
             ),
