@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:job_ostad/screens/book.dart';
 import 'package:job_ostad/screens/course.dart';
+import 'package:job_ostad/screens/exam.dart';
 import 'package:job_ostad/screens/overview.dart';
 import 'package:job_ostad/screens/user.dart';
 import 'package:job_ostad/utils/constants.dart';
@@ -129,9 +130,17 @@ class _LandingState extends State<Landing> {
       case 2:
         return Overview();
       case 3:
-        return Course();
+        return Course(
+          onClicked: () {
+            setState(() {
+              _currentPageIndex = 5;
+            });
+          },
+        );
       case 4:
         return User();
+      case 5:
+        return Exam();
 
       default:
         return Overview();
