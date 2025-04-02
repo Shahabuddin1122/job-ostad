@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:job_ostad/screens/book.dart';
 import 'package:job_ostad/screens/overview.dart';
+import 'package:job_ostad/screens/user.dart';
 import 'package:job_ostad/utils/constants.dart';
 
 class Landing extends StatefulWidget {
@@ -128,6 +129,8 @@ class _LandingState extends State<Landing> {
         return Overview();
       case 3:
         return Overview();
+      case 4:
+        return User();
 
       default:
         return Overview();
