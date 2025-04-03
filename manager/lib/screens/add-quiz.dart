@@ -1,75 +1,28 @@
-import 'dart:io';
-
-import 'package:dotted_border/dotted_border.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 
-class AddCourse extends StatefulWidget {
-  const AddCourse({super.key});
+class AddQuiz extends StatefulWidget {
+  const AddQuiz({super.key});
 
   @override
-  State<AddCourse> createState() => _AddCourseState();
+  State<AddQuiz> createState() => _AddQuizState();
 }
 
-class _AddCourseState extends State<AddCourse> {
-  File? imageFile;
-  String? selectedValue;
-
-  Future<void> pickImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-    );
-
-    if (result != null && result.files.single.path != null) {
-      setState(() {
-        imageFile = File(result.files.single.path!);
-      });
-    }
-  }
+class _AddQuizState extends State<AddQuiz> {
+  String? selectedCollectionValue;
+  String? selectVisiblityValue;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Add a Course")),
+      appBar: AppBar(title: Text("Add Quiz")),
       body: SingleChildScrollView(
         child: Padding(
           padding: Theme.of(context).defaultPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              GestureDetector(
-                onTap: pickImage,
-                child: Center(
-                  child: DottedBorder(
-                    color: PRIMARY_COLOR,
-                    strokeWidth: 3,
-                    radius: Radius.circular(5),
-                    dashPattern: [10, 5],
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 200,
-                      child:
-                          imageFile == null
-                              ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.image, size: 45),
-                                  Text("Upload Image"),
-                                ],
-                              )
-                              : Image.file(
-                                imageFile!,
-                                fit: BoxFit.cover,
-                                width: 150,
-                                height: 150,
-                              ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
               Text(
                 "Title",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -103,7 +56,7 @@ class _AddCourseState extends State<AddCourse> {
               ),
               SizedBox(height: 20),
               Text(
-                "Category",
+                "Collection",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Container(
@@ -115,17 +68,52 @@ class _AddCourseState extends State<AddCourse> {
                 ),
                 child: DropdownButton<String>(
                   hint: Text(
-                    'Select a Category',
+                    'Select a Collection',
                     style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
-                  value: selectedValue,
+                  value: selectedCollectionValue,
                   style: TextStyle(color: Colors.black, fontSize: 16),
                   underline: SizedBox(),
                   alignment: Alignment.centerLeft,
                   items:
-                      ['BCS', 'Bank', 'Job Preparation', 'Primary'].map((
-                        String item,
-                      ) {
+                      ['200 Days BCS', '47th BCS Crash Course', '48th BCS'].map(
+                        (String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          );
+                        },
+                      ).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedCollectionValue = newValue;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Visiblity",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 2.0, color: PRIMARY_COLOR),
+                  ),
+                ),
+                child: DropdownButton<String>(
+                  hint: Text(
+                    'Select Visibility',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                  value: selectVisiblityValue,
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  underline: SizedBox(),
+                  alignment: Alignment.centerLeft,
+                  items:
+                      ['Admin', 'Paid_user', 'Free_user'].map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -133,9 +121,41 @@ class _AddCourseState extends State<AddCourse> {
                       }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
-                      selectedValue = newValue;
+                      selectVisiblityValue = newValue;
                     });
                   },
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Number of Question",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  hintText: "Enter number of question",
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Time",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  hintText: "Enter time",
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                  ),
                 ),
               ),
               SizedBox(height: 20),
@@ -154,22 +174,24 @@ class _AddCourseState extends State<AddCourse> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 40),
               Row(
-                spacing: 20,
+                spacing: 10,
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                       child: Text("Save"),
                     ),
                   ),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.popAndPushNamed(context, '/add-quiz');
+                        Navigator.popAndPushNamed(context, '/add-question');
                       },
-                      child: Text("Add Quiz"),
+                      child: Text("Add Question"),
                     ),
                   ),
                 ],
