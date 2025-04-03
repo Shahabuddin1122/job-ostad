@@ -105,10 +105,7 @@ class _LandingState extends State<Landing> {
             bottom: 10,
             child: FloatingActionButton(
               onPressed: () {
-                setState(() {
-                  _selectedIndex = 2; // Index for the floating action button
-                  _currentPageIndex = 2; // Navigate to Exam
-                });
+                Navigator.pushNamed(context, '/add-quiz');
               },
               backgroundColor: PRIMARY_COLOR,
               elevation: 4,

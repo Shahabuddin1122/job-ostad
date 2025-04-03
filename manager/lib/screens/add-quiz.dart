@@ -180,13 +180,17 @@ class _AddQuizState extends State<AddQuiz> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                       child: Text("Save"),
                     ),
                   ),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.popAndPushNamed(context, '/add-question');
+                      },
                       child: Text("Add Question"),
                     ),
                   ),
