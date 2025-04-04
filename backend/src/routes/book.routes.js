@@ -106,4 +106,12 @@ router.post(
   }
 );
 
+router.get("/get-all-books", async (req, res) => {
+  const allBook = await Book.getAll();
+  res.status(200).json({
+    message: "All Book fetched successfully",
+    data: allBook,
+  });
+});
+
 module.exports = router;
