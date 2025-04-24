@@ -25,6 +25,17 @@ const Course = {
         );
         return result.rows;
     },
+
+    async getCourseByCategory(category) {
+        const query = `
+          SELECT * FROM courses
+          WHERE category = $1
+          ORDER BY created_at DESC;
+        `;
+        const values = [category];
+        const result = await pool.query(query, values);
+        return result.rows;
+    },
 };
 
 module.exports = Course

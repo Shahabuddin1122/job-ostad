@@ -36,3 +36,14 @@ exports.addCourse = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+exports.getCoursesOnEachCategory = async (req, res)=>{
+  try {
+    const { category } = req.query;
+    const getCourses = await Course.getCourseByCategory(category)
+    res.status(200).json({ success: true, message: getCourses });
+  }
+  catch (e) {
+    res.status(500).json({ message: "Server error", error: e.message })
+  }
+};
