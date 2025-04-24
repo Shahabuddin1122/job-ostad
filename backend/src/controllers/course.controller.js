@@ -1,8 +1,14 @@
 const { imgbb } = require("../services/imagebb.service");
 const Course = require("../models/course.model");
 
-exports.course = (req, res) => {
-  res.status(200).json({ success: true, message: "Course api works fine" });
+exports.getAllCourse = async (req, res) => {
+  try {
+    const all_books = await Course.getAll();
+    res.status(200).json({ success: true, message: all_books });
+  }
+  catch (error) {
+    res.status(500).json({message: "Server error", error: error.message })
+  }
 };
 
 exports.addCourse = async (req, res) => {
@@ -15,7 +21,6 @@ exports.addCourse = async (req, res) => {
     }
     course_image = await imgbb(course_image)
     course_image = course_image.url
-    console.log(course_image)
 
     const newCourse = await Course.create({
       title,description,category,keywords,course_image
