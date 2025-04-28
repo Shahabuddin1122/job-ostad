@@ -1,20 +1,27 @@
-const Question = require('../models/question.model');
+const Question = require('../models/exam.model');
+const { imgbb } = require("../services/imagebb.service");
 
-// Create multiple questions (NO exam_script_id given)
 exports.create_question = async (req, res) => {
     try {
-        const { quiz_id, questions } = req.body;
+        const { quiz_id } = req.body;
+        let questions = JSON.parse(req.body.questions);
 
-        if (!quiz_id || !Array.isArray(questions) || questions.length === 0) {
-            return res.status(400).json({ success: false, message: "quiz_id and non-empty questions array are required." });
+        if (req.files && req.files.length > 0) {
+            const imageFiles = req.files;
+
+            for (let i = 0; i < questions.length; i++) {
+                if (imageFiles[i]) {
+                    const uploadedImage = await imgbb(imageFiles[i]);
+                    questions[i].image = uploadedImage.url; // replace image field with imgbb URL
+                }
+            }
         }
 
-        const newQuestions = await Question.createMultiple(quiz_id, questions);
-
-        res.status(201).json({ success: true, data: newQuestions });
+        await Question.createMultiple(quiz_id, questions);
+        res.status(201).json({ success: true, message: "Questions created successfully" });
     } catch (error) {
         console.error('Error creating questions:', error);
-        res.status(500).json({ success: false, message: 'Internal server error.' });
+        res.status(500).json({ success: false, message: 'Failed to create questions' });
     }
 };
 
