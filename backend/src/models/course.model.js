@@ -39,7 +39,7 @@ const Course = {
 
     async getAllCollection(){
         const query = `
-            SELECT title, category FROM courses
+            SELECT title, category, id FROM courses
         `;
 
         const results = await pool.query(query);

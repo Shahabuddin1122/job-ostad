@@ -13,13 +13,13 @@ exports.get_all_quiz = async (req, res)=>{
 
 exports.add_a_quiz = async (req, res)=>{
     try {
-        const {title, description, collection, visibility, number_of_questions, total_time, keywords} = req.body;
+        const {title, description, collection, visibility, number_of_questions, total_time, keywords, course_id} = req.body;
 
-        if(!title || !description || !collection || !visibility || !number_of_questions || !total_time || !keywords) {
+        if(!title || !description || !collection || !visibility || !number_of_questions || !total_time || !keywords || !course_id) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        const newQuiz = await Quiz.create({title, description, collection, visibility, number_of_questions, total_time, keywords})
+        const newQuiz = await Quiz.create({title, description, collection, visibility, number_of_questions, total_time, keywords, course_id})
 
         res.json({
             message: "Quiz created successfully",
