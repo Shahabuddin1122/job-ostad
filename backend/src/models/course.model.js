@@ -36,6 +36,15 @@ const Course = {
         const result = await pool.query(query, values);
         return result.rows;
     },
+
+    async getAllCollection(){
+        const query = `
+            SELECT title, category FROM courses
+        `;
+
+        const results = await pool.query(query);
+        return results.rows;
+    }
 };
 
 module.exports = Course

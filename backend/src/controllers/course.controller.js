@@ -50,9 +50,10 @@ exports.getCoursesOnEachCategory = async (req, res)=>{
 
 exports.getAllCollection = async (req, res)=>{
   try {
+    const data = await Course.getAllCollection()
     res.json({
-      message: "Quiz created successfully",
-      data: "newQuiz"
+      success: true,
+      data: data
     });
   }
   catch (error) {
