@@ -1,10 +1,10 @@
 const {pool} = require('../config/db')
 
 const Quiz = {
-    async create({title, description, collection, visibility, number_of_questions, total_time, keywords}){
+    async create({title, description, collection, visibility, number_of_questions, total_time, keywords, course_id}){
         const query=`
-            INSERT INTO quiz(title, description, collection, visibility, number_of_questions, total_time, keywords) 
-            values ($1, $2, $3, $4, $5, $6, $7)
+            INSERT INTO quiz(title, description, collection, visibility, number_of_questions, total_time, keywords, course_id) 
+            values ($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING *;
         `;
         const values = [
@@ -14,7 +14,8 @@ const Quiz = {
             visibility,
             number_of_questions,
             total_time,
-            keywords
+            keywords,
+            course_id
         ];
         const results = await pool.query(query, values)
         return results.rows[0]
