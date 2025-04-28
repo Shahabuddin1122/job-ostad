@@ -18,7 +18,26 @@ const Quiz = {
         ];
         const results = await pool.query(query, values)
         return results.rows[0]
-    }
+    },
+
+    async findAll(){
+        const query = `
+            SELECT * FROM quiz ORDER BY created_at DESC
+        `;
+
+        const results = await pool.query(query)
+        return results.rows;
+    },
+    async findByCategory(category){
+        const query = `
+            SELECT * FROM quiz 
+            WHERE lower(collection) = lower($1)
+            ORDER BY created_at DESC;
+        `;
+        const values = [category]
+        const results = await pool.query(query, values)
+        return results.rows;
+    },
 }
 
 module.exports = Quiz
