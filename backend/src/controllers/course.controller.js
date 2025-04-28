@@ -47,3 +47,15 @@ exports.getCoursesOnEachCategory = async (req, res)=>{
     res.status(500).json({ message: "Server error", error: e.message })
   }
 };
+
+exports.getAllCollection = async (req, res)=>{
+  try {
+    res.json({
+      message: "Quiz created successfully",
+      data: "newQuiz"
+    });
+  }
+  catch (error) {
+    res.status(500).json({"message": "Server error", error: error.message});
+  }
+}

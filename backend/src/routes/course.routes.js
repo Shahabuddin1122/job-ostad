@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAllCourse, addCourse, getCoursesOnEachCategory } = require("../controllers/course.controller");
+const { getAllCourse, addCourse, getCoursesOnEachCategory, getAllCollection} = require("../controllers/course.controller");
 const multer = require("multer");
 
 const router = express.Router();
@@ -128,6 +128,44 @@ router.post("/add-course", upload.fields([{name:"course_image", maxCount: 1}]), 
  *         description: Server error
  */
 router.get("/get-category-courses", getCoursesOnEachCategory);
+
+/**
+ * @swagger
+ * /course/get-all-collection:
+ *   get:
+ *     summary: Get all unique course collections
+ *     tags: [Courses]
+ *     responses:
+ *       200:
+ *         description: List of all available course collections
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                     example: "47th BCS"
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Error fetching collections"
+ */
+router.get('/get-all-collection', getAllCollection)
 
 /**
  * @swagger
