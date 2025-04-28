@@ -3,7 +3,6 @@ const authRoutes = require("./auth.routes");
 const testRoutes = require("./test.routes");
 const bookRoutes = require("./book.routes");
 const courseRoutes = require("./course.routes");
-
 const router = express.Router();
 
 router.use("/auth", authRoutes);
