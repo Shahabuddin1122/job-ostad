@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:job_ostad/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,6 +87,41 @@ class ApiSettings {
       return response;
     } catch (e) {
       throw Exception(e.toString());
+    }
+  }
+
+  Future<http.StreamedResponse> postMultipartMethod({
+    required Map<String, String> fields,
+    File? book_image,
+    File? book_pdf,
+  }) async {
+    try {
+      String? token = await _getToken();
+
+      var uriObj = Uri.parse(uri);
+      var request = http.MultipartRequest('POST', uriObj);
+
+      if (token != null) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
+
+      request.fields.addAll(fields);
+
+      if (book_image != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath('book_image', book_image.path),
+        );
+      }
+
+      if (book_pdf != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath('book_pdf', book_pdf.path),
+        );
+      }
+
+      return await request.send();
+    } catch (e) {
+      throw Exception("Multipart upload failed: $e");
     }
   }
 }
