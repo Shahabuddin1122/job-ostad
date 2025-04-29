@@ -30,7 +30,7 @@ class CategoryItem extends StatelessWidget {
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12),
                     ),
-                    child: SvgPicture.asset(imagePath, fit: BoxFit.fill),
+                    child: Image.network(imagePath, fit: BoxFit.fill),
                   ),
                 ),
                 Center(
@@ -43,7 +43,7 @@ class CategoryItem extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
-                        fontSize: title.length > 20 ? 14 : 16,
+                        fontSize: title.length > 10 ? 14 : 16,
                       ),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
