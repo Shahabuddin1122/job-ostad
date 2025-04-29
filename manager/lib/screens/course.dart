@@ -49,27 +49,23 @@ class Course extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final items = [
                     CategoryItem(
-                      imagePath:
-                          "assets/images/Textbook with mortarboard for education.png",
+                      imagePath: "assets/images/svg/Collab-bro.svg",
                       title: "47th BCS CRASH COURSE",
                     ),
                     CategoryItem(
-                      imagePath:
-                          "assets/images/Standardized test as method of assessment.png",
+                      imagePath: "assets/images/svg/Collab-bro.svg",
                       title: "BANK PROSTUTI",
                     ),
                     CategoryItem(
-                      imagePath:
-                          "assets/images/stack of books and mug next to laptop screen showing planets.png",
+                      imagePath: "assets/images/svg/Collab-bro.svg",
                       title: "47th BCS CRASH COURSE",
                     ),
                     CategoryItem(
-                      imagePath:
-                          "assets/images/Online lesson and distance learning.png",
+                      imagePath: "assets/images/svg/Collab-bro.svg",
                       title: "BANK PROSTUTI",
                     ),
                     CategoryItem(
-                      imagePath: "assets/images/exam paper.png",
+                      imagePath: "assets/images/svg/Collab-bro.svg",
                       title: "BANK PROSTUTI",
                     ),
                   ];
