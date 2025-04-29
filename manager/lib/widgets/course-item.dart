@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_ostad/utils/constants.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CategoryItem extends StatelessWidget {
   final String imagePath, title;
@@ -29,19 +30,20 @@ class CategoryItem extends StatelessWidget {
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12),
                     ),
-                    child: Image.asset(imagePath, fit: BoxFit.cover),
+                    child: SvgPicture.asset(imagePath, fit: BoxFit.fill),
                   ),
                 ),
                 Center(
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
                     height: 55,
+                    alignment: Alignment.center,
                     child: Text(
-                      title.toUpperCase(), // Convert text to uppercase
-                      style: const TextStyle(
+                      title.toUpperCase(),
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
-                        fontSize: 16,
+                        fontSize: title.length > 20 ? 14 : 16,
                       ),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
