@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 
@@ -12,6 +15,33 @@ class AddQuiz extends StatefulWidget {
 class _AddQuizState extends State<AddQuiz> {
   String? selectedCollectionValue;
   String? selectVisiblityValue;
+  List<Map<String, dynamic>> collections = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCollection();
+  }
+
+  void getCollection() async {
+    ApiSettings apiSettings = ApiSettings(
+      endPoint: 'course/get-all-collection',
+    );
+
+    try {
+      final response = await apiSettings.getMethod();
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          collections = List<Map<String, dynamic>>.from(data['data']);
+        });
+      }
+    } catch (e) {
+      print("Error fetching collections: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,14 +106,12 @@ class _AddQuizState extends State<AddQuiz> {
                   underline: SizedBox(),
                   alignment: Alignment.centerLeft,
                   items:
-                      ['200 Days BCS', '47th BCS Crash Course', '48th BCS'].map(
-                        (String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        },
-                      ).toList(),
+                      collections.map((collection) {
+                        return DropdownMenuItem<String>(
+                          value: collection['id'].toString(),
+                          child: Text(collection['title']),
+                        );
+                      }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedCollectionValue = newValue;
