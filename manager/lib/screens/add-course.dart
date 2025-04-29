@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 
@@ -16,6 +17,9 @@ class AddCourse extends StatefulWidget {
 class _AddCourseState extends State<AddCourse> {
   File? imageFile;
   String? selectedValue;
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final keywordsController = TextEditingController();
 
   Future<void> pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -26,6 +30,55 @@ class _AddCourseState extends State<AddCourse> {
       setState(() {
         imageFile = File(result.files.single.path!);
       });
+    }
+  }
+
+  void send() async {
+    if (imageFile == null || selectedValue == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Image and category must be selected")),
+      );
+      return;
+    }
+
+    final String title = titleController.text.trim();
+    final String description = descriptionController.text.trim();
+    final String keywords = keywordsController.text.trim();
+
+    if (title.isEmpty || description.isEmpty || keywords.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Please fill in all fields")));
+      return;
+    }
+
+    try {
+      final api = ApiSettings(endPoint: 'course/add-course');
+
+      final response = await api.postMultipartMethod(
+        fields: {
+          'title': title,
+          'description': description,
+          'category': selectedValue!,
+          'keywords': keywords,
+        },
+        course_image: imageFile,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Course added successfully!")));
+      } else {
+        final resStr = await response.stream.bytesToString();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed: ${response.statusCode} - $resStr")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     }
   }
 
@@ -75,6 +128,7 @@ class _AddCourseState extends State<AddCourse> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: titleController,
                 decoration: InputDecoration(
                   hintText: "Enter Title",
                   enabledBorder: UnderlineInputBorder(
@@ -91,6 +145,7 @@ class _AddCourseState extends State<AddCourse> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: descriptionController,
                 decoration: InputDecoration(
                   hintText: "Enter Description",
                   enabledBorder: UnderlineInputBorder(
@@ -144,6 +199,7 @@ class _AddCourseState extends State<AddCourse> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: keywordsController,
                 decoration: InputDecoration(
                   hintText: "Write keywords and Press Enter",
                   enabledBorder: UnderlineInputBorder(
@@ -160,13 +216,17 @@ class _AddCourseState extends State<AddCourse> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        send();
+                        Navigator.pop(context);
+                      },
                       child: Text("Save"),
                     ),
                   ),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        send();
                         Navigator.popAndPushNamed(context, '/add-quiz');
                       },
                       child: Text("Add Quiz"),

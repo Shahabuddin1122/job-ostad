@@ -93,6 +93,7 @@ class ApiSettings {
   Future<http.StreamedResponse> postMultipartMethod({
     required Map<String, String> fields,
     File? book_image,
+    File? course_image,
     File? book_pdf,
   }) async {
     try {
@@ -110,6 +111,11 @@ class ApiSettings {
       if (book_image != null) {
         request.files.add(
           await http.MultipartFile.fromPath('book_image', book_image.path),
+        );
+      }
+      if (course_image != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath('course_image', course_image.path),
         );
       }
 
