@@ -16,6 +16,11 @@ class _AddQuizState extends State<AddQuiz> {
   String? selectedCollectionValue;
   String? selectVisiblityValue;
   List<Map<String, dynamic>> collections = [];
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descController = TextEditingController();
+  final TextEditingController questionController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  final TextEditingController keywordsController = TextEditingController();
 
   @override
   void initState() {
@@ -43,6 +48,40 @@ class _AddQuizState extends State<AddQuiz> {
     }
   }
 
+  void send() async {
+    ApiSettings apiSettings = ApiSettings(endPoint: 'quiz/add-a-quiz');
+
+    try {
+      Map<String, dynamic> body = {
+        "title": titleController.text,
+        "description": descController.text,
+        "visibility": selectVisiblityValue,
+        "number_of_questions": questionController.text,
+        "total_time": timeController.text,
+        "keywords": keywordsController.text,
+        "course_id": selectedCollectionValue,
+      };
+      final response = await apiSettings.postMethod(jsonEncode(body));
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Quiz uploaded successfully.")));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed to upload. Status: ${response.statusCode}"),
+          ),
+        );
+      }
+    } catch (e) {
+      print("Error storing the quiz data: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +97,7 @@ class _AddQuizState extends State<AddQuiz> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: titleController,
                 decoration: InputDecoration(
                   hintText: "Enter Title",
                   enabledBorder: UnderlineInputBorder(
@@ -74,6 +114,7 @@ class _AddQuizState extends State<AddQuiz> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: descController,
                 decoration: InputDecoration(
                   hintText: "Enter Description",
                   enabledBorder: UnderlineInputBorder(
@@ -160,6 +201,7 @@ class _AddQuizState extends State<AddQuiz> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: questionController,
                 decoration: InputDecoration(
                   hintText: "Enter number of question",
                   enabledBorder: UnderlineInputBorder(
@@ -176,6 +218,7 @@ class _AddQuizState extends State<AddQuiz> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: timeController,
                 decoration: InputDecoration(
                   hintText: "Enter time",
                   enabledBorder: UnderlineInputBorder(
@@ -192,6 +235,7 @@ class _AddQuizState extends State<AddQuiz> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: keywordsController,
                 decoration: InputDecoration(
                   hintText: "Write keywords and Press Enter",
                   enabledBorder: UnderlineInputBorder(
@@ -209,6 +253,7 @@ class _AddQuizState extends State<AddQuiz> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        send();
                         Navigator.pop(context);
                       },
                       child: Text("Save"),
