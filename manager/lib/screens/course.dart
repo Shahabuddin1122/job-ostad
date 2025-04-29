@@ -91,9 +91,12 @@ class _CourseState extends State<Course> {
                   itemCount: allCourses.length,
                   itemBuilder: (context, index) {
                     final course = allCourses[index];
-                    return CategoryItem(
-                      imagePath: course['course_image'] ?? '',
-                      title: course['title'] ?? 'No Title',
+                    return GestureDetector(
+                      onTap: widget.onClicked,
+                      child: CategoryItem(
+                        imagePath: course['course_image'] ?? '',
+                        title: course['title'] ?? 'No Title',
+                      ),
                     );
                   },
                 ),

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 
@@ -12,6 +15,72 @@ class AddQuiz extends StatefulWidget {
 class _AddQuizState extends State<AddQuiz> {
   String? selectedCollectionValue;
   String? selectVisiblityValue;
+  List<Map<String, dynamic>> collections = [];
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descController = TextEditingController();
+  final TextEditingController questionController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  final TextEditingController keywordsController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCollection();
+  }
+
+  void getCollection() async {
+    ApiSettings apiSettings = ApiSettings(
+      endPoint: 'course/get-all-collection',
+    );
+
+    try {
+      final response = await apiSettings.getMethod();
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          collections = List<Map<String, dynamic>>.from(data['data']);
+        });
+      }
+    } catch (e) {
+      print("Error fetching collections: $e");
+    }
+  }
+
+  void send() async {
+    ApiSettings apiSettings = ApiSettings(endPoint: 'quiz/add-a-quiz');
+
+    try {
+      Map<String, dynamic> body = {
+        "title": titleController.text,
+        "description": descController.text,
+        "visibility": selectVisiblityValue,
+        "number_of_questions": questionController.text,
+        "total_time": timeController.text,
+        "keywords": keywordsController.text,
+        "course_id": selectedCollectionValue,
+      };
+      final response = await apiSettings.postMethod(jsonEncode(body));
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Quiz uploaded successfully.")));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed to upload. Status: ${response.statusCode}"),
+          ),
+        );
+      }
+    } catch (e) {
+      print("Error storing the quiz data: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +97,7 @@ class _AddQuizState extends State<AddQuiz> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: titleController,
                 decoration: InputDecoration(
                   hintText: "Enter Title",
                   enabledBorder: UnderlineInputBorder(
@@ -44,6 +114,7 @@ class _AddQuizState extends State<AddQuiz> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: descController,
                 decoration: InputDecoration(
                   hintText: "Enter Description",
                   enabledBorder: UnderlineInputBorder(
@@ -76,14 +147,12 @@ class _AddQuizState extends State<AddQuiz> {
                   underline: SizedBox(),
                   alignment: Alignment.centerLeft,
                   items:
-                      ['200 Days BCS', '47th BCS Crash Course', '48th BCS'].map(
-                        (String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        },
-                      ).toList(),
+                      collections.map((collection) {
+                        return DropdownMenuItem<String>(
+                          value: collection['id'].toString(),
+                          child: Text(collection['title']),
+                        );
+                      }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedCollectionValue = newValue;
@@ -132,6 +201,7 @@ class _AddQuizState extends State<AddQuiz> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: questionController,
                 decoration: InputDecoration(
                   hintText: "Enter number of question",
                   enabledBorder: UnderlineInputBorder(
@@ -148,6 +218,7 @@ class _AddQuizState extends State<AddQuiz> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: timeController,
                 decoration: InputDecoration(
                   hintText: "Enter time",
                   enabledBorder: UnderlineInputBorder(
@@ -164,6 +235,7 @@ class _AddQuizState extends State<AddQuiz> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               TextField(
+                controller: keywordsController,
                 decoration: InputDecoration(
                   hintText: "Write keywords and Press Enter",
                   enabledBorder: UnderlineInputBorder(
@@ -181,6 +253,7 @@ class _AddQuizState extends State<AddQuiz> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        send();
                         Navigator.pop(context);
                       },
                       child: Text("Save"),
