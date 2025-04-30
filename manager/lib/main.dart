@@ -3,6 +3,7 @@ import 'package:job_ostad/screens/add-book.dart';
 import 'package:job_ostad/screens/add-course.dart';
 import 'package:job_ostad/screens/add-question.dart';
 import 'package:job_ostad/screens/add-quiz.dart';
+import 'package:job_ostad/screens/exam_script.dart';
 import 'package:job_ostad/screens/landing.dart';
 import 'package:job_ostad/utils/scheme.dart';
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/add-course': (context) => AddCourse(),
         '/add-quiz': (context) => AddQuiz(),
         '/add-question': (context) => AddQuestion(),
+        '/question-paper': (context) => ExamScript(),
       },
     );
   }
