@@ -38,11 +38,11 @@ const Question = {
 
     async getAllQuestionOfAQuiz(quizId) {
         const query = `
-            SELECT q.*
-            FROM question q
-                     INNER JOIN exam_script es ON q.exam_script_id = es.id
-            WHERE es.quiz_id = $1
-            ORDER BY q.id ASC;
+            SELECT q.title, q.number_of_questions, q.total_time, qs.question, qs.options, qs.image, qs.subject
+            FROM quiz q 
+            INNER JOIN exam_script es ON q.id = es.quiz_id
+            INNER JOIN question qs ON es.id = qs.exam_script_id
+            WHERE q.id = $1
         `;
         const values = [quizId];
         const results = await pool.query(query, values);

@@ -34,9 +34,17 @@ exports.get_question = async (req, res) => {
             return res.status(400).json({ success: false, message: "quizId is required." });
         }
 
-        const questions = await Question.getAllQuestionOfAQuiz(quizId);
+        const response = await Question.getAllQuestionOfAQuiz(quizId);
 
-        res.status(200).json({ success: true, data: questions });
+        const { title, number_of_questions, total_time } = response[0]
+        const questions = response.map(row => ({
+            question: row.question,
+            options: row.options,
+            image: row.image,
+            subject: row.subject
+        }));
+
+        res.status(200).json({ success: true, data: {title, number_of_questions, total_time, questions} });
     } catch (error) {
         console.error('Error fetching questions:', error);
         res.status(500).json({ success: false, message: 'Internal server error.' });

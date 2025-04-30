@@ -39,7 +39,12 @@ class Examcard extends StatelessWidget {
                 spacing: 10.0,
                 children: [
                   ElevatedButton(onPressed: () {}, child: Text("Update")),
-                  ElevatedButton(onPressed: () {}, child: Text("View")),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/question-paper');
+                    },
+                    child: Text("View"),
+                  ),
                 ],
               ),
             ],
