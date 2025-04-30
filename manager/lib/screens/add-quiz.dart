@@ -254,7 +254,7 @@ class _AddQuizState extends State<AddQuiz> {
                     child: ElevatedButton(
                       onPressed: () {
                         send();
-                        Navigator.pop(context);
+                        Navigator.popAndPushNamed(context, '/');
                       },
                       child: Text("Save"),
                     ),

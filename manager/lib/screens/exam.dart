@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:job_ostad/utils/api_settings.dart';
+import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/exam-card.dart';
 
@@ -50,11 +51,32 @@ class _ExamState extends State<Exam> {
     return SingleChildScrollView(
       child: Padding(
         padding: Theme.of(context).defaultPadding,
-        child:
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: PRIMARY_COLOR,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/add-quiz');
+                },
+                child: const Text("Add New Quiz"),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "Exam",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
             isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : exams.isEmpty
-                ? const Text("No exams available.")
+                ? Center(child: const Text("No exams available."))
                 : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:
@@ -71,6 +93,8 @@ class _ExamState extends State<Exam> {
                         );
                       }).toList(),
                 ),
+          ],
+        ),
       ),
     );
   }
