@@ -24,6 +24,7 @@ exports.addBook = async (req, res) => {
       ? req.files["book_image"][0]
       : null;
     let book_pdf = req.files["book_pdf"] ? req.files["book_pdf"][0] : null;
+
     if (
       !title ||
       !description ||

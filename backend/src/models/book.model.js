@@ -22,6 +22,7 @@ const Book = {
       book_image,
       book_pdf,
     ];
+    console.log(title, description, writer, visibility, book_image, book_pdf)
     const result = await pool.query(query, values);
     return result.rows[0];
   },

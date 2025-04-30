@@ -44,7 +44,8 @@ const Course = {
 
         const results = await pool.query(query);
         return results.rows;
-    }
+    },
+
 };
 
 module.exports = Course
