@@ -7,7 +7,7 @@ import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/course-item.dart';
 
 class Course extends StatefulWidget {
-  final VoidCallback onClicked;
+  final Function(int) onClicked;
   const Course({required this.onClicked, super.key});
 
   @override
@@ -92,7 +92,7 @@ class _CourseState extends State<Course> {
                   itemBuilder: (context, index) {
                     final course = allCourses[index];
                     return GestureDetector(
-                      onTap: widget.onClicked,
+                      onTap: () => widget.onClicked(course['id']),
                       child: CategoryItem(
                         imagePath: course['course_image'] ?? '',
                         title: course['title'] ?? 'No Title',

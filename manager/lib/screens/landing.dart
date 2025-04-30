@@ -15,8 +15,9 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   bool _isSearching = false;
-  int _selectedIndex = 0; // Tracks the bottom navigation bar selection
-  int _currentPageIndex = 0; // Tracks the current page being displayed
+  int _selectedIndex = 0;
+  int _currentPageIndex = 0;
+  int? _selectedCourseId;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -128,8 +129,9 @@ class _LandingState extends State<Landing> {
         return Overview();
       case 3:
         return Course(
-          onClicked: () {
+          onClicked: (int id) {
             setState(() {
+              _selectedCourseId = id;
               _currentPageIndex = 5;
             });
           },
@@ -137,7 +139,7 @@ class _LandingState extends State<Landing> {
       case 4:
         return User();
       case 5:
-        return Exam();
+        return Exam(id: _selectedCourseId!);
 
       default:
         return Overview();
