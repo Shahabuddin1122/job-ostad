@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/mcq_widget.dart';
@@ -16,35 +19,12 @@ class _ExamScriptState extends State<ExamScript> {
   int _seconds = 120;
   final ScrollController _scrollController = ScrollController();
   String? selectedSubject = "All";
+  String? title;
+  int numberOfQuestions = 0;
+  int totalTime = 0;
 
   // Question dictionary
-  final List<Map<String, dynamic>> questions = [
-    {
-      "question": "What is the capital of Bangladesh?",
-      "options": ["Paris", "Dhaka", "Daka", "Colombo"],
-      "subject": "Geography",
-    },
-    {
-      "question": "Who discovered gravity?",
-      "options": ["Einstein", "Newton", "Galileo", "Hawking"],
-      "subject": "Science",
-    },
-    {
-      "question": "What is the largest planet in our solar system?",
-      "options": ["Earth", "Mars", "Jupiter", "Saturn"],
-      "subject": "Science",
-    },
-    {
-      "question": "Which element has the chemical symbol 'O'?",
-      "options": ["Oxygen", "Gold", "Silver", "Osmium"],
-      "subject": "Science",
-    },
-    {
-      "question": "What is the boiling point of water?",
-      "options": ["100°C", "90°C", "80°C", "110°C"],
-      "subject": "Science",
-    },
-  ];
+  final List<Map<String, dynamic>> questions = [];
 
   // Get unique subjects with "All" option
   List<String> get uniqueSubjects {
@@ -65,6 +45,43 @@ class _ExamScriptState extends State<ExamScript> {
   void initState() {
     super.initState();
     _startTimer();
+    fetchQuestion();
+  }
+
+  void fetchQuestion() async {
+    try {
+      ApiSettings apiSettings = ApiSettings(
+        endPoint: 'exam/get-question-by-quiz-id/2',
+      );
+      final response =
+          await apiSettings
+              .getMethod(); // Make sure this is implemented and working
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> json = jsonDecode(response.body);
+        final List<dynamic> data = json['data']['questions'];
+
+        setState(() {
+          title = json["data"]["title"];
+          totalTime = json["data"]["total_time"];
+          numberOfQuestions = json["data"]["number_of_questions"];
+
+          questions.clear();
+          for (var item in data) {
+            questions.add({
+              "question": item["question"],
+              "options": List<String>.from(item["options"]),
+              "subject": item["subject"] ?? "General",
+            });
+          }
+        });
+      } else {
+        // Handle unexpected structure or empty response
+        print("Unexpected API response: $response");
+      }
+    } catch (e) {
+      print("Error fetching questions: $e");
+    }
   }
 
   void _startTimer() {
@@ -107,13 +124,13 @@ class _ExamScriptState extends State<ExamScript> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Weekly Model Test"),
+        title: Text(title ?? ''),
         actions: [
           Container(
             padding: const EdgeInsets.only(right: 16.0),
             child: Center(
               child: Text(
-                "Time: ${120 / 60.0} min",
+                "Time: $totalTime min",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
