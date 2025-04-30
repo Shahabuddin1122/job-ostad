@@ -1,16 +1,15 @@
 const {pool} = require('../config/db')
 
 const Quiz = {
-    async create({title, description, collection, visibility, number_of_questions, total_time, keywords, course_id}){
+    async create({title, description, visibility, number_of_questions, total_time, keywords, course_id}){
         const query=`
-            INSERT INTO quiz(title, description, collection, visibility, number_of_questions, total_time, keywords, course_id) 
-            values ($1, $2, $3, $4, $5, $6, $7, $8)
+            INSERT INTO quiz(title, description, visibility, number_of_questions, total_time, keywords, course_id) 
+            values ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *;
         `;
         const values = [
             title,
             description,
-            collection,
             visibility,
             number_of_questions,
             total_time,
@@ -39,6 +38,17 @@ const Quiz = {
         const results = await pool.query(query, values)
         return results.rows;
     },
+
+    async getAllQuizByCourseID(id){
+        const query = `
+            SELECT * from quiz
+            WHERE course_id = $1
+        `;
+
+        const value = [id];
+        const results = await pool.query(query, value);
+        return results.rows;
+    }
 }
 
 module.exports = Quiz

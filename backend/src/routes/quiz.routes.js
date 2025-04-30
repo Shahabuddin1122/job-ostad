@@ -1,5 +1,5 @@
 const express = require('express')
-const { add_a_quiz, get_all_quiz, get_quiz_by_category } = require("../controllers/quiz.controller");
+const { add_a_quiz, get_all_quiz, get_quiz_by_category, getAllQuizByCourseId} = require("../controllers/quiz.controller");
 
 const router = express.Router()
 
@@ -90,6 +90,28 @@ router.post("/add-a-quiz", add_a_quiz)
  *         description: Server error
  */
 router.get("/get-quiz", get_quiz_by_category)
+
+router.get('/get-all-quiz-by-courseId/:courseId', getAllQuizByCourseId);
+
+/**
+ * @swagger
+ * /quiz/get-all-quiz-by-courseId/:courseId:
+ *  get:
+ *    summary: Get all unique course collections
+ *    tags: [Courses]
+ *    parameters:
+ *      - in: params
+ *        name: courseId
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: course id to get the quiz
+ *    responses:
+ *      200:
+ *          description: list of all quiz
+ *      500:
+ *          description: server error
+ */
 
 /**
  * @swagger

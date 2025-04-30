@@ -1,4 +1,5 @@
 const Quiz = require("../models/quiz.model");
+const Course = require("../models/course.model");
 
 exports.get_all_quiz = async (req, res)=>{
     try {
@@ -13,13 +14,14 @@ exports.get_all_quiz = async (req, res)=>{
 
 exports.add_a_quiz = async (req, res)=>{
     try {
-        const {title, description, collection, visibility, number_of_questions, total_time, keywords, course_id} = req.body;
+        const {title, description, visibility, number_of_questions, total_time, keywords, course_id} = req.body;
 
-        if(!title || !description || !collection || !visibility || !number_of_questions || !total_time || !keywords || !course_id) {
+        if(!title || !description || !visibility || !number_of_questions || !total_time || !keywords || !course_id) {
             return res.status(400).json({ message: "All fields are required" });
         }
+        console.log(title, description, visibility, number_of_questions, total_time, keywords, course_id)
 
-        const newQuiz = await Quiz.create({title, description, collection, visibility, number_of_questions, total_time, keywords, course_id})
+        const newQuiz = await Quiz.create({title, description, visibility, number_of_questions, total_time, keywords, course_id})
 
         res.json({
             message: "Quiz created successfully",
@@ -44,5 +46,18 @@ exports.get_quiz_by_category = async (req, res)=>{
     }
     catch (error) {
         res.status(500).json({"message": "Server error", error: error.message});
+    }
+}
+
+exports.getAllQuizByCourseId = async (req, res)=>{
+    try {
+        const {courseId} = req.params;
+
+        const data = await Quiz.getAllQuizByCourseID(courseId)
+
+        res.status(200).json({success: true, message: data})
+    }
+    catch (error) {
+        res.status(500).json({success: false, message: `Server Error: ${error.message}`});
     }
 }

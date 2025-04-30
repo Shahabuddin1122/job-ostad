@@ -1,6 +1,7 @@
 const express = require("express");
-const { getAllCourse, addCourse, getCoursesOnEachCategory, getAllCollection} = require("../controllers/course.controller");
+const { getAllCourse, addCourse, getCoursesOnEachCategory, getAllCollection, getAllQuizByCourseId} = require("../controllers/course.controller");
 const multer = require("multer");
+const {route} = require("express/lib/application");
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
