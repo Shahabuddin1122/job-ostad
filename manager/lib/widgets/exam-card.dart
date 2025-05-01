@@ -3,12 +3,15 @@ import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 
 class Examcard extends StatelessWidget {
-  final String title, desc, num_of_question, time;
+  final String id, title, desc, num_of_question, time;
+  final bool has_exam_script;
   const Examcard({
+    required this.id,
     required this.desc,
     required this.num_of_question,
     required this.time,
     required this.title,
+    required this.has_exam_script,
     super.key,
   });
 
@@ -41,9 +44,15 @@ class Examcard extends StatelessWidget {
                   ElevatedButton(onPressed: () {}, child: Text("Update")),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/question-paper');
+                      has_exam_script
+                          ? Navigator.pushNamed(
+                            context,
+                            '/question-paper',
+                            arguments: id,
+                          )
+                          : Navigator.pushNamed(context, '/add-question');
                     },
-                    child: Text("View"),
+                    child: Text(has_exam_script ? "View" : "Add Question"),
                   ),
                 ],
               ),

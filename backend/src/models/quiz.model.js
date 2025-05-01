@@ -39,16 +39,29 @@ const Quiz = {
         return results.rows;
     },
 
-    async getAllQuizByCourseID(id){
+    async getAllQuizByCourseID(id) {
         const query = `
-            SELECT * from quiz
-            WHERE course_id = $1
+        SELECT  
+            q.id AS quiz_id, 
+            q.title, 
+            q.description, 
+            q.number_of_questions, 
+            q.total_time, 
+            CASE 
+                WHEN es.id IS NULL THEN false 
+                ELSE true 
+            END AS has_exam_script
+        FROM quiz q 
+        LEFT JOIN exam_script es ON q.id = es.quiz_id
+        WHERE q.course_id = $1
         `;
 
         const value = [id];
         const results = await pool.query(query, value);
         return results.rows;
     }
+
+
 }
 
 module.exports = Quiz

@@ -8,7 +8,8 @@ import 'package:job_ostad/widgets/mcq_widget.dart';
 import 'dart:async';
 
 class ExamScript extends StatefulWidget {
-  const ExamScript({super.key});
+  final String id;
+  const ExamScript({required this.id, super.key});
 
   @override
   _ExamScriptState createState() => _ExamScriptState();
@@ -51,7 +52,7 @@ class _ExamScriptState extends State<ExamScript> {
   void fetchQuestion() async {
     try {
       ApiSettings apiSettings = ApiSettings(
-        endPoint: 'exam/get-question-by-quiz-id/2',
+        endPoint: 'exam/get-question-by-quiz-id/${widget.id}',
       );
       final response =
           await apiSettings
