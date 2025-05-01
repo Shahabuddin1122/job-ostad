@@ -54,9 +54,7 @@ class _ExamScriptState extends State<ExamScript> {
       ApiSettings apiSettings = ApiSettings(
         endPoint: 'exam/get-question-by-quiz-id/${widget.id}',
       );
-      final response =
-          await apiSettings
-              .getMethod(); // Make sure this is implemented and working
+      final response = await apiSettings.getMethod();
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> json = jsonDecode(response.body);

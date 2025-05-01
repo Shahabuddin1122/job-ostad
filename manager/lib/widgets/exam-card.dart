@@ -41,7 +41,9 @@ class Examcard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 spacing: 10.0,
                 children: [
-                  ElevatedButton(onPressed: () {}, child: Text("Update")),
+                  has_exam_script
+                      ? ElevatedButton(onPressed: () {}, child: Text("Update"))
+                      : Text(''),
                   ElevatedButton(
                     onPressed: () {
                       has_exam_script
@@ -50,7 +52,11 @@ class Examcard extends StatelessWidget {
                             '/question-paper',
                             arguments: id,
                           )
-                          : Navigator.pushNamed(context, '/add-question');
+                          : Navigator.pushNamed(
+                            context,
+                            '/add-question',
+                            arguments: id,
+                          );
                     },
                     child: Text(has_exam_script ? "View" : "Add Question"),
                   ),
