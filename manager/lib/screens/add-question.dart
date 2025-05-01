@@ -6,7 +6,8 @@ import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 
 class AddQuestion extends StatefulWidget {
-  const AddQuestion({super.key});
+  final String id;
+  const AddQuestion({required this.id, super.key});
 
   @override
   State<AddQuestion> createState() => _AddQuestionState();
@@ -22,6 +23,13 @@ class _AddQuestionState extends State<AddQuestion> {
   final TextEditingController _optionController = TextEditingController();
   final TextEditingController _questionController = TextEditingController();
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("widget.id: ${widget.id}");
+  }
 
   @override
   void dispose() {

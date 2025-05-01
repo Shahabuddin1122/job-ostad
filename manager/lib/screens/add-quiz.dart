@@ -21,6 +21,7 @@ class _AddQuizState extends State<AddQuiz> {
   final TextEditingController questionController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
   final TextEditingController keywordsController = TextEditingController();
+  String quizId = '';
 
   @override
   void initState() {
@@ -48,8 +49,14 @@ class _AddQuizState extends State<AddQuiz> {
     }
   }
 
-  void send() async {
+  Future<bool> send() async {
     ApiSettings apiSettings = ApiSettings(endPoint: 'quiz/add-a-quiz');
+    if (selectedCollectionValue == null || selectVisiblityValue == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please select collection and visibility.")),
+      );
+      return false;
+    }
 
     try {
       Map<String, dynamic> body = {
@@ -64,21 +71,28 @@ class _AddQuizState extends State<AddQuiz> {
       final response = await apiSettings.postMethod(jsonEncode(body));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          quizId = data['data']['id'].toString();
+        });
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("Quiz uploaded successfully.")));
+        return true;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Failed to upload. Status: ${response.statusCode}"),
           ),
         );
+        return false;
       }
     } catch (e) {
       print("Error storing the quiz data: $e");
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+      return false;
     }
   }
 
@@ -252,19 +266,26 @@ class _AddQuizState extends State<AddQuiz> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        send();
-                        Navigator.popAndPushNamed(context, '/');
+                      onPressed: () async {
+                        final success = await send();
+                        if (success) Navigator.popAndPushNamed(context, '/');
                       },
-                      child: Text("Save"),
+                      child: const Text("Save"),
                     ),
                   ),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.popAndPushNamed(context, '/add-question');
+                      onPressed: () async {
+                        final success = await send();
+                        if (success) {
+                          Navigator.popAndPushNamed(
+                            context,
+                            '/add-question',
+                            arguments: quizId,
+                          );
+                        }
                       },
-                      child: Text("Add Question"),
+                      child: const Text("Add Question"),
                     ),
                   ),
                 ],
