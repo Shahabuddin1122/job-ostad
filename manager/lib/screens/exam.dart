@@ -84,11 +84,13 @@ class _ExamState extends State<Exam> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: Examcard(
+                            id: exam['quiz_id'].toString(),
                             desc: exam['description'] ?? '',
                             num_of_question:
                                 exam['number_of_questions'].toString(),
                             time: exam['total_time'].toString(),
                             title: exam['title'] ?? 'No Title',
+                            has_exam_script: exam['has_exam_script'],
                           ),
                         );
                       }).toList(),

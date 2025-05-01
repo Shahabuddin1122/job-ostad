@@ -28,7 +28,10 @@ class MyApp extends StatelessWidget {
         '/add-course': (context) => AddCourse(),
         '/add-quiz': (context) => AddQuiz(),
         '/add-question': (context) => AddQuestion(),
-        '/question-paper': (context) => ExamScript(),
+        '/question-paper': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as String;
+          return ExamScript(id: args);
+        },
       },
     );
   }
