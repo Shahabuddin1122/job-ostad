@@ -14,3 +14,4 @@
 {"level":"error","message":"Unexpected field"}
 {"level":"error","message":"Expected property name or '}' in JSON at position 1 (line 1 column 2)"}
 {"level":"error","message":"Expected property name or '}' in JSON at position 1 (line 1 column 2)"}
+{"level":"error","message":"Unexpected field"}

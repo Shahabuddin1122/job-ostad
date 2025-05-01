@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 
@@ -15,7 +18,7 @@ class AddQuestion extends StatefulWidget {
 
 class _AddQuestionState extends State<AddQuestion> {
   List<Map<String, dynamic>> questions = [
-    {'image': null, 'text': '', 'options': <String>[], 'subject': null},
+    {'image': null, 'question': '', 'options': <String>[], 'subject': null},
   ];
 
   final PageController _pageController = PageController();
@@ -72,7 +75,7 @@ class _AddQuestionState extends State<AddQuestion> {
       setState(() {
         questions.add({
           'image': null,
-          'text': '',
+          'question': '',
           'options': <String>[],
           'subject': null,
         });
@@ -99,8 +102,64 @@ class _AddQuestionState extends State<AddQuestion> {
   void saveQuestion(int index) {
     // This ensures all data is saved when navigating away from a question
     setState(() {
-      questions[index]['text'] = _questionController.text;
+      questions[index]['question'] = _questionController.text;
     });
+  }
+
+  void saveToDatabase() async {
+    final uri = Uri.parse('${baseUri}exam/create-question');
+    final request = http.MultipartRequest('POST', uri);
+
+    request.fields['quiz_id'] = widget.id;
+
+    // Build the questions list
+    List<Map<String, dynamic>> payload = [];
+    for (var q in questions) {
+      payload.add({
+        'question': q['question'],
+        'answer':
+            q['options'].isNotEmpty
+                ? q['options'][0]
+                : '', // assuming first is the correct answer
+        'options': q['options'],
+        'subject': q['subject'],
+      });
+
+      // If image exists, add it as a multipart file
+      if (q['image'] != null && q['image'] is File) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'images', // this key must match the expected backend key
+            q['image'].path,
+          ),
+        );
+      }
+    }
+
+    request.fields['questions'] = jsonEncode(payload);
+
+    try {
+      final response = await request.send();
+      final resBody = await response.stream.bytesToString();
+
+      if (response.statusCode == 201) {
+        print('Success: $resBody');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Questions uploaded successfully!")),
+        );
+        Navigator.popAndPushNamed(context, '/');
+      } else {
+        print('Error ${response.statusCode}: $resBody');
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Failed to upload questions.")));
+      }
+    } catch (e) {
+      print('Exception: $e');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
   }
 
   @override
@@ -119,7 +178,7 @@ class _AddQuestionState extends State<AddQuestion> {
           setState(() {
             _currentIndex = index;
             // Update controllers with current question data
-            _questionController.text = questions[index]['text'] ?? '';
+            _questionController.text = questions[index]['question'] ?? '';
           });
         },
         itemBuilder: (context, index) {
@@ -202,7 +261,7 @@ class _AddQuestionState extends State<AddQuestion> {
                   TextField(
                     controller: _questionController,
                     onChanged: (value) {
-                      questions[index]['text'] = value;
+                      questions[index]['question'] = value;
                     },
                     decoration: InputDecoration(
                       hintText: "Enter Question",
@@ -342,11 +401,13 @@ class _AddQuestionState extends State<AddQuestion> {
                         ),
                         ElevatedButton(
                           onPressed:
-                              questions.length < 20 ? addNewQuestion : null,
+                              questions.length < 5
+                                  ? addNewQuestion
+                                  : saveToDatabase,
                           child: Icon(
-                            questions.length < 20 ? Icons.add : Icons.save,
+                            questions.length < 5 ? Icons.add : Icons.save,
                             color:
-                                questions.length < 20
+                                questions.length < 5
                                     ? Colors.white
                                     : Colors.red,
                           ),
@@ -359,9 +420,7 @@ class _AddQuestionState extends State<AddQuestion> {
                   ElevatedButton(
                     onPressed: () {
                       saveQuestion(index);
-                      print(
-                        questions,
-                      ); // For debugging - check if data is saved
+                      saveToDatabase();
                     },
                     child: Text("Save Current Question"),
                   ),
