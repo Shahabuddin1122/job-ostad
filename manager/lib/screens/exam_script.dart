@@ -71,6 +71,7 @@ class _ExamScriptState extends State<ExamScript> {
               "question": item["question"],
               "options": List<String>.from(item["options"]),
               "subject": item["subject"] ?? "General",
+              "image": item["image"],
             });
           }
         });
@@ -93,13 +94,6 @@ class _ExamScriptState extends State<ExamScript> {
         _timer.cancel();
       }
     });
-  }
-
-  String _formatTime(int seconds) {
-    int hours = seconds ~/ 3600;
-    int minutes = (seconds % 3600) ~/ 60;
-    int secs = seconds % 60;
-    return "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}";
   }
 
   void _scrollToQuestion(int index) {
@@ -219,6 +213,7 @@ class _ExamScriptState extends State<ExamScript> {
                         count: filteredQuestions.indexOf(q) + 1,
                         question: q["question"],
                         options: q["options"],
+                        image: q["image"],
                       );
                     }).toList(),
                     const SizedBox(height: 60),
