@@ -79,20 +79,22 @@ class _ExamState extends State<Exam> {
                 ? Center(child: const Text("No exams available."))
                 : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                      exams.map((exam) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Examcard(
-                            id: exam['quiz_id'].toString(),
-                            desc: exam['description'] ?? '',
-                            num_of_question: exam['number_of_questions'],
-                            time: exam['total_time'].toString(),
-                            title: exam['title'] ?? 'No Title',
-                            has_exam_script: exam['has_exam_script'],
-                          ),
-                        );
-                      }).toList(),
+                  children: [
+                    ...exams.map((exam) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Examcard(
+                          id: exam['quiz_id'].toString(),
+                          desc: exam['description'] ?? '',
+                          date: exam['date'] ?? '',
+                          num_of_question: exam['number_of_questions'],
+                          time: exam['total_time'].toString(),
+                          title: exam['title'] ?? 'No Title',
+                          has_exam_script: exam['has_exam_script'],
+                        ),
+                      );
+                    }).toList(),
+                  ],
                 ),
           ],
         ),

@@ -56,7 +56,7 @@ const Quiz = {
         FROM quiz q 
         LEFT JOIN exam_script es ON q.id = es.quiz_id
         WHERE q.course_id = $1
-        ORDER BY q.date DESC
+        ORDER BY q.date ASC
         `;
 
         const value = [id];
