@@ -10,7 +10,12 @@ import 'package:job_ostad/utils/custom_theme.dart';
 
 class AddQuestion extends StatefulWidget {
   final String id;
-  const AddQuestion({required this.id, super.key});
+  final int number_of_questions;
+  const AddQuestion({
+    required this.number_of_questions,
+    required this.id,
+    super.key,
+  });
 
   @override
   State<AddQuestion> createState() => _AddQuestionState();
@@ -18,20 +23,26 @@ class AddQuestion extends StatefulWidget {
 
 class _AddQuestionState extends State<AddQuestion> {
   List<Map<String, dynamic>> questions = [
-    {'image': null, 'question': '', 'options': <String>[], 'subject': null},
+    {
+      'image': null,
+      'question': '',
+      'answer': '',
+      'options': <String>[],
+      'subject': null,
+    },
   ];
 
   final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _optionController = TextEditingController();
   final TextEditingController _questionController = TextEditingController();
+  final TextEditingController _answerController = TextEditingController();
   int _currentIndex = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("widget.id: ${widget.id}");
   }
 
   @override
@@ -71,11 +82,12 @@ class _AddQuestionState extends State<AddQuestion> {
   }
 
   void addNewQuestion() {
-    if (questions.length < 20) {
+    if (questions.length < widget.number_of_questions) {
       setState(() {
         questions.add({
           'image': null,
           'question': '',
+          'answer': '',
           'options': <String>[],
           'subject': null,
         });
@@ -100,9 +112,14 @@ class _AddQuestionState extends State<AddQuestion> {
   }
 
   void saveQuestion(int index) {
-    // This ensures all data is saved when navigating away from a question
     setState(() {
       questions[index]['question'] = _questionController.text;
+    });
+  }
+
+  void saveAnswer(int index) {
+    setState(() {
+      questions[index]['answer'] = _answerController.text;
     });
   }
 
@@ -117,10 +134,7 @@ class _AddQuestionState extends State<AddQuestion> {
     for (var q in questions) {
       payload.add({
         'question': q['question'],
-        'answer':
-            q['options'].isNotEmpty
-                ? q['options'][0]
-                : '', // assuming first is the correct answer
+        'answer': q['answer'],
         'options': q['options'],
         'subject': q['subject'],
       });
@@ -143,7 +157,6 @@ class _AddQuestionState extends State<AddQuestion> {
       final resBody = await response.stream.bytesToString();
 
       if (response.statusCode == 201) {
-        print('Success: $resBody');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Questions uploaded successfully!")),
         );
@@ -174,11 +187,13 @@ class _AddQuestionState extends State<AddQuestion> {
           // Save current question before switching
           if (_currentIndex < questions.length) {
             saveQuestion(_currentIndex);
+            saveAnswer(_currentIndex);
           }
           setState(() {
             _currentIndex = index;
             // Update controllers with current question data
             _questionController.text = questions[index]['question'] ?? '';
+            _answerController.text = questions[index]['answer'] ?? '';
           });
         },
         itemBuilder: (context, index) {
@@ -275,6 +290,26 @@ class _AddQuestionState extends State<AddQuestion> {
                   ),
                   SizedBox(height: 20),
                   Text(
+                    "Answer",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  TextField(
+                    controller: _answerController,
+                    onChanged: (value) {
+                      questions[index]['answer'] = value;
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Enter Answer",
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
                     "Options",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
@@ -354,6 +389,7 @@ class _AddQuestionState extends State<AddQuestion> {
                                 return GestureDetector(
                                   onTap: () {
                                     saveQuestion(_currentIndex);
+                                    saveAnswer(_currentIndex);
                                     _pageController.animateToPage(
                                       i,
                                       duration: Duration(milliseconds: 300),
@@ -401,13 +437,15 @@ class _AddQuestionState extends State<AddQuestion> {
                         ),
                         ElevatedButton(
                           onPressed:
-                              questions.length < 5
+                              questions.length < widget.number_of_questions
                                   ? addNewQuestion
                                   : saveToDatabase,
                           child: Icon(
-                            questions.length < 5 ? Icons.add : Icons.save,
+                            questions.length < widget.number_of_questions
+                                ? Icons.add
+                                : Icons.save,
                             color:
-                                questions.length < 5
+                                questions.length < widget.number_of_questions
                                     ? Colors.white
                                     : Colors.red,
                           ),
@@ -420,6 +458,7 @@ class _AddQuestionState extends State<AddQuestion> {
                   ElevatedButton(
                     onPressed: () {
                       saveQuestion(index);
+                      saveAnswer(index);
                       saveToDatabase();
                     },
                     child: Text("Save Current Question"),

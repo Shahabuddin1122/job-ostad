@@ -22,6 +22,7 @@ class _AddQuizState extends State<AddQuiz> {
   final TextEditingController timeController = TextEditingController();
   final TextEditingController keywordsController = TextEditingController();
   String quizId = '';
+  int num_of_question = 0;
 
   @override
   void initState() {
@@ -74,6 +75,7 @@ class _AddQuizState extends State<AddQuiz> {
         final data = jsonDecode(response.body);
         setState(() {
           quizId = data['data']['id'].toString();
+          num_of_question = data['data']['number_of_questions'];
         });
         ScaffoldMessenger.of(
           context,
@@ -281,7 +283,7 @@ class _AddQuizState extends State<AddQuiz> {
                           Navigator.popAndPushNamed(
                             context,
                             '/add-question',
-                            arguments: quizId,
+                            arguments: [quizId, num_of_question],
                           );
                         }
                       },
