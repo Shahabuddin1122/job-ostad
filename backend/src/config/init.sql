@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS quiz (
     course_id INTEGER NOT NULL ,
     title VARCHAR(255) NOT NULL,
     description TEXT,
+    date DATE,
     visibility VARCHAR(255) DEFAULT 'FREE_USER',
     number_of_questions INTEGER,
     total_time INTEGER,
