@@ -86,8 +86,7 @@ class _ExamState extends State<Exam> {
                           child: Examcard(
                             id: exam['quiz_id'].toString(),
                             desc: exam['description'] ?? '',
-                            num_of_question:
-                                exam['number_of_questions'].toString(),
+                            num_of_question: exam['number_of_questions'],
                             time: exam['total_time'].toString(),
                             title: exam['title'] ?? 'No Title',
                             has_exam_script: exam['has_exam_script'],

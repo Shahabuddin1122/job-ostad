@@ -3,7 +3,8 @@ import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 
 class Examcard extends StatelessWidget {
-  final String id, title, desc, num_of_question, time;
+  final String id, title, desc, time;
+  final int num_of_question;
   final bool has_exam_script;
   const Examcard({
     required this.id,
@@ -34,7 +35,7 @@ class Examcard extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               Text(desc),
-              Text("Number of Questions: $num_of_question"),
+              Text("Number of Questions: ${num_of_question.toString()}"),
               Text("Time: $time min"),
               SizedBox(height: 10),
               Row(
@@ -55,7 +56,7 @@ class Examcard extends StatelessWidget {
                           : Navigator.pushNamed(
                             context,
                             '/add-question',
-                            arguments: id,
+                            arguments: [id, num_of_question],
                           );
                     },
                     child: Text(has_exam_script ? "View" : "Add Question"),
