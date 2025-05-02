@@ -1,15 +1,16 @@
 const {pool} = require('../config/db')
 
 const Quiz = {
-    async create({title, description, visibility, number_of_questions, total_time, keywords, course_id}){
+    async create({title, description, date, visibility, number_of_questions, total_time, keywords, course_id}){
         const query=`
-            INSERT INTO quiz(title, description, visibility, number_of_questions, total_time, keywords, course_id) 
-            values ($1, $2, $3, $4, $5, $6, $7)
+            INSERT INTO quiz(title, description, date, visibility, number_of_questions, total_time, keywords, course_id) 
+            values ($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING *;
         `;
         const values = [
             title,
             description,
+            date,
             visibility,
             number_of_questions,
             total_time,
@@ -46,7 +47,8 @@ const Quiz = {
             q.title, 
             q.description, 
             q.number_of_questions, 
-            q.total_time, 
+            q.total_time,
+            q.date,
             CASE 
                 WHEN es.id IS NULL THEN false 
                 ELSE true 
@@ -54,6 +56,7 @@ const Quiz = {
         FROM quiz q 
         LEFT JOIN exam_script es ON q.id = es.quiz_id
         WHERE q.course_id = $1
+        ORDER BY q.date ASC
         `;
 
         const value = [id];

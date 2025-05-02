@@ -21,6 +21,7 @@ class _AddQuizState extends State<AddQuiz> {
   final TextEditingController questionController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
   final TextEditingController keywordsController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
   String quizId = '';
   int num_of_question = 0;
 
@@ -63,6 +64,7 @@ class _AddQuizState extends State<AddQuiz> {
       Map<String, dynamic> body = {
         "title": titleController.text,
         "description": descController.text,
+        "date": dateController.text,
         "visibility": selectVisiblityValue,
         "number_of_questions": questionController.text,
         "total_time": timeController.text,
@@ -133,6 +135,35 @@ class _AddQuizState extends State<AddQuiz> {
                 controller: descController,
                 decoration: InputDecoration(
                   hintText: "Enter Description",
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Date",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              TextField(
+                controller: dateController,
+                readOnly: true,
+                onTap: () async {
+                  final DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    dateController.text = "${picked.toLocal()}".split(' ')[0];
+                  }
+                },
+                decoration: InputDecoration(
+                  hintText: "Select date",
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
                   ),

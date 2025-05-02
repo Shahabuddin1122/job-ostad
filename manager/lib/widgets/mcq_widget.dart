@@ -5,11 +5,13 @@ class MCQWidget extends StatefulWidget {
   final String question;
   final List<String> options;
   final int count;
+  final String? image;
 
   MCQWidget({
     required this.count,
     required this.question,
     required this.options,
+    this.image,
   });
 
   @override
@@ -43,6 +45,28 @@ class _MCQWidgetState extends State<MCQWidget> {
             '${widget.count}. ${widget.question}',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
+          widget.image != null
+              ? Container(
+                width: double.maxFinite,
+                height: 200,
+                margin: EdgeInsets.only(top: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 1),
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withAlpha(130),
+                      blurRadius: 4,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(widget.image!, fit: BoxFit.contain),
+                ),
+              )
+              : Text(""),
           SizedBox(height: 10),
           ...List.generate(
             widget.options.length,
