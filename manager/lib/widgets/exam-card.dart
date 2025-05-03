@@ -28,7 +28,7 @@ class Examcard extends StatelessWidget {
         ).format(parsedDate);
         return formatted;
       } catch (e) {
-        return dateString; // fallback in case of error
+        return dateString;
       }
     }
 
