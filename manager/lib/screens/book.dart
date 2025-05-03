@@ -6,7 +6,8 @@ import 'package:job_ostad/widgets/bookList.dart';
 import 'dart:convert';
 
 class Book extends StatefulWidget {
-  const Book({super.key});
+  final Function(String, String) onClicked;
+  const Book({required this.onClicked, super.key});
 
   @override
   State<Book> createState() => _BookState();
@@ -70,7 +71,12 @@ class _BookState extends State<Book> {
                         allBooks
                             .map(
                               (book) => GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  widget.onClicked(
+                                    book["book_pdf"],
+                                    book["title"],
+                                  );
+                                },
                                 child: Booklist(
                                   title: book["title"] ?? "",
                                   desc: book["description"] ?? "",
