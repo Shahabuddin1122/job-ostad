@@ -4,6 +4,7 @@ import 'package:job_ostad/screens/course.dart';
 import 'package:job_ostad/screens/exam.dart';
 import 'package:job_ostad/screens/overview.dart';
 import 'package:job_ostad/screens/user.dart';
+import 'package:job_ostad/screens/view_book.dart';
 import 'package:job_ostad/utils/constants.dart';
 
 class Landing extends StatefulWidget {
@@ -18,6 +19,7 @@ class _LandingState extends State<Landing> {
   int _selectedIndex = 0;
   int _currentPageIndex = 0;
   int? _selectedCourseId;
+  String? selectedBook, title;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -124,7 +126,15 @@ class _LandingState extends State<Landing> {
       case 0:
         return Overview();
       case 1:
-        return Book();
+        return Book(
+          onClicked: (String book_pdf, String Clickedtitle) {
+            setState(() {
+              selectedBook = book_pdf;
+              title = Clickedtitle;
+              _currentPageIndex = 6;
+            });
+          },
+        );
       case 2:
         return Overview();
       case 3:
@@ -140,6 +150,8 @@ class _LandingState extends State<Landing> {
         return User();
       case 5:
         return Exam(id: _selectedCourseId!);
+      case 6:
+        return BookView(book_pdf: selectedBook!, title: title!);
 
       default:
         return Overview();
