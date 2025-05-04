@@ -80,6 +80,8 @@ class _BookViewState extends State<BookView> {
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Row(

@@ -67,11 +67,6 @@ class _ExamState extends State<Exam> {
                 child: const Text("Add New Quiz"),
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
-              "Exam",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
             const SizedBox(height: 10),
             isLoading
                 ? const Center(child: CircularProgressIndicator())

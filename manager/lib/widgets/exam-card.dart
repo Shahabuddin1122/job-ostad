@@ -35,11 +35,11 @@ class Examcard extends StatelessWidget {
     return Stack(
       children: [
         Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               formatDate(date),
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
             SizedBox(height: 10),
             Container(
@@ -52,9 +52,15 @@ class Examcard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
                   ),
                   Text(desc),
                   Text("Number of Questions: ${num_of_question.toString()}"),

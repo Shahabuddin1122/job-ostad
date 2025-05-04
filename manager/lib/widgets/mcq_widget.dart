@@ -53,13 +53,6 @@ class _MCQWidgetState extends State<MCQWidget> {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black, width: 1),
                   borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withAlpha(130),
-                      blurRadius: 4,
-                      offset: Offset(2, 2),
-                    ),
-                  ],
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
