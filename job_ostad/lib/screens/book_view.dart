@@ -4,7 +4,8 @@ import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class BookView extends StatefulWidget {
-  const BookView({super.key});
+  final String book_pdf, title;
+  const BookView({required this.title, required this.book_pdf, super.key});
 
   @override
   State<BookView> createState() => _BookViewState();
@@ -70,14 +71,17 @@ class _BookViewState extends State<BookView> {
               children: [
                 Container(
                   width: 200,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   alignment: Alignment.center,
                   child: Text(
-                    "LAL NIL DIPABALI",
+                    widget.title,
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 12,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Row(
@@ -101,8 +105,8 @@ class _BookViewState extends State<BookView> {
             ),
           ),
           Expanded(
-            child: SfPdfViewer.asset(
-              "assets/pdf/LAL NIL DIPABALI (jobbooksbd.blogspot.com).pdf",
+            child: SfPdfViewer.network(
+              widget.book_pdf,
               controller: _pdfViewerController,
               canShowPaginationDialog: true,
               canShowScrollHead: true,

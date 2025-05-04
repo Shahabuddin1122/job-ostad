@@ -1,66 +1,70 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/bookList.dart';
 
-class Book extends StatelessWidget {
-  final VoidCallback onClicked;
+class Book extends StatefulWidget {
+  final Function(String, String) onClicked;
   const Book({required this.onClicked, super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // List of most downloaded books
-    final List<Map<String, String>> mostDownloadedBooks = [
-      {
-        "title": "ATM এক টানা মুখস্থ - (লিখিত ও এমসিকিউ)",
-        "desc":
-            "বাগধারা ॥ সমার্থক শব্দ ॥ বিপরীত শব্দ । এক কথায় প্রকাশ পারিভাষিক শব্দ ॥ বঙ্গানুবাদ ॥ প্রবাদ-প্রবচনসহ...",
-        "image": "assets/images/books/ATM.jpg",
-        "writter": "মোঃ আবু বকর সিদ্দিক",
-      },
-      {
-        "title": "বাংলার ইতিহাস",
-        "desc":
-            "প্রাচীন থেকে আধুনিক বাংলার ইতিহাস, ঐতিহ্য, ও সংস্কৃতির একটি বিস্তৃত উপস্থাপনা।",
-        "image": "assets/images/books/banglar_itihas.jpg",
-        "writter": "ড. মোহাম্মদ হান্নান",
-      },
-      {
-        "title": "Physics for Competitive Exams",
-        "desc":
-            "Detailed physics concepts with MCQs and practice sets for job & university entrance exams.",
-        "image": "assets/images/books/physics.jpg",
-        "writter": "Dr. A. Rahman",
-      },
-      {
-        "title": "Programming with Python",
-        "desc":
-            "An easy-to-follow guide covering basic to advanced Python programming concepts.",
-        "image": "assets/images/books/python.png",
-        "writter": "John Doe",
-      },
-      {
-        "title": "মহাকাব্য: রামায়ণ ও মহাভারত",
-        "desc": "ভারতের দুটি প্রধান মহাকাব্যের সহজ ভাষায় সংকলন ও ব্যাখ্যা।",
-        "image": "assets/images/books/mahabharat.jpg",
-        "writter": "বিশ্বনাথ দত্ত",
-      },
-    ];
+  State<Book> createState() => _BookState();
+}
 
+class _BookState extends State<Book> {
+  List<Map<String, dynamic>> allBooks = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchBooks();
+  }
+
+  Future<void> fetchBooks() async {
+    ApiSettings apiSettings = ApiSettings(endPoint: 'book/get-all-books');
+    try {
+      final response = await apiSettings.getMethod();
+      final data = jsonDecode(response.body);
+      print(data);
+      if (data['data'] != null) {
+        setState(() {
+          allBooks = List<Map<String, dynamic>>.from(data['data']);
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print("Error fetching books: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // List of other books
     final List<Map<String, String>> otherBooks = [
       {
         "title": "বাংলার ইতিহাস",
         "desc":
             "প্রাচীন থেকে আধুনিক বাংলার ইতিহাস, ঐতিহ্য, ও সংস্কৃতির একটি বিস্তৃত উপস্থাপনা।",
-        "image": "assets/images/books/banglar_itihas.jpg",
+        "image": "https://i.ibb.co/6MsjtZK/ffb87d8816f5.jpg",
         "writter": "ড. মোহাম্মদ হান্নান",
       },
       {
         "title": "Physics for Competitive Exams",
         "desc":
             "Detailed physics concepts with MCQs and practice sets for job & university entrance exams.",
-        "image": "assets/images/books/physics.jpg",
+        "image": "https://i.ibb.co/6MsjtZK/ffb87d8816f5.jpg",
         "writter": "Dr. A. Rahman",
       },
     ];
@@ -74,23 +78,29 @@ class Book extends StatelessWidget {
             // Most Downloaded Section
             _buildSectionTitle("Most Downloaded"),
             SizedBox(height: 10),
-            Column(
-              spacing: 10.0,
-              children:
-                  mostDownloadedBooks
-                      .map(
-                        (book) => GestureDetector(
-                          onTap: onClicked,
-                          child: Booklist(
-                            title: book["title"]!,
-                            desc: book["desc"]!,
-                            images: book["image"]!,
-                            writter: book["writter"]!,
+            if (isLoading)
+              const Center(child: CircularProgressIndicator())
+            else
+              Column(
+                spacing: 10.0,
+                children:
+                    allBooks
+                        .map(
+                          (book) => GestureDetector(
+                            onTap: () {
+                              widget.onClicked(book["title"], book["book_pdf"]);
+                            },
+
+                            child: Booklist(
+                              title: book["title"] ?? "",
+                              desc: book["description"] ?? "",
+                              images: book["book_image"] ?? "",
+                              writter: book["writer"] ?? "",
+                            ),
                           ),
-                        ),
-                      )
-                      .toList(),
-            ),
+                        )
+                        .toList(),
+              ),
             SizedBox(height: 20),
 
             _buildSectionTitle("Others"),
@@ -101,12 +111,13 @@ class Book extends StatelessWidget {
                   otherBooks
                       .map(
                         (book) => GestureDetector(
-                          onTap: onClicked,
+                          onTap: () {},
+
                           child: Booklist(
-                            title: book["title"]!,
-                            desc: book["desc"]!,
-                            images: book["image"]!,
-                            writter: book["writter"]!,
+                            title: book["title"] ?? "",
+                            desc: book["desc"] ?? "",
+                            images: book["image"] ?? "",
+                            writter: book["writter"] ?? "",
                           ),
                         ),
                       )

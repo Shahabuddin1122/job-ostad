@@ -23,6 +23,8 @@ class _LandingState extends State<Landing> {
   int _currentPageIndex = 0; // Tracks the current page being displayed
   String? selectedCourse;
   String? courseId;
+  String? selectedBookPdf;
+  String? selectedBookTitle;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -140,9 +142,11 @@ class _LandingState extends State<Landing> {
         );
       case 1:
         return Book(
-          onClicked: () {
+          onClicked: (String title, String pdf) {
             setState(() {
               _currentPageIndex = 7;
+              selectedBookPdf = pdf;
+              selectedBookTitle = title;
             });
           },
         );
@@ -165,7 +169,7 @@ class _LandingState extends State<Landing> {
       case 6:
         return Exam(id: courseId!);
       case 7:
-        return BookView();
+        return BookView(book_pdf: selectedBookPdf!, title: selectedBookTitle!);
       default:
         return Home(
           onTextClicked: (String course) {
