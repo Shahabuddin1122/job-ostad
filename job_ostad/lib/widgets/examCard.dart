@@ -3,8 +3,12 @@ import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 
 class Examcard extends StatelessWidget {
-  final String title, desc, num_of_question, time;
+  final String title, desc, num_of_question, time, id, date;
+  final bool has_exam_script;
   const Examcard({
+    required this.date,
+    required this.id,
+    required this.has_exam_script,
     required this.desc,
     required this.num_of_question,
     required this.time,

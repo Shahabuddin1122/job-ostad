@@ -22,6 +22,7 @@ class _LandingState extends State<Landing> {
   int _selectedIndex = 0; // Tracks the bottom navigation bar selection
   int _currentPageIndex = 0; // Tracks the current page being displayed
   String? selectedCourse;
+  String? courseId;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -154,14 +155,15 @@ class _LandingState extends State<Landing> {
       case 5:
         return Courses(
           course: selectedCourse!,
-          onTextClicked: () {
+          onTextClicked: (String id) {
             setState(() {
               _currentPageIndex = 6; // Navigate to Exam
+              courseId = id;
             });
           },
         );
       case 6:
-        return Exam();
+        return Exam(id: courseId!);
       case 7:
         return BookView();
       default:

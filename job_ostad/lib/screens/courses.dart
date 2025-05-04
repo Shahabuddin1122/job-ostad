@@ -7,7 +7,7 @@ import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/categoryItem.dart';
 
 class Courses extends StatefulWidget {
-  final VoidCallback onTextClicked;
+  final Function(String) onTextClicked;
   final String course;
   const Courses({required this.course, super.key, required this.onTextClicked});
 
@@ -32,7 +32,6 @@ class _CoursesState extends State<Courses> {
     try {
       final response = await apiSettings.getMethod();
       final data = jsonDecode(response.body);
-      print(data);
       if (data['message'] != null && data['message'] is List) {
         setState(() {
           allCourses = List<Map<String, dynamic>>.from(data['message']);
@@ -137,7 +136,9 @@ class _CoursesState extends State<Courses> {
                   itemBuilder: (context, index) {
                     final course = allCourses[index];
                     return GestureDetector(
-                      onTap: () => widget.onTextClicked,
+                      onTap: () {
+                        widget.onTextClicked(course['id'].toString());
+                      },
                       child: CategoryItem(
                         imagePath: course['course_image'] ?? '',
                         title: course['title'] ?? 'No Title',
