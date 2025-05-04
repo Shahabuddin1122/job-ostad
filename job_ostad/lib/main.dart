@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:job_ostad/screens/exam_script.dart';
 import 'package:job_ostad/screens/landing.dart';
 import 'package:job_ostad/screens/signin.dart';
+import 'package:job_ostad/screens/signup.dart';
 import 'package:job_ostad/utils/scheme.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/sign-in',
+      initialRoute: '/sign-up',
       theme: Scheme.lightTheme,
       darkTheme: Scheme.darkTheme,
       themeMode: ThemeMode.system,
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Landing(),
         '/sign-in': (context) => Signin(),
+        '/sign-up': (context) => Signup(),
         '/exam-script': (context) {
           final args = ModalRoute.of(context)!.settings.arguments as String;
           return ExamScript(id: args);
