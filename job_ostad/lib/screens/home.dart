@@ -5,7 +5,7 @@ import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/categoryItem.dart';
 
 class Home extends StatelessWidget {
-  final VoidCallback onTextClicked;
+  final Function(String) onTextClicked;
   const Home({required this.onTextClicked, super.key});
 
   @override
@@ -163,7 +163,9 @@ class Home extends StatelessWidget {
                   children:
                       categories.map((category) {
                         return GestureDetector(
-                          onTap: onTextClicked,
+                          onTap: () {
+                            onTextClicked(category);
+                          },
                           child: CategoryCard(category: category),
                         );
                       }).toList(),
@@ -199,13 +201,11 @@ class Home extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final items = [
                       CategoryItem(
-                        imagePath:
-                            "assets/images/Lamp, books and objects for studying.png",
+                        imagePath: "https://i.ibb.co/nq5n03vm/e552cf5654ad.jpg",
                         title: "47th BCS CRASH COURSE",
                       ),
                       CategoryItem(
-                        imagePath:
-                            "assets/images/Young woman doing her homework.png",
+                        imagePath: "https://i.ibb.co/nq5n03vm/e552cf5654ad.jpg",
                         title: "BANK PROSTUTI",
                       ),
                     ];
@@ -243,13 +243,11 @@ class Home extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final items = [
                       CategoryItem(
-                        imagePath:
-                            "assets/images/Back to school, items for studying.png",
+                        imagePath: "https://i.ibb.co/nq5n03vm/e552cf5654ad.jpg",
                         title: "48th BCS",
                       ),
                       CategoryItem(
-                        imagePath:
-                            "assets/images/notebook with glasses and pencil.png",
+                        imagePath: "https://i.ibb.co/nq5n03vm/e552cf5654ad.jpg",
                         title: "HSE 2025",
                       ),
                     ];

@@ -97,7 +97,7 @@ router.post("/add-course", upload.fields([{name:"course_image", maxCount: 1}]), 
 
 /**
  * @swagger
- * /course/get-category-courses:
+ * /course/get-courses-by-category:
  *   get:
  *     summary: Get courses by category
  *     tags: [Courses]
@@ -128,7 +128,7 @@ router.post("/add-course", upload.fields([{name:"course_image", maxCount: 1}]), 
  *       500:
  *         description: Server error
  */
-router.get("/get-category-courses", getCoursesOnEachCategory);
+router.get("/get-courses-by-category", getCoursesOnEachCategory);
 
 /**
  * @swagger

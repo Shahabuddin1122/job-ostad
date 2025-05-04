@@ -29,7 +29,7 @@ const Course = {
     async getCourseByCategory(category) {
         const query = `
           SELECT * FROM courses
-          WHERE category = $1
+          WHERE lower(category) = lower($1)
           ORDER BY created_at DESC;
         `;
         const values = [category];

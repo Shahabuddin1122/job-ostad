@@ -27,18 +27,20 @@ class CategoryItem extends StatelessWidget {
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
                 ),
-                child: Image.asset(imagePath, fit: BoxFit.cover),
+                child: Image.network(imagePath, fit: BoxFit.fill),
               ),
             ),
-            Flexible(
-              child: Padding(
+            Center(
+              child: Container(
                 padding: const EdgeInsets.all(8.0),
+                height: 55,
+                alignment: Alignment.center,
                 child: Text(
-                  title.toUpperCase(), // Convert text to uppercase
-                  style: const TextStyle(
+                  title.toUpperCase(),
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
-                    fontSize: 16,
+                    fontSize: title.length > 10 ? 14 : 16,
                   ),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,

@@ -20,7 +20,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => Landing(),
-        '/exam-script': (context) => ExamScript(),
+        '/exam-script': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as String;
+          return ExamScript(id: args);
+        },
       },
     );
   }
