@@ -31,6 +31,17 @@ class Examcard extends StatelessWidget {
       }
     }
 
+    bool isButtonEnabled() {
+      final today = DateTime.now();
+      final examDate = DateTime.tryParse(date);
+      if (examDate == null) return false;
+      final isToday =
+          today.year == examDate.year &&
+          today.month == examDate.month &&
+          today.day == examDate.day;
+      return isToday && has_exam_script;
+    }
+
     return Container(
       width: double.maxFinite,
       decoration: BoxDecoration(
@@ -76,13 +87,24 @@ class Examcard extends StatelessWidget {
                     ElevatedButton(onPressed: () {}, child: Text("Syllabus")),
                     ElevatedButton(onPressed: () {}, child: Text("Archive")),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/exam-script',
-                          arguments: id,
-                        );
-                      },
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(
+                          isButtonEnabled() ? SECONDARY_COLOR : DISABLE,
+                        ),
+                        foregroundColor: WidgetStateProperty.all(
+                          isButtonEnabled() ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      onPressed:
+                          isButtonEnabled()
+                              ? () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/exam-script',
+                                  arguments: id,
+                                );
+                              }
+                              : null, // disables the button if false
                       child: Text("Exam"),
                     ),
                   ],
