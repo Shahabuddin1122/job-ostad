@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/mcq_widget.dart';
 import 'dart:async';
 
 class ExamScript extends StatefulWidget {
-  const ExamScript({super.key});
+  final String id;
+  const ExamScript({required this.id, super.key});
 
   @override
   _ExamScriptState createState() => _ExamScriptState();
@@ -13,38 +17,15 @@ class ExamScript extends StatefulWidget {
 
 class _ExamScriptState extends State<ExamScript> {
   late Timer _timer;
-  int _seconds = 120; // 30 minutes
+  late int _seconds;
   final ScrollController _scrollController = ScrollController();
   String? selectedSubject = "All";
+  String? title;
+  int numberOfQuestions = 0;
+  int totalTime = 0;
 
   // Question dictionary
-  final List<Map<String, dynamic>> questions = [
-    {
-      "question": "What is the capital of Bangladesh?",
-      "options": ["Paris", "Dhaka", "Daka", "Colombo"],
-      "subject": "Geography",
-    },
-    {
-      "question": "Who discovered gravity?",
-      "options": ["Einstein", "Newton", "Galileo", "Hawking"],
-      "subject": "Science",
-    },
-    {
-      "question": "What is the largest planet in our solar system?",
-      "options": ["Earth", "Mars", "Jupiter", "Saturn"],
-      "subject": "Science",
-    },
-    {
-      "question": "Which element has the chemical symbol 'O'?",
-      "options": ["Oxygen", "Gold", "Silver", "Osmium"],
-      "subject": "Science",
-    },
-    {
-      "question": "What is the boiling point of water?",
-      "options": ["100°C", "90°C", "80°C", "110°C"],
-      "subject": "Science",
-    },
-  ];
+  final List<Map<String, dynamic>> questions = [];
 
   // Get unique subjects with "All" option
   List<String> get uniqueSubjects {
@@ -64,7 +45,44 @@ class _ExamScriptState extends State<ExamScript> {
   @override
   void initState() {
     super.initState();
+    _seconds = 0;
     _startTimer();
+    fetchQuestion();
+  }
+
+  void fetchQuestion() async {
+    try {
+      ApiSettings apiSettings = ApiSettings(
+        endPoint: 'exam/get-question-by-quiz-id/${widget.id}',
+      );
+      final response = await apiSettings.getMethod();
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> json = jsonDecode(response.body);
+        final List<dynamic> data = json['data']['questions'];
+
+        setState(() {
+          title = json["data"]["title"];
+          totalTime = json["data"]["total_time"];
+          numberOfQuestions = json["data"]["number_of_questions"];
+          _seconds = totalTime.toInt() * 60;
+          questions.clear();
+          for (var item in data) {
+            questions.add({
+              "question": item["question"],
+              "options": List<String>.from(item["options"]),
+              "subject": item["subject"] ?? "General",
+              "image": item["image"],
+            });
+          }
+        });
+      } else {
+        // Handle unexpected structure or empty response
+        print("Unexpected API response: $response");
+      }
+    } catch (e) {
+      print("Error fetching questions: $e");
+    }
   }
 
   void _startTimer() {
@@ -79,21 +97,20 @@ class _ExamScriptState extends State<ExamScript> {
     });
   }
 
-  String _formatTime(int seconds) {
-    int hours = seconds ~/ 3600;
-    int minutes = (seconds % 3600) ~/ 60;
-    int secs = seconds % 60;
-    return "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}";
-  }
-
   void _scrollToQuestion(int index) {
-    final double offset =
-        index * 150.0; // Adjust based on your MCQWidget height
+    final double offset = index * 150.0;
     _scrollController.animateTo(
       offset,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+  }
+
+  String _formatTime(int seconds) {
+    int hours = seconds ~/ 3600;
+    int minutes = (seconds % 3600) ~/ 60;
+    int secs = seconds % 60;
+    return "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}";
   }
 
   @override
@@ -107,7 +124,7 @@ class _ExamScriptState extends State<ExamScript> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Weekly Model Test"),
+        title: Text(title ?? ''),
         actions: [
           Container(
             padding: const EdgeInsets.only(right: 16.0),
@@ -203,6 +220,7 @@ class _ExamScriptState extends State<ExamScript> {
                         count: filteredQuestions.indexOf(q) + 1,
                         question: q["question"],
                         options: q["options"],
+                        image: q["image"],
                       );
                     }).toList(),
                     const SizedBox(height: 60),

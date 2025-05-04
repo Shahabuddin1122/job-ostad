@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:job_ostad/utils/constants.dart';
 
 class MCQWidget extends StatefulWidget {
-  final String question;
+  final String question, image;
   final List<String> options;
   final int count;
 
   MCQWidget({
+    required this.image,
     required this.count,
     required this.question,
     required this.options,
@@ -43,6 +44,21 @@ class _MCQWidgetState extends State<MCQWidget> {
             '${widget.count}. ${widget.question}',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
+          widget.image.isNotEmpty
+              ? Container(
+                width: double.maxFinite,
+                height: 200,
+                margin: EdgeInsets.only(top: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(widget.image!, fit: BoxFit.contain),
+                ),
+              )
+              : Text(""),
           SizedBox(height: 10),
           ...List.generate(
             widget.options.length,
