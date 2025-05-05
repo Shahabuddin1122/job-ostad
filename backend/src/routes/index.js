@@ -5,6 +5,7 @@ const bookRoutes = require("./book.routes");
 const courseRoutes = require("./course.routes");
 const quizRouters = require("./quiz.routes");
 const examRouters = require("./exam.routes");
+const userRouters = require('./user.routes');
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.use("/book", bookRoutes);
 router.use("/course", courseRoutes);
 router.use("/quiz", quizRouters);
 router.use("/exam", examRouters)
+router.use("/user", userRouters)
 
 module.exports = router;

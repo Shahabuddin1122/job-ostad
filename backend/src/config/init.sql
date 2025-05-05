@@ -4,9 +4,9 @@ CREATE TABLE IF NOT EXISTS books (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     writer VARCHAR(255),
-    visibility VARCHAR(255) DEFAULT 'FREE_USER',   -- assuming visibility means whether the book is visible or not
+    visibility VARCHAR(255) DEFAULT 'FREE_USER',
     book_image VARCHAR(255),
-    book_pdf VARCHAR(255),            -- store the path or URL to the PDF
+    book_pdf VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -50,9 +50,28 @@ CREATE TABLE IF NOT EXISTS question (
     exam_script_id INTEGER NOT NULL,
     question TEXT NOT NULL,
     answer TEXT NOT NULL,
-    options TEXT[], -- Array to store multiple options
-    image VARCHAR(255), -- URL or file path if any image
+    options TEXT[],
+    image VARCHAR(255),
     subject VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (exam_script_id) REFERENCES exam_script(id) ON DELETE CASCADE
+);
+
+-- Create User table
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    phone_number BIGINT NOT NULL UNIQUE,
+    education VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+    );
+
+
+-- Create manager table
+CREATE TABLE IF NOT EXISTS managers (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255),
+    phone_number INTEGER UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
 );
