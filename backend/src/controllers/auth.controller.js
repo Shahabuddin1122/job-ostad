@@ -1,20 +1,47 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const { send_sms } = require("../services/sms.service");
+const { saveOtp, verifyOtp } = require("../utils/verify_sms.utils"); // new module
 
 exports.register = async (req, res) => {
   try {
-    const { username, email, phone_number, education, password } = req.body;
+    const { phone_number } = req.body;
 
-    const existingUser = await User.findOne( 'phone_number', phone_number );
+    const existingUser = await User.findOne('phone_number', phone_number);
+    // if (existingUser) {
+    //   return res.status(400).json({ message: "Phone number already in use" });
+    // }
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    saveOtp(phone_number, otp);
+
+    const smsSent = await send_sms(phone_number, `Your Alpha Net OTP Code is ${otp}`);
+    if (!smsSent) {
+      return res.status(500).json({ message: "Failed to send OTP" });
+    }
+
+    res.status(200).json({ message: "OTP sent successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Registration initiation failed", error: error.message });
+  }
+};
+
+exports.verifyOtpAndRegister = async (req, res) => {
+  try {
+    const { username, email, phone_number, education, password, otp } = req.body;
+
+    if (!verifyOtp(phone_number, otp)) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    const existingUser = await User.findOne('phone_number', phone_number);
     if (existingUser) {
       return res.status(400).json({ message: "Phone number already in use" });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
     const user = await User.create({
       username,
       email,
@@ -28,6 +55,7 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: "Registration failed", error: error.message });
   }
 };
+
 
 exports.login = async (req, res) => {
   try {
