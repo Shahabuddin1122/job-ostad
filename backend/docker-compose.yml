@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: shahabuddinakhon/jobostad-backend
+    build: .
     container_name: jobostad-api
     ports:
       - "5000:5000"
@@ -13,6 +13,7 @@ services:
       - ./keys:/app/keys:ro
     depends_on:
       - postgres
+      - redis
     networks:
       - jobostad-network
 
@@ -45,14 +46,22 @@ services:
     networks:
       - jobostad-network
 
+  redis:
+    image: redis:latest
+    container_name: jobostad-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - jobostad-network
+
 
 networks:
   jobostad-network:
 
 volumes:
   pgdata:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /mnt/pgdata/data
+#    driver: local
+#    driver_opts:
+#      type: none
+#      o: bind
+#      device: /mnt/pgdata/data
