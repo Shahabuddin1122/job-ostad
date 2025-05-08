@@ -105,11 +105,6 @@ class _CoursesState extends State<Courses> {
                   ],
                 ),
             const SizedBox(height: 20),
-            Text(
-              "Crash Course",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            // Show skeleton loader while data is loading
             isLoading
                 ? SkeletonCourseItem()
                 : allCourses.isEmpty
@@ -117,28 +112,41 @@ class _CoursesState extends State<Courses> {
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: Center(child: Text("No courses available.")),
                 )
-                : GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.9,
-                  ),
-                  itemCount: allCourses.length,
-                  itemBuilder: (context, index) {
-                    final course = allCourses[index];
-                    return GestureDetector(
-                      onTap: () {
-                        widget.onTextClicked(course['id'].toString());
-                      },
-                      child: CategoryItem(
-                        imagePath: course['course_image'] ?? '',
-                        title: course['title'] ?? 'No Title',
+                : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Crash Course",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                    );
-                  },
+                    ),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 0.9,
+                          ),
+                      itemCount: allCourses.length,
+                      itemBuilder: (context, index) {
+                        final course = allCourses[index];
+                        return GestureDetector(
+                          onTap: () {
+                            widget.onTextClicked(course['id'].toString());
+                          },
+                          child: CategoryItem(
+                            imagePath: course['course_image'] ?? '',
+                            title: course['title'] ?? 'No Title',
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
           ],
         ),

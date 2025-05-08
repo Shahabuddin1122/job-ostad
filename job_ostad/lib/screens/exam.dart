@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:job_ostad/utils/api_settings.dart';
-import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/examCard.dart';
+import 'package:job_ostad/widgets/examShimmer.dart';
 
 class Exam extends StatefulWidget {
   final String id;
@@ -53,9 +53,9 @@ class _ExamState extends State<Exam> {
         padding: Theme.of(context).defaultPadding,
         child:
             isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? ExamShimmer()
                 : exams.isEmpty
-                ? Center(child: const Text("No exams available."))
+                ? Center(child: const Text("Course Content Not available"))
                 : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
