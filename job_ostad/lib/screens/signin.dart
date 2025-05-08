@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class Signin extends StatelessWidget {
+class Signin extends StatefulWidget {
   const Signin({super.key});
+
+  @override
+  State<Signin> createState() => _SigninState();
+}
+
+class _SigninState extends State<Signin> {
+  final numberController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +38,7 @@ class Signin extends StatelessWidget {
               // Mobile Number Field
               TextField(
                 keyboardType: TextInputType.phone,
+                controller: numberController,
                 decoration: InputDecoration(
                   labelText: 'Mobile Number',
                   hintText: 'Enter your mobile number',
@@ -44,6 +53,7 @@ class Signin extends StatelessWidget {
               // Password Field
               TextField(
                 obscureText: true,
+                controller: passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   hintText: 'Enter your password',
@@ -104,7 +114,9 @@ class Signin extends StatelessWidget {
                 children: [
                   const Text("Don't have an account?"),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/sign-up');
+                    },
                     child: const Text('Register now'),
                   ),
                 ],

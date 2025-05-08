@@ -1,9 +1,49 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
+import 'package:job_ostad/utils/snackbar.dart';
+import 'package:job_ostad/widgets/showDialog.dart';
 
-class Signup extends StatelessWidget {
+class Signup extends StatefulWidget {
   const Signup({super.key});
+
+  @override
+  State<Signup> createState() => _SignupState();
+}
+
+class _SignupState extends State<Signup> {
+  final TextEditingController userController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
+  final TextEditingController passworcController = TextEditingController();
+  String? selectEducation;
+
+  void sendOtp(BuildContext context) async {
+    ApiSettings apiSettings = ApiSettings(endPoint: 'auth/register');
+    try {
+      var data = {"phone_number": mobileController.text};
+      final response = await apiSettings.postMethod(jsonEncode(data));
+      final a = jsonDecode(response.body);
+      final body = {
+        "username": userController.text,
+        "email": emailController.text,
+        "phone_number": mobileController.text,
+        "education": selectEducation,
+        "password": passworcController.text,
+      };
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OtpScreen(data: body)),
+        );
+      }
+    } catch (e) {
+      SnackbarUtils.showErrorSnackbar(context, "Registration Failed");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +59,6 @@ class Signup extends StatelessWidget {
                 'assets/images/svg/graduation hats.svg',
                 height: 200,
                 fit: BoxFit.none,
-                // fit: BoxFit.contain,
               ),
               const SizedBox(height: 24),
               const Text(
@@ -33,6 +72,7 @@ class Signup extends StatelessWidget {
               const SizedBox(height: 32),
 
               TextField(
+                controller: userController,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   labelText: 'User name',
@@ -45,6 +85,7 @@ class Signup extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextField(
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -57,6 +98,7 @@ class Signup extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextField(
+                controller: mobileController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   labelText: 'Mobile Number',
@@ -72,16 +114,18 @@ class Signup extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   border: Border.all(width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: DropdownButton<String>(
-                  hint: Text(
+                  hint: const Text(
                     'Select Education',
                     style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 12),
+                  padding: const EdgeInsets.only(left: 12),
+                  isExpanded: true,
+                  value: selectEducation,
                   items:
                       ['SSC', 'HSC', 'Undergraduate', 'Graduate'].map((
                         String item,
@@ -91,12 +135,16 @@ class Signup extends StatelessWidget {
                           child: Text(item),
                         );
                       }).toList(),
-                  onChanged: (String? newValue) {},
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectEducation = newValue!;
+                    });
+                  },
                 ),
               ),
               const SizedBox(height: 16),
-              // Password Field
               TextField(
+                controller: passworcController,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -104,7 +152,7 @@ class Signup extends StatelessWidget {
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.visibility_off),
-                    onPressed: () {}, // Add toggle later
+                    onPressed: () {}, // Add toggle logic later if needed
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -112,12 +160,12 @@ class Signup extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Sign In Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    sendOtp(context);
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -128,8 +176,6 @@ class Signup extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-
-              // OR Divider
               Row(
                 children: const [
                   Expanded(child: Divider()),
@@ -141,14 +187,14 @@ class Signup extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-
-              // Register link
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("Already have an account?"),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/sign-in');
+                    },
                     child: const Text(
                       'Sign in',
                       style: TextStyle(color: PRIMARY_COLOR),

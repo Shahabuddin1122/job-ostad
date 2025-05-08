@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Examcard extends StatelessWidget {
   final String title, desc, num_of_question, time, id, date;
@@ -39,7 +41,20 @@ class Examcard extends StatelessWidget {
           today.year == examDate.year &&
           today.month == examDate.month &&
           today.day == examDate.day;
-      return isToday && has_exam_script;
+      return isToday || has_exam_script;
+    }
+
+    Future<void> isUserLogin() async {
+      ApiSettings apiSettings = ApiSettings(endPoint: 'auth/get-all-user');
+
+      try {
+        final response = await apiSettings.getMethod();
+        if (response.statusCode == 200) {
+          Navigator.pushNamed(context, '/exam-script', arguments: id);
+        } else {
+          Navigator.pushNamed(context, '/sign-in');
+        }
+      } catch (e) {}
     }
 
     return Container(
@@ -98,13 +113,9 @@ class Examcard extends StatelessWidget {
                       onPressed:
                           isButtonEnabled()
                               ? () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/exam-script',
-                                  arguments: id,
-                                );
+                                isUserLogin();
                               }
-                              : null, // disables the button if false
+                              : null,
                       child: Text("Exam"),
                     ),
                   ],
