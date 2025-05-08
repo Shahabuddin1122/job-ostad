@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/snackbar.dart';
-import 'package:job_ostad/widgets/showDialog.dart';
+import 'package:job_ostad/widgets/otpScreen.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
