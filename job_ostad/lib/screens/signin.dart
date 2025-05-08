@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
+import 'package:job_ostad/widgets/loading.dart';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -60,121 +61,132 @@ class _SigninState extends State<Signin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 40),
-              SvgPicture.asset(
-                'assets/images/svg/graduation hats.svg',
-                height: 200,
-                fit: BoxFit.none,
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                "Sign In",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 32),
-
-              // Mobile Number Field
-              TextField(
-                keyboardType: TextInputType.phone,
-                controller: numberController,
-                decoration: InputDecoration(
-                  labelText: 'Mobile Number',
-                  hintText: 'Enter your mobile number',
-                  prefixIcon: const Icon(Icons.phone),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 40),
+                  SvgPicture.asset(
+                    'assets/images/svg/graduation hats.svg',
+                    height: 200,
+                    fit: BoxFit.none,
                   ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Password Field
-              TextField(
-                obscureText: true,
-                controller: passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  hintText: 'Enter your password',
-                  prefixIcon: const Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.visibility_off),
-                    onPressed: () {}, // Optional toggle logic
+                  const SizedBox(height: 24),
+                  const Text(
+                    "Sign In",
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
+                  const SizedBox(height: 32),
 
-              // Forgot password
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text('Forgot password?'),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Sign In Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: isLoading ? null : send,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: PRIMARY_COLOR,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                  // Mobile Number Field
+                  TextField(
+                    keyboardType: TextInputType.phone,
+                    controller: numberController,
+                    decoration: InputDecoration(
+                      labelText: 'Mobile Number',
+                      hintText: 'Enter your mobile number',
+                      prefixIcon: const Icon(Icons.phone),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
-                  child:
-                      isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                            "Sign In",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                ),
-              ),
-              const SizedBox(height: 24),
+                  const SizedBox(height: 16),
 
-              // OR Divider
-              Row(
-                children: const [
-                  Expanded(child: Divider()),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text("OR"),
+                  // Password Field
+                  TextField(
+                    obscureText: true,
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      hintText: 'Enter your password',
+                      prefixIcon: const Icon(Icons.lock),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.visibility_off),
+                        onPressed: () {}, // Optional toggle logic
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                   ),
-                  Expanded(child: Divider()),
+                  const SizedBox(height: 8),
+
+                  // Forgot password
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text('Forgot password?'),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Sign In Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : send,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: PRIMARY_COLOR,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child:
+                          isLoading
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text(
+                                "Sign In",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // OR Divider
+                  Row(
+                    children: const [
+                      Expanded(child: Divider()),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text("OR"),
+                      ),
+                      Expanded(child: Divider()),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Register link
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account?"),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/sign-up');
+                        },
+                        child: const Text('Register now'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              const SizedBox(height: 16),
-
-              // Register link
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't have an account?"),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/sign-up');
-                    },
-                    child: const Text('Register now'),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
+          if (isLoading)
+            Container(
+              color: Colors.black.withAlpha(50),
+              child: const CustomLoadingIndicator(),
+            ),
+        ],
       ),
     );
   }
