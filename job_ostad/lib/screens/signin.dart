@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:job_ostad/utils/api_settings.dart';
+import 'package:job_ostad/utils/constants.dart';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -11,6 +14,48 @@ class Signin extends StatefulWidget {
 class _SigninState extends State<Signin> {
   final numberController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isLoading = false;
+
+  void send() async {
+    if (numberController.text.isEmpty || passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please fill in all fields')));
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    ApiSettings apiSettings = ApiSettings(endPoint: 'auth/login');
+    final data = {
+      "phone_number": numberController.text,
+      "password": passwordController.text,
+    };
+
+    try {
+      final response = await apiSettings.postMethod(jsonEncode(data));
+
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
+        print("Login success: $body");
+
+        // Navigate to the home/dashboard screen
+        Navigator.pushReplacementNamed(context, '/');
+      } else {
+        final errorBody = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorBody['message'] ?? 'Login failed')),
+        );
+      }
+    } catch (e) {
+      print("Login error: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("An error occurred. Try again.")));
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +71,6 @@ class _SigninState extends State<Signin> {
                 'assets/images/svg/graduation hats.svg',
                 height: 200,
                 fit: BoxFit.none,
-                // fit: BoxFit.contain,
               ),
               const SizedBox(height: 24),
               const Text(
@@ -60,7 +104,7 @@ class _SigninState extends State<Signin> {
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.visibility_off),
-                    onPressed: () {}, // Add toggle later
+                    onPressed: () {}, // Optional toggle logic
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -83,14 +127,21 @@ class _SigninState extends State<Signin> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: isLoading ? null : send,
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: PRIMARY_COLOR,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text("Sign In", style: TextStyle(fontSize: 18)),
+                  child:
+                      isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                            "Sign In",
+                            style: TextStyle(fontSize: 18),
+                          ),
                 ),
               ),
               const SizedBox(height: 24),
