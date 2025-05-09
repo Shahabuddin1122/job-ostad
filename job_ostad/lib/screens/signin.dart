@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/widgets/loading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -18,6 +19,7 @@ class _SigninState extends State<Signin> {
   bool isLoading = false;
 
   void send() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (numberController.text.isEmpty || passwordController.text.isEmpty) {
       ScaffoldMessenger.of(
         context,
@@ -38,7 +40,7 @@ class _SigninState extends State<Signin> {
 
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);
-        print("Login success: $body");
+        prefs.setString("token", body['token']);
 
         // Navigate to the home/dashboard screen
         Navigator.pushReplacementNamed(context, '/');

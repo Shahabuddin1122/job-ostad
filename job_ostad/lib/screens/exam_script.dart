@@ -72,7 +72,7 @@ class _ExamScriptState extends State<ExamScript> {
               "question": item["question"],
               "options": List<String>.from(item["options"]),
               "subject": item["subject"] ?? "General",
-              "image": item["image"],
+              "image": item["image"] ?? '',
             });
           }
         });
