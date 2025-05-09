@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Examcard extends StatelessWidget {
   final String title, desc, num_of_question, time, id, date;
