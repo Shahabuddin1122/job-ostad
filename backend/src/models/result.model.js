@@ -28,11 +28,28 @@ const Results = {
     },
 
     // Get results by user ID
-    async getByUserId(user_id) {
-        const query = `SELECT * FROM results WHERE user_id = $1 ORDER BY id DESC;`;
+    async getByUserId({ user_id }) {
+        const query = `
+        SELECT 
+            r.id AS result_id,
+            q.title,
+            r.score,
+            q.number_of_questions,
+            COUNT(a.*) FILTER (WHERE a.is_correct = true) AS number_of_correct
+        
+        FROM results r
+        INNER JOIN exam_script es ON r.exam_script_id = es.id
+        INNER JOIN quiz q ON q.id = es.quiz_id
+        LEFT JOIN answer_script a ON a.result_id = r.id
+        WHERE r.user_id = $1
+        GROUP BY r.id, q.id, q.title, r.score, q.number_of_questions
+        ORDER BY q.id DESC;
+    `;
+
         const response = await pool.query(query, [user_id]);
         return response.rows;
     },
+
 
     async update({score, id}){
         const updateQuery = `
