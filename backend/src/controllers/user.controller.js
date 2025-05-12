@@ -47,3 +47,41 @@ exports.add_user_question_response = async (req, res) => {
         res.status(500).json({ status: false, message: `Server error: ${e.message}` });
     }
 };
+
+exports.get_user_results = async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ status: false, message: "Unauthorized" });
+        }
+
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user_id = decoded.userId;
+
+        const results = await Results.getByUserId({ user_id });
+
+        // Convert string values to numbers and calculate totals
+        let total_correct = 0;
+        let total_wrong = 0;
+
+        for (let result of results) {
+            result.number_of_correct = parseInt(result.number_of_correct);
+            result.number_of_wrong = parseInt(result.number_of_questions) - parseInt(result.number_of_correct);
+            total_correct += result.number_of_correct;
+            total_wrong += result.number_of_wrong;
+        }
+
+        res.status(200).json({
+            status: true,
+            data: {
+                total_exams: results.length,
+                total_correct,
+                total_wrong,
+                results
+            }
+        });
+    } catch (e) {
+        res.status(500).json({ status: false, message: `Serve error: ${e.message}` });
+    }
+};
