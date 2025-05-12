@@ -75,3 +75,25 @@ CREATE TABLE IF NOT EXISTS managers (
     phone_number INTEGER UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
+
+-- Create result table
+CREATE TABLE IF NOT EXISTS results (
+    id SERIAL PRIMARY KEY,
+    score BIGINT NOT NULL,
+    exam_script_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (exam_script_id) REFERENCES exam_script(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
+
+-- Create answer_script table
+CREATE TABLE IF NOT EXISTS answer_script (
+    id SERIAL PRIMARY KEY,
+    is_correct BOOLEAN NOT NULL,
+    result_id INTEGER NOT NULL,
+    question_id INTEGER NOT NULL,
+    submission_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    selected_option TEXT NOT NULL,
+    FOREIGN KEY (result_id) REFERENCES results(id) ON DELETE CASCADE,
+    FOREIGN KEY (question_id) REFERENCES question(id) ON DELETE CASCADE
+);

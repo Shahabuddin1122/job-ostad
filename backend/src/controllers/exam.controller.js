@@ -20,7 +20,6 @@ exports.create_question = async (req, res) => {
         await Question.createMultiple(quiz_id, questions);
         res.status(201).json({ success: true, message: "Questions created successfully" });
     } catch (error) {
-        console.error('Error creating questions:', error);
         res.status(500).json({ success: false, message: 'Failed to create questions' });
     }
 };
@@ -36,15 +35,16 @@ exports.get_question = async (req, res) => {
 
         const response = await Question.getAllQuestionOfAQuiz(quizId);
 
-        const { title, number_of_questions, total_time } = response[0]
+        const { id:exam_script_id, title, number_of_questions, total_time } = response[0]
         const questions = response.map(row => ({
+            id: row.id,
             question: row.question,
             options: row.options,
             image: row.image,
             subject: row.subject
         }));
 
-        res.status(200).json({ success: true, data: {title, number_of_questions, total_time, questions} });
+        res.status(200).json({ success: true, data: {exam_script_id, title, number_of_questions, total_time, questions} });
     } catch (error) {
         console.error('Error fetching questions:', error);
         res.status(500).json({ success: false, message: 'Internal server error.' });
