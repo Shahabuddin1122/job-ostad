@@ -1,6 +1,7 @@
 const app = require("./app");
 const logger = require("./config/logger");
 const dotenv = require("dotenv");
+const redisClient = require("./config/radis");
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;

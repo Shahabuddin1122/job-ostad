@@ -38,7 +38,7 @@ const Question = {
 
     async getAllQuestionOfAQuiz(quizId) {
         const query = `
-            SELECT q.title, q.number_of_questions, q.total_time, qs.question, qs.options, qs.image, qs.subject
+            SELECT es.id, q.title, q.number_of_questions, q.total_time, qs.question, qs.options, qs.image, qs.subject, qs.id
             FROM quiz q 
             INNER JOIN exam_script es ON q.id = es.quiz_id
             INNER JOIN question qs ON es.id = qs.exam_script_id
@@ -47,7 +47,17 @@ const Question = {
         const values = [quizId];
         const results = await pool.query(query, values);
         return results.rows;
-    }
+    },
+
+    async findByPk(id){
+        const query = `
+            SELECT * FROM question 
+            WHERE id = $1
+        `;
+        const values = [id];
+        const results = await pool.query(query, values)
+        return results.rows[0];
+    },
 };
 
 module.exports = Question;

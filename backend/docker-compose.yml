@@ -47,7 +47,7 @@ services:
       - jobostad-network
 
   redis:
-    image: redis:latest
+    image: redis/redis-stack-server:latest
     container_name: jobostad-redis
     ports:
       - "6379:6379"
