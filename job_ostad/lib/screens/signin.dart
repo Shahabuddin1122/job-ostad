@@ -140,15 +140,10 @@ class _SigninState extends State<Signin> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child:
-                          isLoading
-                              ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                              : const Text(
-                                "Sign In",
-                                style: TextStyle(fontSize: 18),
-                              ),
+                      child: const Text(
+                        "Sign In",
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),

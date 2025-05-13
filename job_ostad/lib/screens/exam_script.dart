@@ -7,6 +7,8 @@ import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/mcq_widget.dart';
 import 'dart:async';
 
+import 'package:job_ostad/widgets/showDialog.dart';
+
 class ExamScript extends StatefulWidget {
   final String id;
   const ExamScript({required this.id, super.key});
@@ -21,11 +23,14 @@ class _ExamScriptState extends State<ExamScript> {
   final ScrollController _scrollController = ScrollController();
   String? selectedSubject = "All";
   String? title;
+  String? exam_script_id;
   int numberOfQuestions = 0;
   int totalTime = 0;
+  Map<String, dynamic>? submissionData;
 
   // Question dictionary
   final List<Map<String, dynamic>> questions = [];
+  Map<String, int> selectedAnswers = {};
 
   // Get unique subjects with "All" option
   List<String> get uniqueSubjects {
@@ -62,6 +67,7 @@ class _ExamScriptState extends State<ExamScript> {
         final List<dynamic> data = json['data']['questions'];
 
         setState(() {
+          exam_script_id = json['data']['exam_script_id'].toString();
           title = json["data"]["title"];
           totalTime = json["data"]["total_time"];
           numberOfQuestions = json["data"]["number_of_questions"];
@@ -69,6 +75,7 @@ class _ExamScriptState extends State<ExamScript> {
           questions.clear();
           for (var item in data) {
             questions.add({
+              "question_id": item["id"],
               "question": item["question"],
               "options": List<String>.from(item["options"]),
               "subject": item["subject"] ?? "General",
@@ -85,6 +92,63 @@ class _ExamScriptState extends State<ExamScript> {
     }
   }
 
+  void saveQuestion() async {
+    if (exam_script_id == null) return;
+
+    List<Map<String, dynamic>> answerList = [];
+
+    for (var entry in selectedAnswers.entries) {
+      String questionId = entry.key;
+      int selectedIndex = entry.value;
+
+      var question = questions.firstWhere(
+        (q) => q["question_id"].toString() == questionId,
+      );
+      answerList.add({
+        "question_id": questionId,
+        "selected_option": question["options"][selectedIndex],
+      });
+    }
+
+    submissionData = {"exam_script_id": exam_script_id, "answers": answerList};
+    await showCustomDialog(
+      context: context,
+      title: "Confirm Submission",
+      content: "Are you sure you want to submit?",
+      confirmText: "Submit",
+      cancelText: "Cancel",
+      dismissible: false,
+      onConfirm: () {
+        saveToDatabase();
+      },
+    );
+  }
+
+  void saveToDatabase() async {
+    ApiSettings apiSettings = ApiSettings(
+      endPoint: 'user/add-user-question-response',
+    );
+    try {
+      final response = await apiSettings.postMethod(jsonEncode(submissionData));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Answer Script Save in the database")),
+        );
+        Navigator.pushNamed(context, '/');
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Try again.")));
+      }
+    } catch (e) {
+      print("Error to save the database");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("An error occurred. Try again.")));
+    }
+  }
+
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_seconds > 0) {
@@ -93,6 +157,15 @@ class _ExamScriptState extends State<ExamScript> {
         });
       } else {
         _timer.cancel();
+        showCustomDialog(
+          context: context,
+          content: "Timeout. Submit the script",
+          showCancelButton: false,
+          dismissible: false,
+          onConfirm: () {
+            saveToDatabase();
+          },
+        );
       }
     });
   }
@@ -215,14 +288,28 @@ class _ExamScriptState extends State<ExamScript> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 10,
                   children: [
-                    ...filteredQuestions.map((q) {
-                      return MCQWidget(
-                        count: filteredQuestions.indexOf(q) + 1,
-                        question: q["question"],
-                        options: q["options"],
-                        image: q["image"],
+                    ...filteredQuestions.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      var q = entry.value;
+                      String qId = q["question_id"].toString();
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: MCQWidget(
+                          count: index + 1,
+                          question: q["question"],
+                          options: q["options"],
+                          image: q["image"],
+                          selectedIndex: selectedAnswers[qId],
+                          onOptionSelected: (selectedIndex) {
+                            setState(() {
+                              selectedAnswers[qId] = selectedIndex;
+                            });
+                          },
+                        ),
                       );
-                    }).toList(),
+                    }),
+
                     const SizedBox(height: 60),
                   ],
                 ),
@@ -236,7 +323,7 @@ class _ExamScriptState extends State<ExamScript> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: FloatingActionButton.extended(
-            onPressed: () {},
+            onPressed: saveQuestion,
             label: const Text(
               "Submit Test",
               style: TextStyle(fontSize: 18, color: Colors.white),
