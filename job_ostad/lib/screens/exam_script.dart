@@ -7,6 +7,8 @@ import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/mcq_widget.dart';
 import 'dart:async';
 
+import 'package:job_ostad/widgets/showDialog.dart';
+
 class ExamScript extends StatefulWidget {
   final String id;
   const ExamScript({required this.id, super.key});
@@ -24,6 +26,7 @@ class _ExamScriptState extends State<ExamScript> {
   String? exam_script_id;
   int numberOfQuestions = 0;
   int totalTime = 0;
+  Map<String, dynamic>? submissionData;
 
   // Question dictionary
   final List<Map<String, dynamic>> questions = [];
@@ -107,11 +110,43 @@ class _ExamScriptState extends State<ExamScript> {
       });
     }
 
-    final submission = {
-      "exam_script_id": exam_script_id,
-      "answers": answerList,
-    };
-    print(submission);
+    submissionData = {"exam_script_id": exam_script_id, "answers": answerList};
+    await showCustomDialog(
+      context: context,
+      title: "Confirm Submission",
+      content: "Are you sure you want to submit?",
+      confirmText: "Submit",
+      cancelText: "Cancel",
+      dismissible: false,
+      onConfirm: () {
+        saveToDatabase();
+      },
+    );
+  }
+
+  void saveToDatabase() async {
+    ApiSettings apiSettings = ApiSettings(
+      endPoint: 'user/add-user-question-response',
+    );
+    try {
+      final response = await apiSettings.postMethod(jsonEncode(submissionData));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Answer Script Save in the database")),
+        );
+        Navigator.pushNamed(context, '/');
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Try again.")));
+      }
+    } catch (e) {
+      print("Error to save the database");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("An error occurred. Try again.")));
+    }
   }
 
   void _startTimer() {
@@ -122,6 +157,15 @@ class _ExamScriptState extends State<ExamScript> {
         });
       } else {
         _timer.cancel();
+        showCustomDialog(
+          context: context,
+          content: "Timeout. Submit the script",
+          showCancelButton: false,
+          dismissible: false,
+          onConfirm: () {
+            saveToDatabase();
+          },
+        );
       }
     });
   }
