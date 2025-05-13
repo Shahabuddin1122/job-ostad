@@ -1,37 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:job_ostad/utils/constants.dart';
 
-class MCQWidget extends StatefulWidget {
+class MCQWidget extends StatelessWidget {
   final String question, image;
   final List<String> options;
   final int count;
+  final int? selectedIndex;
+  final Function(int index) onOptionSelected;
 
-  MCQWidget({
+  const MCQWidget({
     required this.image,
     required this.count,
     required this.question,
     required this.options,
+    required this.selectedIndex,
+    required this.onOptionSelected,
   });
 
   @override
-  _MCQWidgetState createState() => _MCQWidgetState();
-}
-
-class _MCQWidgetState extends State<MCQWidget> {
-  int? _selectedIndex;
-
-  void _selectOption(int index) {
-    if (_selectedIndex == null) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // print('${question} ${selectedIndex}');
+
     return Container(
-      padding: EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(12.0),
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(width: 1.0, color: Colors.blue),
@@ -41,77 +32,72 @@ class _MCQWidgetState extends State<MCQWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${widget.count}. ${widget.question}',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            '$count. $question',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          widget.image.isNotEmpty
+          image.isNotEmpty
               ? Container(
                 width: double.maxFinite,
                 height: 200,
-                margin: EdgeInsets.only(top: 10),
+                margin: const EdgeInsets.only(top: 10),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black, width: 1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(widget.image!, fit: BoxFit.contain),
+                  child: Image.network(image, fit: BoxFit.contain),
                 ),
               )
-              : Text(""),
-          SizedBox(height: 10),
-          ...List.generate(
-            widget.options.length,
-            (index) => Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: _buildOption(index, widget.options[index]),
-            ),
-          ),
+              : const SizedBox.shrink(),
+          const SizedBox(height: 10),
+          ...List.generate(options.length, (index) {
+            return GestureDetector(
+              onTap: () => onOptionSelected(index),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: _buildOption(index, options[index], selectedIndex),
+              ),
+            );
+          }),
         ],
       ),
     );
   }
 
-  Widget _buildOption(int index, String text) {
-    String optionLabel = String.fromCharCode(
-      65 + index,
-    ); // Convert 0 -> A, 1 -> B, etc.
-    return GestureDetector(
-      onTap: () => _selectOption(index),
-      child: Row(
-        children: [
-          SizedBox(width: 20),
-          Container(
-            width: 20,
-            height: 20,
-            decoration: BoxDecoration(
-              color:
-                  _selectedIndex == index ? PRIMARY_COLOR : Colors.transparent,
-              borderRadius: BorderRadius.circular(100.0),
-              border: Border.all(width: 1.0, color: PRIMARY_COLOR),
-            ),
-            child: Center(
-              child: Text(
-                optionLabel,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: _selectedIndex == index ? Colors.white : Colors.black,
-                ),
+  Widget _buildOption(int index, String text, int? selectedIndex) {
+    String optionLabel = String.fromCharCode(65 + index);
+    bool isSelected = index == selectedIndex;
+    return Row(
+      children: [
+        const SizedBox(width: 20),
+        Container(
+          width: 20,
+          height: 20,
+          decoration: BoxDecoration(
+            color: isSelected ? PRIMARY_COLOR : Colors.transparent,
+            borderRadius: BorderRadius.circular(100.0),
+            border: Border.all(width: 1.0, color: PRIMARY_COLOR),
+          ),
+          child: Center(
+            child: Text(
+              optionLabel,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: isSelected ? Colors.white : Colors.black,
               ),
             ),
           ),
-          SizedBox(width: 15),
-          Text(
-            text,
-            style: TextStyle(
-              fontWeight:
-                  _selectedIndex == index ? FontWeight.bold : FontWeight.normal,
-            ),
+        ),
+        const SizedBox(width: 15),
+        Text(
+          text,
+          style: TextStyle(
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
