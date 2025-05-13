@@ -85,3 +85,15 @@ exports.get_user_results = async (req, res) => {
         res.status(500).json({ status: false, message: `Serve error: ${e.message}` });
     }
 };
+
+exports.get_exam_script_by_result_id = async (req, res)=>{
+    try {
+        const {result_id} = req.query;
+
+        const results = await Results.getById(result_id)
+        res.status(200).json({status: true, message: results})
+    }
+    catch (e) {
+        res.status(500).json({status: false, message: `Server error: ${e.message}`})
+    }
+}

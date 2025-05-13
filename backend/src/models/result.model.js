@@ -22,10 +22,29 @@ const Results = {
 
     // Get result by ID
     async getById(id) {
-        const query = `SELECT * FROM results WHERE id = $1;`;
+        const query = `
+        SELECT 
+            q.id AS question_id,
+            q.question AS question_text,
+            q.options,
+            q.answer AS correct_answer,
+            q.image,
+            q.subject,
+            ans.selected_option,
+            ans.is_correct,
+            ans.submission_time
+        FROM results r
+        INNER JOIN exam_script es ON r.exam_script_id = es.id
+        INNER JOIN question q ON q.exam_script_id = es.id
+        LEFT JOIN answer_script ans ON ans.question_id = q.id AND ans.result_id = r.id
+        WHERE r.id = $1
+        ORDER BY q.id;
+    `;
+
         const response = await pool.query(query, [id]);
-        return response.rows[0];
+        return response.rows;
     },
+
 
     // Get results by user ID
     async getByUserId({ user_id }) {
