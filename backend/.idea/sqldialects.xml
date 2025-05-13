@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/src/models/answer.model.js" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/book.model.js" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/result.model.js" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/models/user.model.js" dialect="GenericSQL" />
   </component>
 </project>

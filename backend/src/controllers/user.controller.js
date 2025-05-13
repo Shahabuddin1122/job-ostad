@@ -97,3 +97,43 @@ exports.get_exam_script_by_result_id = async (req, res)=>{
         res.status(500).json({status: false, message: `Server error: ${e.message}`})
     }
 }
+
+exports.get_user_info = async (req, res)=>{
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ status: false, message: "Unauthorized" });
+        }
+
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user_id = decoded.userId;
+
+        const user = await User.findOne("id", user_id)
+
+        res.status(200).json({status: true, message: user});
+    }
+    catch (e) {
+        res.status(500).json({status: false, message: `Server error: ${e.message}`})
+    }
+}
+
+exports.get_user_stat = async (req, res)=>{
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ status: false, message: "Unauthorized" });
+        }
+
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user_id = decoded.userId;
+
+        const user = await User.findUserStat(user_id)
+
+        res.status(200).json({status: true, message: user});
+    }
+    catch (e) {
+        res.status(500).json({status: false, message: `Server error: ${e.message}`})
+    }
+}
