@@ -78,7 +78,7 @@ class Profile extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             Column(
               spacing: 10,
               children: [
@@ -86,7 +86,7 @@ class Profile extends StatelessWidget {
                   padding: Theme.of(context).insideCardPadding,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.grey,
+                    border: Border.all(width: 1.0),
                   ),
                   child: Row(
                     spacing: 10.0,
@@ -107,7 +107,7 @@ class Profile extends StatelessWidget {
                   padding: Theme.of(context).insideCardPadding,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.grey,
+                    border: Border.all(width: 1.0),
                   ),
                   child: Row(
                     spacing: 10.0,
@@ -128,7 +128,7 @@ class Profile extends StatelessWidget {
                   padding: Theme.of(context).insideCardPadding,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.grey,
+                    border: Border.all(width: 1.0),
                   ),
                   child: Row(
                     spacing: 10.0,
@@ -149,7 +149,7 @@ class Profile extends StatelessWidget {
                   padding: Theme.of(context).insideCardPadding,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.grey,
+                    border: Border.all(width: 1.0),
                   ),
                   child: Row(
                     spacing: 10.0,
@@ -170,7 +170,7 @@ class Profile extends StatelessWidget {
                   padding: Theme.of(context).insideCardPadding,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.grey,
+                    border: Border.all(width: 1.0),
                   ),
                   child: Row(
                     spacing: 10.0,
@@ -191,7 +191,7 @@ class Profile extends StatelessWidget {
                   padding: Theme.of(context).insideCardPadding,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.grey,
+                    border: Border.all(width: 1.0),
                   ),
                   child: Row(
                     spacing: 10.0,
@@ -212,7 +212,7 @@ class Profile extends StatelessWidget {
                   padding: Theme.of(context).insideCardPadding,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.grey,
+                    border: Border.all(width: 1.0),
                   ),
                   child: Row(
                     spacing: 10.0,
