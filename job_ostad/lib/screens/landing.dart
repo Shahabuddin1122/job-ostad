@@ -19,7 +19,7 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   bool _isSearching = false;
-  int _selectedIndex = 0; // Tracks the bottom navigation bar selection
+  int _selectedIndex = 0;
   int _currentPageIndex = 0; // Tracks the current page being displayed
   String? selectedCourse;
   String? courseId;

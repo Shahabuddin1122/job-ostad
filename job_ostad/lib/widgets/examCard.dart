@@ -40,7 +40,7 @@ class Examcard extends StatelessWidget {
           today.year == examDate.year &&
           today.month == examDate.month &&
           today.day == examDate.day;
-      return isToday || has_exam_script;
+      return isToday && has_exam_script;
     }
 
     Future<void> isUserLogin() async {

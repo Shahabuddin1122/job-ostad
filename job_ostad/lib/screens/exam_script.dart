@@ -130,8 +130,8 @@ class _ExamScriptState extends State<ExamScript> {
     );
     try {
       final response = await apiSettings.postMethod(jsonEncode(submissionData));
-      print(response.statusCode);
       if (response.statusCode == 200) {
+        _timer.cancel();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Answer Script Save in the database")),
         );
