@@ -13,7 +13,6 @@ class Results extends StatefulWidget {
 }
 
 class _ResultsState extends State<Results> {
-  // Variables to store fetched data
   int totalExams = 0;
   int totalCorrect = 0;
   int totalWrong = 0;
@@ -39,7 +38,6 @@ class _ResultsState extends State<Results> {
           totalWrong = resultData['total_wrong'] ?? 0;
           results = resultData['results'] ?? [];
         });
-        print("Result: $resultData");
       } else {
         print("Failed to fetch result. Status code: ${response.statusCode}");
         Navigator.pushReplacementNamed(context, '/sign-in');
