@@ -55,14 +55,41 @@ const Quiz = {
             END AS has_exam_script
         FROM quiz q 
         LEFT JOIN exam_script es ON q.id = es.quiz_id
-        WHERE q.course_id = $1
+        WHERE q.course_id = $1 AND q.date > CURRENT_DATE
         ORDER BY q.date ASC
         `;
 
         const value = [id];
         const results = await pool.query(query, value);
         return results.rows;
-    }
+    },
+
+    async getUnansweredQuizByCourseID(courseId, userId) {
+        const query = `
+            SELECT
+                q.id AS quiz_id,
+                q.title,
+                q.description,
+                q.number_of_questions,
+                q.total_time,
+                q.date,
+                CASE
+                    WHEN es.id IS NULL THEN false
+                    ELSE true
+                    END AS has_exam_script
+            FROM quiz q
+                     LEFT JOIN exam_script es ON q.id = es.quiz_id
+                     LEFT JOIN results rs ON rs.exam_script_id = es.id AND rs.user_id = $2
+            WHERE q.course_id = $1
+              AND rs.id IS NULL
+              AND q.date > CURRENT_DATE
+            ORDER BY q.date ASC
+        `;
+
+        const value = [courseId, userId];
+        const results = await pool.query(query, value);
+        return results.rows;
+    },
 
 
 }

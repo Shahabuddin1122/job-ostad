@@ -1,5 +1,6 @@
 const Quiz = require("../models/quiz.model");
 const Course = require("../models/course.model");
+const jwt = require("jsonwebtoken");
 
 exports.get_all_quiz = async (req, res)=>{
     try {
@@ -51,10 +52,23 @@ exports.get_quiz_by_category = async (req, res)=>{
 exports.getAllQuizByCourseId = async (req, res)=>{
     try {
         const {courseId} = req.params;
+        const authHeader = req.headers.authorization;
+        let userId;
+        if (authHeader) {
+            const token = authHeader.split(" ")[1];
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            userId = decoded.userId;
+        }
 
-        const data = await Quiz.getAllQuizByCourseID(courseId)
+        if(userId) {
+            const data = await Quiz.getUnansweredQuizByCourseID(courseId,1)
+            res.status(200).json({success: true, message: data})
+        }
+        else {
+            const data = await Quiz.getAllQuizByCourseID(courseId)
+            res.status(200).json({success: true, message: data})
+        }
 
-        res.status(200).json({success: true, message: data})
     }
     catch (error) {
         res.status(500).json({success: false, message: `Server Error: ${error.message}`});
