@@ -46,6 +46,84 @@ const Course = {
         return results.rows;
     },
 
+    async findFavouriteCourse() {
+        const query = `
+        WITH popular_courses AS (
+            SELECT
+                c.id,
+                c.title,
+                c.description,
+                c.category,
+                c.keywords,
+                c.course_image,
+                c.created_at,
+                COUNT(DISTINCT r.user_id) as user_count
+            FROM results r
+            INNER JOIN exam_script es ON r.exam_script_id = es.id
+            INNER JOIN quiz q ON es.quiz_id = q.id
+            INNER JOIN courses c ON q.course_id = c.id
+            GROUP BY c.id, c.title, c.description, c.category, c.keywords, c.course_image, c.created_at
+        ),
+        ranked_courses AS (
+            SELECT
+                id,
+                title,
+                description,
+                category,
+                keywords,
+                course_image,
+                created_at,
+                user_count,
+                ROW_NUMBER() OVER (ORDER BY user_count DESC) as rn
+            FROM popular_courses
+        ),
+        top_courses AS (
+            SELECT
+                id,
+                title,
+                description,
+                category,
+                keywords,
+                course_image,
+                created_at
+            FROM ranked_courses
+            WHERE rn <= 2
+        ),
+        fallback_courses AS (
+            SELECT
+                id,
+                title,
+                description,
+                category,
+                keywords,
+                course_image,
+                created_at
+            FROM courses
+            WHERE id NOT IN (SELECT id FROM top_courses)
+            ORDER BY RANDOM()
+            LIMIT GREATEST(0, 2 - (SELECT COUNT(*) FROM top_courses))
+        )
+        SELECT id, title, description, category, keywords, course_image, created_at
+        FROM (
+            SELECT id, title, description, category, keywords, course_image, created_at
+            FROM top_courses
+            UNION
+            SELECT id, title, description, category, keywords, course_image, created_at
+            FROM fallback_courses
+        ) AS combined
+        ORDER BY (
+            SELECT COUNT(DISTINCT r.user_id)
+            FROM results r
+            JOIN exam_script es ON r.exam_script_id = es.id
+            JOIN quiz q ON es.quiz_id = q.id
+            WHERE q.course_id = combined.id
+        ) DESC NULLS LAST;
+    `;
+
+        const results = await pool.query(query);
+        return results.rows; // Return all rows, not just the first one
+    }
+
 };
 
 module.exports = Course

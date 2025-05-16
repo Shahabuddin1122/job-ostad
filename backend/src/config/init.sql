@@ -1,15 +1,3 @@
--- Create the books table
-CREATE TABLE IF NOT EXISTS books (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    writer VARCHAR(255),
-    visibility VARCHAR(255) DEFAULT 'FREE_USER',
-    book_image VARCHAR(255),
-    book_pdf VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-
 -- Create the courses table
 CREATE TABLE IF NOT EXISTS courses (
    id SERIAL PRIMARY KEY,
@@ -97,3 +85,25 @@ CREATE TABLE IF NOT EXISTS answer_script (
     FOREIGN KEY (result_id) REFERENCES results(id) ON DELETE CASCADE,
     FOREIGN KEY (question_id) REFERENCES question(id) ON DELETE CASCADE
 );
+
+-- Create the books table
+CREATE TABLE IF NOT EXISTS books (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    writer VARCHAR(255),
+    visibility VARCHAR(255) DEFAULT 'FREE_USER',
+    book_image VARCHAR(255),
+    book_pdf VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+-- Create studies table
+CREATE TABLE IF NOT EXISTS studies (
+    user_id INTEGER NOT NULL,
+    book_id INTEGER NOT NULL,
+    study_count INTEGER NOT NULL DEFAULT 1,
+    PRIMARY KEY (user_id, book_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+    );
