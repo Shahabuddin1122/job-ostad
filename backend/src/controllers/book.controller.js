@@ -59,3 +59,22 @@ exports.addBook = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+exports.updateTheBookStudyCount = async (req, res)=>{
+  try {
+    res.status(200).json({status: true, message: "Message"})
+  }
+  catch (e) {
+    res.status(500).json({status: false, message: `Server error: ${e.message}`})
+  }
+}
+
+exports.getTopStudiedBook = async (req, res) => {
+  try {
+    const results = await Book.getTopStudiedBook()
+    res.status(200).json({status: true, message: results})
+  }
+  catch (e) {
+    res.status(500).json({status: false, message: `Server error: ${e.message}`})
+  }
+}
