@@ -60,3 +60,13 @@ exports.getAllCollection = async (req, res)=>{
     res.status(500).json({"message": "Server error", error: error.message});
   }
 }
+
+exports.getTopCourses = async (req, res) =>{
+  try {
+    const results = await Course.findFavouriteCourse();
+    res.status(200).json({status: true, message: results})
+  }
+  catch (e) {
+    res.status(500).json({status: false, message: `Server error ${e.message}`})
+  }
+}

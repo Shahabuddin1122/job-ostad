@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAllCourse, addCourse, getCoursesOnEachCategory, getAllCollection, getAllQuizByCourseId} = require("../controllers/course.controller");
+const { getAllCourse, addCourse, getCoursesOnEachCategory, getAllCollection, getAllQuizByCourseId, getTopCourses} = require("../controllers/course.controller");
 const multer = require("multer");
 const {route} = require("express/lib/application");
 
@@ -205,5 +205,7 @@ router.get('/get-all-collection', getAllCollection)
  *           format: date-time
  *           example: "2023-05-01T12:00:00Z"
  */
+
+router.get('/get-top-courses', getTopCourses)
 
 module.exports = router;
