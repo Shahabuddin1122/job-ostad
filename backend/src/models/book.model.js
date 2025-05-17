@@ -61,6 +61,40 @@ const Book = {
 
     const results = await pool.query(query);
     return results.rows;
+  },
+
+  async updateTheBookStudyCount({ user_id, book_id }) {
+    const client = await pool.connect();
+
+    try {
+      await client.query('BEGIN');
+
+      const res = await client.query(
+          `SELECT study_count FROM studies WHERE user_id = $1 AND book_id = $2`,
+          [user_id, book_id]
+      );
+
+      if (res.rows.length > 0) {
+        await client.query(
+            `UPDATE studies
+         SET study_count = study_count + 1
+         WHERE user_id = $1 AND book_id = $2`,
+            [user_id, book_id]
+        );
+      } else {
+        await client.query(
+            `INSERT INTO studies (user_id, book_id, study_count)
+         VALUES ($1, $2, 1)`,
+            [user_id, book_id]
+        );
+      }
+
+      await client.query('COMMIT');
+    } catch (err) {
+      await client.query('ROLLBACK');
+    } finally {
+      client.release();
+    }
   }
 };
 

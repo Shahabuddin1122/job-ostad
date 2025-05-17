@@ -5,6 +5,7 @@ const {
     getAllBooks,
     addBook, updateTheBookStudyCount, getTopStudiedBook,
 } = require("../controllers/book.controller");
+const {authenticateToken} = require("../middlewares/auth.middleware");
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -157,7 +158,7 @@ router.post(
  *           example: "2023-05-01T12:00:00Z"
  */
 
-router.put('/update-book-study-count', updateTheBookStudyCount)
+router.put('/update-book-study-count', authenticateToken, updateTheBookStudyCount)
 router.get('/get-top-studied-book', getTopStudiedBook)
 
 module.exports = router;
