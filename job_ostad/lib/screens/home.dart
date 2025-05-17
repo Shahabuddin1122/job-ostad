@@ -1,12 +1,47 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:job_ostad/models/topCourse.dart';
+import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/categoryItem.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   final Function(String) onTextClicked;
   const Home({required this.onTextClicked, super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  List<TopCourse> topCourses = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getTopCourses();
+  }
+
+  Future<void> getTopCourses() async {
+    try {
+      ApiSettings apiSettings = ApiSettings(endPoint: 'course/get-top-courses');
+      final response = await apiSettings.getMethod();
+      if (response.statusCode == 200) {
+        final jsondata = jsonDecode(response.body);
+        List<dynamic> data = jsondata['message'];
+
+        setState(() {
+          topCourses = data.map((item) => TopCourse.fromJson(item)).toList();
+        });
+      }
+    } catch (e) {
+      print('Error fetching top courses: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +199,7 @@ class Home extends StatelessWidget {
                       categories.map((category) {
                         return GestureDetector(
                           onTap: () {
-                            onTextClicked(category);
+                            widget.onTextClicked(category);
                           },
                           child: CategoryCard(category: category),
                         );
@@ -197,21 +232,16 @@ class Home extends StatelessWidget {
                     mainAxisSpacing: 10,
                     childAspectRatio: 0.9,
                   ),
-                  itemCount: 2,
+                  itemCount: topCourses.length,
                   itemBuilder: (context, index) {
-                    final items = [
-                      CategoryItem(
-                        imagePath: "https://i.ibb.co/nq5n03vm/e552cf5654ad.jpg",
-                        title: "47th BCS CRASH COURSE",
-                      ),
-                      CategoryItem(
-                        imagePath: "https://i.ibb.co/nq5n03vm/e552cf5654ad.jpg",
-                        title: "BANK PROSTUTI",
-                      ),
-                    ];
-                    return items[index];
+                    final course = topCourses[index];
+                    return CategoryItem(
+                      imagePath: course.courseImage,
+                      title: course.title,
+                    );
                   },
                 ),
+
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
