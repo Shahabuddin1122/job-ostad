@@ -234,12 +234,21 @@ class _ResultsState extends State<Results> {
                   // Display exam titles from results
                   ...results
                       .map(
-                        (result) => Text(
-                          result['title'],
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            fontSize: 16,
-                            color: Colors.blue,
+                        (result) => TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/answer-script',
+                              arguments: result['result_id'].toString(),
+                            );
+                          },
+                          child: Text(
+                            result['title'],
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 16,
+                              color: Colors.blue,
+                            ),
                           ),
                         ),
                       )
