@@ -133,10 +133,11 @@ class _LandingState extends State<Landing> {
     switch (_currentPageIndex) {
       case 0:
         return Home(
-          onTextClicked: (String course) {
+          onTextClicked: (String? course, String courseid, int pageId) {
             setState(() {
-              _currentPageIndex = 5; // Navigate to Courses
+              _currentPageIndex = pageId; // Navigate to Courses
               selectedCourse = course;
+              courseId = courseid;
             });
           },
         );
@@ -172,10 +173,11 @@ class _LandingState extends State<Landing> {
         return BookView(book_pdf: selectedBookPdf!, title: selectedBookTitle!);
       default:
         return Home(
-          onTextClicked: (String course) {
+          onTextClicked: (String? course, String courseid, int pageId) {
             setState(() {
-              _currentPageIndex = 5;
+              _currentPageIndex = pageId;
               selectedCourse = course;
+              courseId = courseid;
             });
           },
         );
