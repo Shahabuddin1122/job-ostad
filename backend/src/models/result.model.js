@@ -32,7 +32,7 @@ const Results = {
             q.subject,
             ans.selected_option,
             ans.is_correct,
-            ans.submission_time
+            r.submission_time
         FROM results r
         INNER JOIN exam_script es ON r.exam_script_id = es.id
         INNER JOIN question q ON q.exam_script_id = es.id
