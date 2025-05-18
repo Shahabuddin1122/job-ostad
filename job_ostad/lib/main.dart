@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job_ostad/screens/answer_script.dart';
 import 'package:job_ostad/screens/exam_script.dart';
 import 'package:job_ostad/screens/landing.dart';
 import 'package:job_ostad/screens/signin.dart';
@@ -27,6 +28,10 @@ class MyApp extends StatelessWidget {
         '/exam-script': (context) {
           final args = ModalRoute.of(context)!.settings.arguments as String;
           return ExamScript(id: args);
+        },
+        '/answer-script': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as String;
+          return AnswerScript(id: args);
         },
       },
     );
