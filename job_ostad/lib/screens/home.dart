@@ -7,6 +7,7 @@ import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/categoryItem.dart';
+import 'package:job_ostad/widgets/showDialog.dart';
 
 class Home extends StatefulWidget {
   final Function(String? course, String courseId, int pageId) onTextClicked;
@@ -286,7 +287,15 @@ class _HomeState extends State<Home> {
                         title: "HSE 2025",
                       ),
                     ];
-                    return items[index];
+                    return GestureDetector(
+                      onTap: () {
+                        showCustomDialog(
+                          context: context,
+                          content: "This Feature Comming soon!!",
+                        );
+                      },
+                      child: items[index],
+                    );
                   },
                 ),
               ],
