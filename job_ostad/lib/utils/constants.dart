@@ -13,9 +13,9 @@ const Color RATING_FILL = Color(0xFFFFA432);
 
 // const String baseUri = "http://192.168.0.7:8000/";
 // const String baseUri = "http://192.168.0.102:8000/";
-const String baseUri = "http://10.0.2.2:5000/api/";
+// const String baseUri = "http://10.0.2.2:5000/api/";
 // const String baseUri = "http://localhost:5000/api/";
-// const String baseUri = "http://192.168.0.100:8000/";
+const String baseUri = "http://13.219.36.236:5000/api/";
 
 class Constant {
   static String apiUri = '';

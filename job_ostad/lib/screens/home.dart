@@ -7,9 +7,10 @@ import 'package:job_ostad/utils/api_settings.dart';
 import 'package:job_ostad/utils/constants.dart';
 import 'package:job_ostad/utils/custom_theme.dart';
 import 'package:job_ostad/widgets/categoryItem.dart';
+import 'package:job_ostad/widgets/showDialog.dart';
 
 class Home extends StatefulWidget {
-  final Function(String) onTextClicked;
+  final Function(String? course, String courseId, int pageId) onTextClicked;
   const Home({required this.onTextClicked, super.key});
 
   @override
@@ -199,7 +200,7 @@ class _HomeState extends State<Home> {
                       categories.map((category) {
                         return GestureDetector(
                           onTap: () {
-                            widget.onTextClicked(category);
+                            widget.onTextClicked(category, "1", 5);
                           },
                           child: CategoryCard(category: category),
                         );
@@ -235,9 +236,14 @@ class _HomeState extends State<Home> {
                   itemCount: topCourses.length,
                   itemBuilder: (context, index) {
                     final course = topCourses[index];
-                    return CategoryItem(
-                      imagePath: course.courseImage,
-                      title: course.title,
+                    return GestureDetector(
+                      onTap: () {
+                        widget.onTextClicked('', course.id.toString(), 6);
+                      },
+                      child: CategoryItem(
+                        imagePath: course.courseImage,
+                        title: course.title,
+                      ),
                     );
                   },
                 ),
@@ -281,7 +287,15 @@ class _HomeState extends State<Home> {
                         title: "HSE 2025",
                       ),
                     ];
-                    return items[index];
+                    return GestureDetector(
+                      onTap: () {
+                        showCustomDialog(
+                          context: context,
+                          content: "This Feature Comming soon!!",
+                        );
+                      },
+                      child: items[index],
+                    );
                   },
                 ),
               ],
