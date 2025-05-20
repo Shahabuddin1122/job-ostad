@@ -20,6 +20,12 @@ class Overview extends StatelessWidget {
               date: "May 20, 2025",
               time: "10: 30 AM",
             ),
+            Notificationwidget(
+              title: "Exam Reminder",
+              description: 'Your Math Final Exam starts tomorrow at 10:00 AM.',
+              date: "May 20, 2025",
+              time: "10: 30 AM",
+            ),
           ],
         ),
       ),
