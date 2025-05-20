@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:job_ostad/utils/api_settings.dart';
@@ -38,6 +39,7 @@ class _ProfileState extends State<Profile> {
     final apiSettings = ApiSettings(endPoint: 'user/get-user-stat');
     try {
       final response = await apiSettings.getMethod();
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
         final message = data['message'];
@@ -45,7 +47,8 @@ class _ProfileState extends State<Profile> {
 
         final parsed =
             rawTimes
-                .map((e) => DateTime.parse(e).toLocal())
+                .where((e) => e != null)
+                .map((e) => DateTime.parse(e as String).toLocal())
                 .map((d) => DateTime(d.year, d.month, d.day))
                 .toSet();
 
@@ -60,6 +63,12 @@ class _ProfileState extends State<Profile> {
     } catch (e) {
       debugPrint('Error fetching user stat: $e');
     }
+  }
+
+  void logOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    Navigator.pushReplacementNamed(context, '/sign-in');
   }
 
   @override
@@ -233,29 +242,37 @@ class _ProfileState extends State<Profile> {
       {'icon': Icons.rate_review, 'text': 'App rating'},
       {'icon': Icons.share, 'text': 'App Share'},
       {'icon': Icons.help, 'text': 'Help'},
+      {'icon': Icons.logout, 'text': 'Log Out', 'function': logOut},
     ];
 
     return items.map((item) {
-      return Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: Theme.of(context).insideCardPadding,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(width: 1),
-        ),
-        child: Row(
-          children: [
-            Icon(item['icon']! as IconData, color: Colors.black),
-            const SizedBox(width: 10),
-            Text(
-              item['text']! as String,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Colors.black,
+      return GestureDetector(
+        onTap: () {
+          if (item['text'] == 'Log Out') {
+            logOut();
+          }
+        },
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: Theme.of(context).insideCardPadding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(width: 1),
+          ),
+          child: Row(
+            children: [
+              Icon(item['icon']! as IconData, color: Colors.black),
+              const SizedBox(width: 10),
+              Text(
+                item['text']! as String,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }).toList();
