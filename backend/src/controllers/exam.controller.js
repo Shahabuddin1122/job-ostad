@@ -35,9 +35,9 @@ exports.get_question = async (req, res) => {
 
         const response = await Question.getAllQuestionOfAQuiz(quizId);
 
-        const { id:exam_script_id, title, number_of_questions, total_time } = response[0]
+        const { exam_script_id, title, number_of_questions, total_time } = response[0]
         const questions = response.map(row => ({
-            id: row.id,
+            id: row.question_id,
             question: row.question,
             options: row.options,
             image: row.image,

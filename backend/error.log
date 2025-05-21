@@ -1653,3 +1653,8 @@
 {"code":"ECONNREFUSED","level":"error","message":"Redis Client Error","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}
 {"code":"ECONNREFUSED","level":"error","message":"Redis Client Error","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}
 {"code":"ECONNREFUSED","level":"error","message":"Redis Client Error","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}
+{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}
+{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}
+{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}
+{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}
+{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}
