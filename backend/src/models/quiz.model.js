@@ -55,7 +55,7 @@ const Quiz = {
             END AS has_exam_script
         FROM quiz q 
         LEFT JOIN exam_script es ON q.id = es.quiz_id
-        WHERE q.course_id = $1 AND q.date > CURRENT_DATE
+        WHERE q.course_id = $1 AND q.date >= CURRENT_DATE
         ORDER BY q.date ASC
         `;
 
@@ -82,7 +82,7 @@ const Quiz = {
                      LEFT JOIN results rs ON rs.exam_script_id = es.id AND rs.user_id = $2
             WHERE q.course_id = $1
               AND rs.id IS NULL
-              AND q.date > CURRENT_DATE
+              AND q.date >= CURRENT_DATE
             ORDER BY q.date ASC
         `;
 
