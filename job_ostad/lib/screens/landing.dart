@@ -27,7 +27,6 @@ class _LandingState extends State<Landing> {
   String? selectedBookTitle;
 
   void _onItemTapped(int index) {
-    // Navigator.of(context);
     setState(() {
       _selectedIndex = index;
       _currentPageIndex = index;
@@ -37,41 +36,46 @@ class _LandingState extends State<Landing> {
   final TextEditingController _searchController = TextEditingController();
 
   // Handle back button press
-  Future<bool> _onWillPop() async {
+  Future<void> _onPopInvokedWithResult(bool didPop, dynamic result) async {
+    if (didPop) return; // Allow pop if no custom handling
     if (_currentPageIndex != 0) {
       // If not on Overview, go back to Overview
       setState(() {
         _currentPageIndex = 0;
         _selectedIndex = 0;
       });
-      return false;
     } else {
-      return await showDialog(
+      final bool shouldPop =
+          await showDialog(
             context: context,
             builder:
                 (context) => AlertDialog(
-                  title: Text('Exit App'),
-                  content: Text('Do you want to exit the app?'),
+                  title: const Text('Exit App'),
+                  content: const Text('Do you want to exit the app?'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      child: Text('No'),
+                      child: const Text('No'),
                     ),
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(true), // Exit
-                      child: Text('Yes'),
+                      child: const Text('Yes'),
                     ),
                   ],
                 ),
           ) ??
           false;
+      if (shouldPop && mounted) {
+        Navigator.of(context).pop();
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: _onPopInvokedWithResult,
       child: Scaffold(
         appBar: AppBar(
           title:
@@ -79,8 +83,8 @@ class _LandingState extends State<Landing> {
                   ? TextField(
                     controller: _searchController,
                     autofocus: true,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
                       hintText: "Search...",
                       border: InputBorder.none,
                     ),
@@ -88,10 +92,10 @@ class _LandingState extends State<Landing> {
                       print("User searched: $query");
                     },
                   )
-                  : Text("Job OSTAD"),
+                  : const Text("Job OSTAD"),
           actions: [
             IconButton(
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               onPressed: () {
                 setState(() {
                   _isSearching = !_isSearching;
@@ -102,7 +106,7 @@ class _LandingState extends State<Landing> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.notifications),
+              icon: const Icon(Icons.notifications),
               onPressed: () {
                 print("Notification clicked");
               },
@@ -114,15 +118,15 @@ class _LandingState extends State<Landing> {
           alignment: Alignment.bottomCenter,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 color:
                     Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
                 ),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
                     blurRadius: 10,
@@ -136,7 +140,7 @@ class _LandingState extends State<Landing> {
                 items: [
                   _buildNavItem(Icons.home, "Home", 0),
                   _buildNavItem(Icons.book, "Book", 1),
-                  BottomNavigationBarItem(
+                  const BottomNavigationBarItem(
                     icon: SizedBox.shrink(),
                     label: "",
                   ), // Empty item for FAB
@@ -156,8 +160,8 @@ class _LandingState extends State<Landing> {
                 },
                 backgroundColor: PRIMARY_COLOR,
                 elevation: 4,
-                shape: CircleBorder(),
-                child: Icon(Icons.event, color: Colors.white, size: 30),
+                shape: const CircleBorder(),
+                child: const Icon(Icons.event, color: Colors.white, size: 30),
               ),
             ),
           ],
