@@ -27,6 +27,7 @@ class _LandingState extends State<Landing> {
   String? selectedBookTitle;
 
   void _onItemTapped(int index) {
+    // Navigator.of(context);
     setState(() {
       _selectedIndex = index;
       _currentPageIndex = index;
@@ -35,96 +36,132 @@ class _LandingState extends State<Landing> {
 
   final TextEditingController _searchController = TextEditingController();
 
+  // Handle back button press
+  Future<bool> _onWillPop() async {
+    if (_currentPageIndex != 0) {
+      // If not on Overview, go back to Overview
+      setState(() {
+        _currentPageIndex = 0;
+        _selectedIndex = 0;
+      });
+      return false;
+    } else {
+      return await showDialog(
+            context: context,
+            builder:
+                (context) => AlertDialog(
+                  title: Text('Exit App'),
+                  content: Text('Do you want to exit the app?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: Text('No'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true), // Exit
+                      child: Text('Yes'),
+                    ),
+                  ],
+                ),
+          ) ??
+          false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title:
-            _isSearching
-                ? TextField(
-                  controller: _searchController,
-                  autofocus: true,
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: "Search...",
-                    border: InputBorder.none,
-                  ),
-                  onSubmitted: (query) {
-                    print("User searched: $query");
-                  },
-                )
-                : Text("MCQ OSTAD"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              setState(() {
-                _isSearching = !_isSearching;
-                if (!_isSearching) {
-                  _searchController.clear();
-                }
-              });
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              print("Notification clicked");
-            },
-          ),
-        ],
-      ),
-      body: _getBody(),
-      bottomNavigationBar: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            decoration: BoxDecoration(
-              color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  spreadRadius: 4,
-                ),
-              ],
-            ),
-            child: BottomNavigationBar(
-              currentIndex: _selectedIndex,
-              onTap: _onItemTapped,
-              items: [
-                _buildNavItem(Icons.home, "Home", 0),
-                _buildNavItem(Icons.book, "Book", 1),
-                BottomNavigationBarItem(
-                  icon: SizedBox.shrink(),
-                  label: "",
-                ), // Empty item for FAB
-                _buildNavItem(Icons.bar_chart, "Result", 3),
-                _buildNavItem(Icons.person, "Profile", 4),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 10,
-            child: FloatingActionButton(
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          title:
+              _isSearching
+                  ? TextField(
+                    controller: _searchController,
+                    autofocus: true,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: "Search...",
+                      border: InputBorder.none,
+                    ),
+                    onSubmitted: (query) {
+                      print("User searched: $query");
+                    },
+                  )
+                  : Text("Job OSTAD"),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
               onPressed: () {
                 setState(() {
-                  _selectedIndex = 2; // Index for the floating action button
-                  _currentPageIndex = 2; // Navigate to Exam
+                  _isSearching = !_isSearching;
+                  if (!_isSearching) {
+                    _searchController.clear();
+                  }
                 });
               },
-              backgroundColor: PRIMARY_COLOR,
-              elevation: 4,
-              shape: CircleBorder(),
-              child: Icon(Icons.event, color: Colors.white, size: 30),
             ),
-          ),
-        ],
+            IconButton(
+              icon: Icon(Icons.notifications),
+              onPressed: () {
+                print("Notification clicked");
+              },
+            ),
+          ],
+        ),
+        body: _getBody(),
+        bottomNavigationBar: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color:
+                    Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    spreadRadius: 4,
+                  ),
+                ],
+              ),
+              child: BottomNavigationBar(
+                currentIndex: _selectedIndex,
+                onTap: _onItemTapped,
+                items: [
+                  _buildNavItem(Icons.home, "Home", 0),
+                  _buildNavItem(Icons.book, "Book", 1),
+                  BottomNavigationBarItem(
+                    icon: SizedBox.shrink(),
+                    label: "",
+                  ), // Empty item for FAB
+                  _buildNavItem(Icons.bar_chart, "Result", 3),
+                  _buildNavItem(Icons.person, "Profile", 4),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 10,
+              child: FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 2; // Index for the floating action button
+                    _currentPageIndex = 2; // Navigate to Exam
+                  });
+                },
+                backgroundColor: PRIMARY_COLOR,
+                elevation: 4,
+                shape: CircleBorder(),
+                child: Icon(Icons.event, color: Colors.white, size: 30),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
