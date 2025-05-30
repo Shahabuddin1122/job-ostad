@@ -7,10 +7,10 @@ class TAppbarThemeData {
   static const lightAppbar = AppBarTheme(
     elevation: 0,
     centerTitle: false,
-    backgroundColor: SECONDARY_BACKGROUND,
+    backgroundColor: PRIMARY_COLOR,
     iconTheme: IconThemeData(size: 24, color: Colors.white),
     actionsIconTheme: IconThemeData(size: 24, color: Colors.white),
-    surfaceTintColor: SECONDARY_BACKGROUND,
+    surfaceTintColor: PRIMARY_COLOR,
     titleTextStyle: TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.w600,
