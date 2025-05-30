@@ -118,9 +118,7 @@ class _LandingState extends State<Landing> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color: Theme.of(
-                  context,
-                ).bottomNavigationBarTheme.backgroundColor,
+                color: PRIMARY_COLOR,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
@@ -157,7 +155,7 @@ class _LandingState extends State<Landing> {
                     _currentPageIndex = 2; // Navigate to Exam
                   });
                 },
-                backgroundColor: PRIMARY_COLOR,
+                backgroundColor: SECONDARY_BACKGROUND,
                 elevation: 4,
                 shape: const CircleBorder(),
                 child: const Icon(Icons.event, color: Colors.white, size: 30),

@@ -103,7 +103,7 @@ class Examcard extends StatelessWidget {
                     ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all(
-                          isButtonEnabled() ? SECONDARY_COLOR : DISABLE,
+                          isButtonEnabled() ? PRIMARY_COLOR : DISABLE,
                         ),
                         foregroundColor: WidgetStateProperty.all(
                           isButtonEnabled() ? Colors.white : Colors.black,
