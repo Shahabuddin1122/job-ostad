@@ -1,5 +1,5 @@
 const express = require('express')
-const { add_a_quiz, get_all_quiz, get_quiz_by_category, getAllQuizByCourseId} = require("../controllers/quiz.controller");
+const { add_a_quiz, get_all_quiz, get_quiz_by_category, getAllQuizByCourseId, delete_quiz_by_id, update_quiz_by_id} = require("../controllers/quiz.controller");
 
 const router = express.Router()
 
@@ -180,5 +180,8 @@ router.get('/get-all-quiz-by-courseId/:courseId', getAllQuizByCourseId);
  *           type: string
  *           example: "BCS"
  */
+
+router.delete('/delete-quiz/:id', delete_quiz_by_id)
+router.put('/update-quiz/:id', update_quiz_by_id)
 
 module.exports = router

@@ -77,3 +77,40 @@ exports.getAllQuizByCourseId = async (req, res) => {
         res.status(500).json({ success: false, message: `Server Error: ${error.message}` });
     }
 };
+
+exports.update_quiz_by_id = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedData = req.body;
+
+        if (Object.keys(updatedData).length === 0) {
+            return res.status(400).json({ message: "No data provided to update" });
+        }
+
+        const updatedQuiz = await Quiz.update(id, updatedData);
+
+        if (!updatedQuiz) {
+            return res.status(404).json({ message: "Quiz not found or no changes applied" });
+        }
+
+        res.json({ message: "Quiz updated successfully", data: updatedQuiz });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+exports.delete_quiz_by_id = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const deletedQuiz = await Quiz.delete(id);
+
+        if (!deletedQuiz) {
+            return res.status(404).json({ message: "Quiz not found" });
+        }
+
+        res.json({ message: "Quiz deleted successfully", data: deletedQuiz });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
