@@ -136,4 +136,71 @@ exports.get_user_stat = async (req, res)=>{
     catch (e) {
         res.status(500).json({status: false, message: `Server error: ${e.message}`})
     }
+};
+
+exports.update_user_info = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  const { username, email, education } = req.body;
+
+  if (!authHeader) {
+    return res.status(401).json({ status: false, message: "Unauthorized" });
+  }
+
+  try {
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+
+    const fieldsToUpdate = {};
+    if (username !== undefined) fieldsToUpdate.username = username;
+    if (email !== undefined) fieldsToUpdate.email = email;
+    if (education !== undefined) fieldsToUpdate.education = education;
+
+    const updatedUser = await User.updateById(userId, fieldsToUpdate);
+
+    if (!updatedUser) {
+      return res.status(404).json({ status: false, message: "User not found or update failed" });
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: "User info updated successfully",
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error("Error updating user info:", error);
+    return res.status(500).json({ status: false, message: "Server error" });
+  }
+};
+
+exports.update_user_password = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  const { currentPassword, newPassword } = req.body;
+
+  if (!authHeader) {
+    return res.status(401).json({ status: false, message: "Unauthorized" });
+  }
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ status: false, message: "Both current and new passwords are required" });
+  }
+
+  try {
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+
+
+
+    const updatedUser = await User.updatePasswordById(userId, currentPassword, newPassword);
+
+    res.status(200).json({
+      status: true,
+      message: "Password updated successfully",
+      user: updatedUser
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ status: false, message: err.message || "Failed to update password" });
+  }
 }
