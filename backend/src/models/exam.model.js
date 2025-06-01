@@ -58,6 +58,47 @@ const Question = {
         const results = await pool.query(query, values)
         return results.rows[0];
     },
+
+    async updateQuestion(question) {
+        const { id, question: q, answer, options, image, subject } = question;
+        const optionsFormatted = `{${options.map(opt => `"${opt}"`).join(',')}}`;
+
+        let query, values;
+
+        if (image) {
+            query = `
+                UPDATE question 
+                SET question = $1, answer = $2, options = $3, image = $4, subject = $5
+                WHERE id = $6
+            `;
+            values = [q, answer, optionsFormatted, image, subject, id];
+        } else {
+            query = `
+                UPDATE question 
+                SET question = $1, answer = $2, options = $3, subject = $4
+                WHERE id = $5
+            `;
+            values = [q, answer, optionsFormatted, subject, id];
+        }
+        await pool.query(query, values);
+    },
+
+    async addSingleQuestion(exam_script_id, question) {
+        const { question: q, answer, options, image, subject } = question;
+        const optionsFormatted = `{${options.map(opt => `"${opt}"`).join(',')}}`;
+
+        const query = `
+            INSERT INTO question (exam_script_id, question, answer, options, image, subject)
+            VALUES ($1, $2, $3, $4, $5, $6)
+        `;
+        const values = [exam_script_id, q, answer, optionsFormatted, image, subject];
+        await pool.query(query, values);
+    },
+
+    async getExamScriptIdByQuizId(quiz_id) {
+        const result = await pool.query(`SELECT id FROM exam_script WHERE quiz_id = $1 LIMIT 1`, [quiz_id]);
+        return result.rows[0]?.id;
+    }
 };
 
 module.exports = Question;
