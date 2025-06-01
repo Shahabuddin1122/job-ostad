@@ -1,4 +1,5 @@
 const {pool} = require('../config/db')
+const bcrypt = require("bcryptjs");
 
 const User = {
     async create({username, email, phone_number, education, password}){
@@ -48,7 +49,8 @@ const User = {
         const results = await pool.query(query, values);
         return results.rows[0];
     },
-      async updateById(id, fields) {
+
+    async updateById(id, fields) {
     const allowedFields = ['username', 'email', 'education'];
     const keys = Object.keys(fields).filter(key => allowedFields.includes(key));
 
@@ -72,6 +74,33 @@ const User = {
     const result = await pool.query(query, values);
     return result.rows[0];
   },
+
+  async updatePasswordById(id, currentPassword, newPassword) {
+    const userQuery = `SELECT password FROM users WHERE id = $1 LIMIT 1`;
+    const userResult = await pool.query(userQuery, [id]);
+
+    if (userResult.rowCount === 0) {
+      throw new Error("User not found");
+    }
+
+    const storedHash = userResult.rows[0].password;
+    const match = await bcrypt.compare(currentPassword, storedHash);
+    if (!match) {
+      throw new Error("Incorrect current password");
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const updateQuery = `
+      UPDATE users
+      SET password = $1
+      WHERE id = $2
+      RETURNING id, username, email;
+    `;
+    const updateResult = await pool.query(updateQuery, [hashedPassword, id]);
+    return updateResult.rows[0];
+  }
+
 };
 
 module.exports = User;
