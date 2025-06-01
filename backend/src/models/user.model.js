@@ -47,7 +47,31 @@ const User = {
         const values = [id];
         const results = await pool.query(query, values);
         return results.rows[0];
+    },
+      async updateById(id, fields) {
+    const allowedFields = ['username', 'email', 'education'];
+    const keys = Object.keys(fields).filter(key => allowedFields.includes(key));
+
+    if (keys.length === 0) {
+      throw new Error('No valid fields to update');
     }
+
+    // Build SET clause dynamically: field1 = $1, field2 = $2 ...
+    const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
+    const values = keys.map(key => fields[key]);
+
+    const query = `
+      UPDATE users
+      SET ${setClause}
+      WHERE id = $${keys.length + 1}
+      RETURNING *;
+    `;
+
+    values.push(id); // Add user ID at the end
+
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  },
 };
 
 module.exports = User;

@@ -137,3 +137,38 @@ exports.get_user_stat = async (req, res)=>{
         res.status(500).json({status: false, message: `Server error: ${e.message}`})
     }
 }
+
+exports.update_user_info = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  const { username, email, education } = req.body;
+
+  if (!authHeader) {
+    return res.status(401).json({ status: false, message: "Unauthorized" });
+  }
+
+  try {
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+
+    const fieldsToUpdate = {};
+    if (username !== undefined) fieldsToUpdate.username = username;
+    if (email !== undefined) fieldsToUpdate.email = email;
+    if (education !== undefined) fieldsToUpdate.education = education;
+
+    const updatedUser = await User.updateById(userId, fieldsToUpdate);
+
+    if (!updatedUser) {
+      return res.status(404).json({ status: false, message: "User not found or update failed" });
+    }
+
+    res.status(200).json({
+      status: true,
+      message: "User info updated successfully",
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error("Error updating user info:", error);
+    res.status(500).json({ status: false, message: "Server error" });
+  }
+};
