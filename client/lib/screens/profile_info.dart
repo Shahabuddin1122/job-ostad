@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:client/models/inputType.dart';
+import 'package:client/utils/api_settings.dart';
 import 'package:client/widgets/customInput.dart';
 import 'package:client/widgets/showDialog.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +35,13 @@ class _ProfileInfoState extends State<ProfileInfo> {
     "PhD",
     "Other",
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
 
   @override
   void dispose() {
@@ -78,6 +88,54 @@ class _ProfileInfoState extends State<ProfileInfo> {
         );
       },
     );
+  }
+
+  String _formatEducation(String? value) {
+    switch (value?.toLowerCase()) {
+      case 'highschool':
+        return 'High School';
+      case 'graduate':
+        return "Bachelor's Degree";
+      case 'master':
+        return "Master's Degree";
+      case 'phd':
+        return "PhD";
+      default:
+        return 'Other';
+    }
+  }
+
+  void getData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    ApiSettings apiSettings = ApiSettings(endPoint: 'user/get-user-details');
+    final response = await apiSettings.getMethod();
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (response.statusCode == 200) {
+      final userData = jsonDecode(response.body);
+
+      setState(() {
+        _nameController.text = userData['message']['username'] ?? '';
+        _emailController.text = userData['message']['email'] ?? '';
+        _phoneController.text = userData['message']['phone_number'] ?? '';
+        _selectedEducation = _formatEducation(userData['message']['education']);
+        _passwordController.text = ''; // Avoid filling hashed password
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to load profile.'),
+          backgroundColor: INCORRECT,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   void _saveProfile() async {
@@ -252,6 +310,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
               CustomInput(
                 label: 'Education Level',
                 prefixIcon: Icons.school,
+                inputType: InputType.dropdown,
                 dropdownValue: _selectedEducation,
                 dropdownItems: _educationLevels,
                 onChanged: (value) {
@@ -259,17 +318,6 @@ class _ProfileInfoState extends State<ProfileInfo> {
                     _selectedEducation = value;
                   });
                 },
-              ),
-
-              SizedBox(height: 20),
-
-              CustomInput(
-                label: 'Password',
-                controller: _passwordController,
-                inputType: InputType.password,
-                prefixIcon: Icons.lock,
-                hintText: 'Enter your password',
-                validator: InputValidators.password,
               ),
 
               SizedBox(height: 20),
