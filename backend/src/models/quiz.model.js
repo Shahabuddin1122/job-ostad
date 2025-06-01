@@ -91,6 +91,33 @@ const Quiz = {
         return results.rows;
     },
 
+    async delete(id) {
+        const query = `
+            DELETE FROM quiz
+            WHERE id = $1
+            RETURNING *;
+        `;
+        const result = await pool.query(query, [id]);
+        return result.rows[0]; // Return the deleted quiz (or null if not found)
+    },
+
+    async update(id, data) {
+        const keys = Object.keys(data);
+        if (keys.length === 0) return null;
+
+        const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
+        const values = Object.values(data);
+
+        const query = `
+            UPDATE quiz
+            SET ${setClause}
+            WHERE id = $${keys.length + 1}
+            RETURNING *;
+        `;
+
+        const result = await pool.query(query, [...values, id]);
+        return result.rows[0];
+    }
 
 }
 
