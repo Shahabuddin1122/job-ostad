@@ -122,7 +122,30 @@ const Course = {
 
         const results = await pool.query(query);
         return results.rows; // Return all rows, not just the first one
+    },
+
+    async delete(id) {
+        const result = await pool.query("DELETE FROM courses WHERE id = $1 RETURNING *;", [id]);
+        return result.rows[0];
+    },
+
+    async update(id, fields) {
+      const keys = Object.keys(fields).filter(key => fields[key] !== undefined);
+      if (keys.length === 0) return null;
+
+      const setClause = keys.map((key, idx) => `${key} = $${idx + 1}`).join(', ');
+      const values = keys.map(key => fields[key]);
+
+      const query = `
+        UPDATE courses SET ${setClause}
+        WHERE id = $${keys.length + 1}
+        RETURNING *;
+      `;
+
+      const result = await pool.query(query, [...values, id]);
+      return result.rows[0];
     }
+
 
 };
 

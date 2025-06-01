@@ -1,5 +1,7 @@
 const express = require("express");
-const { getAllCourse, addCourse, getCoursesOnEachCategory, getAllCollection, getAllQuizByCourseId, getTopCourses} = require("../controllers/course.controller");
+const { getAllCourse, addCourse, getCoursesOnEachCategory, getAllCollection, getAllQuizByCourseId, getTopCourses,
+    deleteCourse, updateCourse
+} = require("../controllers/course.controller");
 const multer = require("multer");
 const {route} = require("express/lib/application");
 
@@ -207,5 +209,7 @@ router.get('/get-all-collection', getAllCollection)
  */
 
 router.get('/get-top-courses', getTopCourses)
+router.delete('/delete-course/:id', deleteCourse);
+router.put("/update-course/:id", upload.fields([{name:"course_image", maxCount: 1}]), updateCourse);
 
 module.exports = router;
