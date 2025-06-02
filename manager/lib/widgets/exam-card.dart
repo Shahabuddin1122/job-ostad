@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/constants.dart';
-import 'package:job_ostad/utils/custom_theme.dart';
+import 'package:manager/utils/constants.dart';
+import 'package:manager/utils/custom_theme.dart';
 import 'package:intl/intl.dart';
 
 class Examcard extends StatelessWidget {
@@ -72,23 +72,23 @@ class Examcard extends StatelessWidget {
                     children: [
                       has_exam_script
                           ? ElevatedButton(
-                            onPressed: () {},
-                            child: Text("Update"),
-                          )
+                              onPressed: () {},
+                              child: Text("Update"),
+                            )
                           : Text(''),
                       ElevatedButton(
                         onPressed: () {
                           has_exam_script
                               ? Navigator.pushNamed(
-                                context,
-                                '/question-paper',
-                                arguments: id,
-                              )
+                                  context,
+                                  '/question-paper',
+                                  arguments: id,
+                                )
                               : Navigator.pushNamed(
-                                context,
-                                '/add-question',
-                                arguments: [id, num_of_question],
-                              );
+                                  context,
+                                  '/add-question',
+                                  arguments: [id, num_of_question],
+                                );
                         },
                         child: Text(has_exam_script ? "View" : "Add Question"),
                       ),

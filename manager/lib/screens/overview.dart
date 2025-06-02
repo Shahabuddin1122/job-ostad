@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/constants.dart';
-import 'package:job_ostad/utils/custom_theme.dart';
+import 'package:manager/utils/constants.dart';
+import 'package:manager/utils/custom_theme.dart';
 
 class Overview extends StatefulWidget {
   const Overview({super.key});
@@ -88,13 +88,12 @@ class _OverviewState extends State<Overview> {
                             ),
                             underline: SizedBox(),
                             alignment: Alignment.centerLeft,
-                            items:
-                                items.map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(item),
-                                  );
-                                }).toList(),
+                            items: items.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
                             onChanged: (String? newValue) {
                               setState(() {
                                 selectedValue = newValue;
@@ -143,11 +142,10 @@ class _OverviewState extends State<Overview> {
                                     sideTitles: SideTitles(
                                       showTitles: true,
                                       reservedSize: 20,
-                                      getTitlesWidget:
-                                          (value, meta) => Text(
-                                            "${value.toInt()}",
-                                            style: TextStyle(fontSize: 10),
-                                          ),
+                                      getTitlesWidget: (value, meta) => Text(
+                                        "${value.toInt()}",
+                                        style: TextStyle(fontSize: 10),
+                                      ),
                                     ),
                                   ),
                                   topTitles: AxisTitles(
@@ -263,13 +261,12 @@ class _OverviewState extends State<Overview> {
                             ),
                             underline: SizedBox(),
                             alignment: Alignment.centerLeft,
-                            items:
-                                items.map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(item),
-                                  );
-                                }).toList(),
+                            items: items.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
                             onChanged: (String? newValue) {
                               setState(() {
                                 selectedValue = newValue;
@@ -306,11 +303,10 @@ class _OverviewState extends State<Overview> {
                                     sideTitles: SideTitles(
                                       showTitles: true,
                                       reservedSize: 20,
-                                      getTitlesWidget:
-                                          (value, meta) => Text(
-                                            "${value.toInt()}",
-                                            style: TextStyle(fontSize: 10),
-                                          ),
+                                      getTitlesWidget: (value, meta) => Text(
+                                        "${value.toInt()}",
+                                        style: TextStyle(fontSize: 10),
+                                      ),
                                     ),
                                   ),
                                   topTitles: AxisTitles(

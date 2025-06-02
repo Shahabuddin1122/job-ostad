@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:job_ostad/screens/add-book.dart';
-import 'package:job_ostad/screens/add-course.dart';
-import 'package:job_ostad/screens/add-question.dart';
-import 'package:job_ostad/screens/add-quiz.dart';
-import 'package:job_ostad/screens/exam_script.dart';
-import 'package:job_ostad/screens/landing.dart';
-import 'package:job_ostad/utils/scheme.dart';
+import 'package:manager/screens/add-book.dart';
+import 'package:manager/screens/add-course.dart';
+import 'package:manager/screens/add-question.dart';
+import 'package:manager/screens/add-quiz.dart';
+import 'package:manager/screens/exam_script.dart';
+import 'package:manager/screens/landing.dart';
+import 'package:manager/utils/scheme.dart';
 
 void main() {
   runApp(const MyApp());

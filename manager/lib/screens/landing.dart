@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:job_ostad/screens/book.dart';
-import 'package:job_ostad/screens/course.dart';
-import 'package:job_ostad/screens/exam.dart';
-import 'package:job_ostad/screens/overview.dart';
-import 'package:job_ostad/screens/user.dart';
-import 'package:job_ostad/screens/view_book.dart';
-import 'package:job_ostad/utils/constants.dart';
+import 'package:manager/screens/book.dart';
+import 'package:manager/screens/course.dart';
+import 'package:manager/screens/exam.dart';
+import 'package:manager/screens/overview.dart';
+import 'package:manager/screens/user.dart';
+import 'package:manager/screens/view_book.dart';
+import 'package:manager/utils/constants.dart';
 
 class Landing extends StatefulWidget {
   const Landing({super.key});
@@ -31,59 +31,61 @@ class _LandingState extends State<Landing> {
   final TextEditingController _searchController = TextEditingController();
 
   // Handle back button press
-  Future<bool> _onWillPop() async {
+  Future<void> _onPopInvokedWithResult(bool didPop, dynamic result) async {
+    if (didPop) return; // Allow pop if no custom handling
     if (_currentPageIndex != 0) {
       // If not on Overview, go back to Overview
       setState(() {
         _currentPageIndex = 0;
         _selectedIndex = 0;
       });
-      return false; // Prevent default back navigation
     } else {
-      // If on Overview, show confirmation dialog
-      return await showDialog(
+      final bool shouldPop =
+          await showDialog(
             context: context,
-            builder:
-                (context) => AlertDialog(
-                  title: Text('Exit App'),
-                  content: Text('Do you want to exit the app?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: Text('No'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true), // Exit
-                      child: Text('Yes'),
-                    ),
-                  ],
+            builder: (context) => AlertDialog(
+              title: const Text('Exit App'),
+              content: const Text('Do you want to exit the app?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('No'),
                 ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true), // Exit
+                  child: const Text('Yes'),
+                ),
+              ],
+            ),
           ) ??
-          false; // Return false if dialog is dismissed
+          false;
+      if (shouldPop && mounted) {
+        Navigator.of(context).pop();
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: _onPopInvokedWithResult,
       child: Scaffold(
         appBar: AppBar(
-          title:
-              _isSearching
-                  ? TextField(
-                    controller: _searchController,
-                    autofocus: true,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: "Search...",
-                      border: InputBorder.none,
-                    ),
-                    onSubmitted: (query) {
-                      print("User searched: $query");
-                    },
-                  )
-                  : Text("Job OSTAD"),
+          title: _isSearching
+              ? TextField(
+                  controller: _searchController,
+                  autofocus: true,
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    hintText: "Search...",
+                    border: InputBorder.none,
+                  ),
+                  onSubmitted: (query) {
+                    print("User searched: $query");
+                  },
+                )
+              : Text("Job OSTAD"),
           actions: [
             IconButton(
               icon: Icon(Icons.search),
@@ -111,8 +113,9 @@ class _LandingState extends State<Landing> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color:
-                    Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+                color: Theme.of(
+                  context,
+                ).bottomNavigationBarTheme.backgroundColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
