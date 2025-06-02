@@ -26,6 +26,14 @@ const Course = {
         return result.rows;
     },
 
+    async getById(courseId){
+        const query = `SELECT * FROM courses WHERE id=$1`;
+        const values = [courseId]
+
+        const result = await pool.query(query, values);
+        return result.rows[0];
+    },
+
     async getCourseByCategory(category) {
         const query = `
           SELECT * FROM courses

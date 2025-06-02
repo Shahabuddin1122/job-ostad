@@ -1,10 +1,43 @@
+import 'package:admin/utils/api_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:admin/utils/constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class CategoryItem extends StatelessWidget {
-  final String imagePath, title;
-  const CategoryItem({required this.imagePath, required this.title, super.key});
+  final String imagePath, title, courseId;
+  final VoidCallback onDelete;
+  const CategoryItem({
+    required this.imagePath,
+    required this.title,
+    required this.courseId,
+    required this.onDelete,
+    super.key,
+  });
+
+  Future<void> _deleteCourse(BuildContext context) async {
+    ApiSettings apiSettings = ApiSettings(
+      endPoint: 'course/delete-course/$courseId',
+    );
+
+    try {
+      final response = await apiSettings.deleteMethod();
+      if (response.statusCode == 200) {
+        onDelete();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Course deleted successfully')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to delete course: ${response.statusCode}'),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,27 +95,16 @@ class CategoryItem extends StatelessWidget {
               color: Colors.white,
               onSelected: (String choice) {
                 if (choice == 'edit') {
-                  // Handle edit
-                  print("Edit selected");
+                  Navigator.pushNamed(
+                    context,
+                    '/add-course',
+                    arguments: {'courseId': courseId.toString()},
+                  );
                 } else if (choice == 'delete') {
-                  // Handle delete
-                  print("Delete selected");
-                } else if (choice == 'view') {
-                  // Handle view
-                  print("View selected");
+                  _deleteCourse(context);
                 }
               },
               itemBuilder: (BuildContext context) => [
-                const PopupMenuItem(
-                  value: 'view',
-                  child: Row(
-                    children: [
-                      Icon(Icons.visibility, color: Colors.black),
-                      SizedBox(width: 8),
-                      Text("View"),
-                    ],
-                  ),
-                ),
                 const PopupMenuItem(
                   value: 'edit',
                   child: Row(

@@ -1,6 +1,6 @@
 const express = require("express");
 const { getAllCourse, addCourse, getCoursesOnEachCategory, getAllCollection, getAllQuizByCourseId, getTopCourses,
-    deleteCourse, updateCourse
+    deleteCourse, updateCourse, getCourseByCourseId
 } = require("../controllers/course.controller");
 const multer = require("multer");
 const {route} = require("express/lib/application");
@@ -208,6 +208,7 @@ router.get('/get-all-collection', getAllCollection)
  *           example: "2023-05-01T12:00:00Z"
  */
 
+router.get('/get-course-by-course-id/:courseId', getCourseByCourseId)
 router.get('/get-top-courses', getTopCourses)
 router.delete('/delete-course/:id', deleteCourse);
 router.put("/update-course/:id", upload.fields([{name:"course_image", maxCount: 1}]), updateCourse);

@@ -37,6 +37,17 @@ exports.addCourse = async (req, res) => {
   }
 };
 
+exports.getCourseByCourseId = async (req, res)=>{
+  try {
+    const {courseId} = req.params;
+    const response = await Course.getById(courseId);
+    res.status(200).json({ success: true, message: response });
+  }
+  catch (e) {
+    res.status(500).json({ message: "Server error", error: e.message })
+  }
+}
+
 exports.getCoursesOnEachCategory = async (req, res)=>{
   try {
     const { category } = req.query;

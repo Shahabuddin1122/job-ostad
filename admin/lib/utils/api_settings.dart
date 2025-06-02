@@ -90,6 +90,22 @@ class ApiSettings {
     }
   }
 
+  Future<http.Response> deleteMethod() async {
+    try {
+      String? token = await _getToken();
+      final response = await http.delete(
+        Uri.parse(uri),
+        headers: {
+          'Content-Type': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Delete request failed: $e');
+    }
+  }
+
   Future<http.StreamedResponse> postMultipartMethod({
     required Map<String, String> fields,
     File? book_image,
@@ -101,6 +117,47 @@ class ApiSettings {
 
       var uriObj = Uri.parse(uri);
       var request = http.MultipartRequest('POST', uriObj);
+
+      if (token != null) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
+
+      request.fields.addAll(fields);
+
+      if (book_image != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath('book_image', book_image.path),
+        );
+      }
+      if (course_image != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath('course_image', course_image.path),
+        );
+      }
+
+      if (book_pdf != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath('book_pdf', book_pdf.path),
+        );
+      }
+
+      return await request.send();
+    } catch (e) {
+      throw Exception("Multipart upload failed: $e");
+    }
+  }
+
+  Future<http.StreamedResponse> putMultipartMethod({
+    required Map<String, String> fields,
+    File? book_image,
+    File? course_image,
+    File? book_pdf,
+  }) async {
+    try {
+      String? token = await _getToken();
+
+      var uriObj = Uri.parse(uri);
+      var request = http.MultipartRequest('PUT', uriObj);
 
       if (token != null) {
         request.headers['Authorization'] = 'Bearer $token';

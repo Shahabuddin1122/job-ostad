@@ -25,7 +25,12 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Landing(),
         '/add-book': (context) => AddBook(),
-        '/add-course': (context) => AddCourse(),
+        '/add-course': (context) {
+          final args =
+              ModalRoute.of(context)!.settings.arguments
+                  as Map<String, dynamic>?;
+          return AddCourse(courseId: args?['courseId']);
+        },
         '/add-quiz': (context) => AddQuiz(),
         '/add-question': (context) {
           final args = ModalRoute.of(context)!.settings.arguments as List;
