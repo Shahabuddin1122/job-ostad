@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/api_settings.dart';
-import 'package:job_ostad/utils/constants.dart';
-import 'package:job_ostad/utils/custom_theme.dart';
-import 'package:job_ostad/widgets/mcq_widget.dart';
+import 'package:manager/utils/api_settings.dart';
+import 'package:manager/utils/constants.dart';
+import 'package:manager/utils/custom_theme.dart';
+import 'package:manager/widgets/mcq_widget.dart';
 import 'dart:async';
 
 class ExamScript extends StatefulWidget {
@@ -29,8 +29,10 @@ class _ExamScriptState extends State<ExamScript> {
 
   // Get unique subjects with "All" option
   List<String> get uniqueSubjects {
-    final subjects =
-        questions.map((q) => q["subject"] as String).toSet().toList();
+    final subjects = questions
+        .map((q) => q["subject"] as String)
+        .toSet()
+        .toList();
     return ["All"] + subjects; // Add "All" at the beginning
   }
 
@@ -178,21 +180,20 @@ class _ExamScriptState extends State<ExamScript> {
                           selectedSubject = newValue;
                         });
                       },
-                      items:
-                          uniqueSubjects.map<DropdownMenuItem<String>>((
-                            String value,
-                          ) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
-                                  vertical: 0.0,
-                                ),
-                                child: Text(value),
-                              ),
-                            );
-                          }).toList(),
+                      items: uniqueSubjects.map<DropdownMenuItem<String>>((
+                        String value,
+                      ) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                              vertical: 0.0,
+                            ),
+                            child: Text(value),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ),
                 ),

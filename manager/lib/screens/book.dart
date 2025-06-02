@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/api_settings.dart';
-import 'package:job_ostad/utils/constants.dart';
-import 'package:job_ostad/utils/custom_theme.dart';
-import 'package:job_ostad/widgets/bookList.dart';
+import 'package:manager/utils/api_settings.dart';
+import 'package:manager/utils/constants.dart';
+import 'package:manager/utils/custom_theme.dart';
+import 'package:manager/widgets/bookList.dart';
 import 'dart:convert';
 
 class Book extends StatefulWidget {
@@ -67,25 +67,21 @@ class _BookState extends State<Book> {
                   const Center(child: CircularProgressIndicator())
                 else
                   Column(
-                    children:
-                        allBooks
-                            .map(
-                              (book) => GestureDetector(
-                                onTap: () {
-                                  widget.onClicked(
-                                    book["book_pdf"],
-                                    book["title"],
-                                  );
-                                },
-                                child: Booklist(
-                                  title: book["title"] ?? "",
-                                  desc: book["description"] ?? "",
-                                  images: book["book_image"] ?? "",
-                                  writter: book["writer"] ?? "",
-                                ),
-                              ),
-                            )
-                            .toList(),
+                    children: allBooks
+                        .map(
+                          (book) => GestureDetector(
+                            onTap: () {
+                              widget.onClicked(book["book_pdf"], book["title"]);
+                            },
+                            child: Booklist(
+                              title: book["title"] ?? "",
+                              desc: book["description"] ?? "",
+                              images: book["book_image"] ?? "",
+                              writter: book["writer"] ?? "",
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
               ],
             ),

@@ -4,9 +4,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:job_ostad/utils/api_settings.dart';
-import 'package:job_ostad/utils/constants.dart';
-import 'package:job_ostad/utils/custom_theme.dart';
+import 'package:manager/utils/api_settings.dart';
+import 'package:manager/utils/constants.dart';
+import 'package:manager/utils/custom_theme.dart';
 
 class AddQuestion extends StatefulWidget {
   final String id;
@@ -207,28 +207,29 @@ class _AddQuestionState extends State<AddQuestion> {
                     onTap: () => pickImage(index),
                     child: Center(
                       child: DottedBorder(
-                        color: PRIMARY_COLOR,
-                        strokeWidth: 3,
-                        radius: Radius.circular(5),
-                        dashPattern: [10, 5],
+                        options: RoundedRectDottedBorderOptions(
+                          color: PRIMARY_COLOR,
+                          strokeWidth: 3,
+                          radius: Radius.circular(5),
+                          dashPattern: [10, 5],
+                        ),
                         child: SizedBox(
                           width: double.infinity,
                           height: 200,
-                          child:
-                              questions[index]['image'] == null
-                                  ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.image, size: 45),
-                                      Text("Upload Image"),
-                                    ],
-                                  )
-                                  : Image.file(
-                                    questions[index]['image'],
-                                    fit: BoxFit.cover,
-                                    width: 150,
-                                    height: 150,
-                                  ),
+                          child: questions[index]['image'] == null
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.image, size: 45),
+                                    Text("Upload Image"),
+                                  ],
+                                )
+                              : Image.file(
+                                  questions[index]['image'],
+                                  fit: BoxFit.cover,
+                                  width: 150,
+                                  height: 150,
+                                ),
                         ),
                       ),
                     ),
@@ -254,13 +255,12 @@ class _AddQuestionState extends State<AddQuestion> {
                       style: TextStyle(color: Colors.black, fontSize: 16),
                       underline: SizedBox(),
                       alignment: Alignment.centerLeft,
-                      items:
-                          ['Bangla', 'English', 'Math'].map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(item),
-                            );
-                          }).toList(),
+                      items: ['Bangla', 'English', 'Math'].map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
                           questions[index]['subject'] = newValue;
@@ -314,30 +314,26 @@ class _AddQuestionState extends State<AddQuestion> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Column(
-                    children:
-                        questions[index]['options'].map<Widget>((option) {
-                          return Container(
-                            margin: EdgeInsets.only(top: 5),
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: PRIMARY_COLOR,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
+                    children: questions[index]['options'].map<Widget>((option) {
+                      return Container(
+                        margin: EdgeInsets.only(top: 5),
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: PRIMARY_COLOR, width: 1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(option),
+                            IconButton(
+                              icon: Icon(Icons.close, color: Colors.red),
+                              onPressed: () => removeOption(index, option),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(option),
-                                IconButton(
-                                  icon: Icon(Icons.close, color: Colors.red),
-                                  onPressed: () => removeOption(index, option),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
                   SizedBox(height: 10),
                   Container(
@@ -362,10 +358,9 @@ class _AddQuestionState extends State<AddQuestion> {
                       padding: Theme.of(context).insideCardPadding,
                       width: 120,
                       decoration: BoxDecoration(
-                        color:
-                            questions[index]['options'].length < 4
-                                ? PRIMARY_COLOR
-                                : Colors.grey,
+                        color: questions[index]['options'].length < 4
+                            ? PRIMARY_COLOR
+                            : Colors.grey,
                         border: Border.all(width: 1.0),
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -401,16 +396,14 @@ class _AddQuestionState extends State<AddQuestion> {
                                     width: 50,
                                     padding: EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color:
-                                          i == _currentIndex
-                                              ? PRIMARY_COLOR.withOpacity(0.2)
-                                              : null,
+                                      color: i == _currentIndex
+                                          ? PRIMARY_COLOR.withOpacity(0.2)
+                                          : null,
                                       border: Border.all(
                                         width: 2.0,
-                                        color:
-                                            i == _currentIndex
-                                                ? PRIMARY_COLOR
-                                                : Colors.grey,
+                                        color: i == _currentIndex
+                                            ? PRIMARY_COLOR
+                                            : Colors.grey,
                                       ),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
@@ -418,14 +411,12 @@ class _AddQuestionState extends State<AddQuestion> {
                                       child: Text(
                                         (i + 1).toString(),
                                         style: TextStyle(
-                                          fontWeight:
-                                              i == questions.length - 1
-                                                  ? FontWeight.bold
-                                                  : FontWeight.normal,
-                                          color:
-                                              i == _currentIndex
-                                                  ? PRIMARY_COLOR
-                                                  : Colors.black,
+                                          fontWeight: i == questions.length - 1
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                          color: i == _currentIndex
+                                              ? PRIMARY_COLOR
+                                              : Colors.black,
                                         ),
                                       ),
                                     ),
@@ -438,16 +429,15 @@ class _AddQuestionState extends State<AddQuestion> {
                         ElevatedButton(
                           onPressed:
                               questions.length < widget.number_of_questions
-                                  ? addNewQuestion
-                                  : saveToDatabase,
+                              ? addNewQuestion
+                              : saveToDatabase,
                           child: Icon(
                             questions.length < widget.number_of_questions
                                 ? Icons.add
                                 : Icons.save,
-                            color:
-                                questions.length < widget.number_of_questions
-                                    ? Colors.white
-                                    : Colors.red,
+                            color: questions.length < widget.number_of_questions
+                                ? Colors.white
+                                : Colors.red,
                           ),
                         ),
                       ],

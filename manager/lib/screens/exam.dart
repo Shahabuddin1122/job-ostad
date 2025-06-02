@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/api_settings.dart';
-import 'package:job_ostad/utils/constants.dart';
-import 'package:job_ostad/utils/custom_theme.dart';
-import 'package:job_ostad/widgets/exam-card.dart';
+import 'package:manager/utils/api_settings.dart';
+import 'package:manager/utils/constants.dart';
+import 'package:manager/utils/custom_theme.dart';
+import 'package:manager/widgets/exam-card.dart';
 
 class Exam extends StatefulWidget {
   final int id;
@@ -73,24 +73,24 @@ class _ExamState extends State<Exam> {
                 : exams.isEmpty
                 ? Center(child: const Text("No exams available."))
                 : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ...exams.map((exam) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Examcard(
-                          id: exam['quiz_id'].toString(),
-                          desc: exam['description'] ?? '',
-                          date: exam['date'] ?? '',
-                          num_of_question: exam['number_of_questions'],
-                          time: exam['total_time'].toString(),
-                          title: exam['title'] ?? 'No Title',
-                          has_exam_script: exam['has_exam_script'],
-                        ),
-                      );
-                    }).toList(),
-                  ],
-                ),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...exams.map((exam) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Examcard(
+                            id: exam['quiz_id'].toString(),
+                            desc: exam['description'] ?? '',
+                            date: exam['date'] ?? '',
+                            num_of_question: exam['number_of_questions'],
+                            time: exam['total_time'].toString(),
+                            title: exam['title'] ?? 'No Title',
+                            has_exam_script: exam['has_exam_script'],
+                          ),
+                        );
+                      }).toList(),
+                    ],
+                  ),
           ],
         ),
       ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/constants.dart';
+import 'package:manager/utils/constants.dart';
 
 class Booklist extends StatelessWidget {
   final String images, title, desc, writter;
@@ -31,9 +31,8 @@ class Booklist extends StatelessWidget {
               width: 100,
               height: 130,
               fit: BoxFit.cover,
-              errorBuilder:
-                  (context, error, stackTrace) =>
-                      Icon(Icons.broken_image, size: 100),
+              errorBuilder: (context, error, stackTrace) =>
+                  Icon(Icons.broken_image, size: 100),
             ),
           ),
           SizedBox(width: 10),

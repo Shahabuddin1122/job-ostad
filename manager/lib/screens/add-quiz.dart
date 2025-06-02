@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/api_settings.dart';
-import 'package:job_ostad/utils/constants.dart';
-import 'package:job_ostad/utils/custom_theme.dart';
+import 'package:manager/utils/api_settings.dart';
+import 'package:manager/utils/constants.dart';
+import 'package:manager/utils/custom_theme.dart';
 
 class AddQuiz extends StatefulWidget {
   const AddQuiz({super.key});
@@ -193,13 +193,12 @@ class _AddQuizState extends State<AddQuiz> {
                   style: TextStyle(color: Colors.black, fontSize: 16),
                   underline: SizedBox(),
                   alignment: Alignment.centerLeft,
-                  items:
-                      collections.map((collection) {
-                        return DropdownMenuItem<String>(
-                          value: collection['id'].toString(),
-                          child: Text(collection['title']),
-                        );
-                      }).toList(),
+                  items: collections.map((collection) {
+                    return DropdownMenuItem<String>(
+                      value: collection['id'].toString(),
+                      child: Text(collection['title']),
+                    );
+                  }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedCollectionValue = newValue;
@@ -228,13 +227,12 @@ class _AddQuizState extends State<AddQuiz> {
                   style: TextStyle(color: Colors.black, fontSize: 16),
                   underline: SizedBox(),
                   alignment: Alignment.centerLeft,
-                  items:
-                      ['Admin', 'Paid_user', 'Free_user'].map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
+                  items: ['Admin', 'Paid_user', 'Free_user'].map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
                       selectVisiblityValue = newValue;

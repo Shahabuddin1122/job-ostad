@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/constants.dart';
+import 'package:manager/utils/constants.dart';
 
 class MCQWidget extends StatefulWidget {
   final String question;
@@ -47,18 +47,18 @@ class _MCQWidgetState extends State<MCQWidget> {
           ),
           widget.image != null
               ? Container(
-                width: double.maxFinite,
-                height: 200,
-                margin: EdgeInsets.only(top: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(widget.image!, fit: BoxFit.contain),
-                ),
-              )
+                  width: double.maxFinite,
+                  height: 200,
+                  margin: EdgeInsets.only(top: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(widget.image!, fit: BoxFit.contain),
+                  ),
+                )
               : Text(""),
           SizedBox(height: 10),
           ...List.generate(
@@ -86,8 +86,9 @@ class _MCQWidgetState extends State<MCQWidget> {
             width: 20,
             height: 20,
             decoration: BoxDecoration(
-              color:
-                  _selectedIndex == index ? PRIMARY_COLOR : Colors.transparent,
+              color: _selectedIndex == index
+                  ? PRIMARY_COLOR
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(100.0),
               border: Border.all(width: 1.0, color: PRIMARY_COLOR),
             ),
@@ -107,8 +108,9 @@ class _MCQWidgetState extends State<MCQWidget> {
           Text(
             text,
             style: TextStyle(
-              fontWeight:
-                  _selectedIndex == index ? FontWeight.bold : FontWeight.normal,
+              fontWeight: _selectedIndex == index
+                  ? FontWeight.bold
+                  : FontWeight.normal,
             ),
           ),
         ],
