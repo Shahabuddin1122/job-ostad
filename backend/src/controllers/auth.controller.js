@@ -9,12 +9,12 @@ exports.register = async (req, res) => {
     const { phone_number } = req.body;
 
     const existingUser = await User.findOne('phone_number', phone_number);
-    // if (existingUser) {
-    //   return res.status(400).json({ message: "Phone number already in use" });
-    // }
+    if (existingUser) {
+      return res.status(400).json({ message: "Phone number already in use" });
+    }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
-    saveOtp(phone_number, otp);
+    await saveOtp(phone_number, otp);
 
     const smsSent = await send_sms(phone_number, `Your Alpha Net OTP Code is ${otp}`);
     if (!smsSent) {
@@ -31,7 +31,7 @@ exports.verifyOtpAndRegister = async (req, res) => {
   try {
     const { username, email, phone_number, education, password, otp } = req.body;
 
-    if (!verifyOtp(phone_number, otp)) {
+    if (!await verifyOtp(phone_number, otp)) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
 

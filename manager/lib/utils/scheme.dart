@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/appbar_theme_data.dart';
-import 'package:job_ostad/utils/bottom_navigationbar_theme.dart';
-import 'package:job_ostad/utils/constants.dart';
-import 'package:job_ostad/utils/elevated_button_theme.dart';
-import 'package:job_ostad/utils/text_theme.dart';
+import 'package:manager/utils/appbar_theme_data.dart';
+import 'package:manager/utils/bottom_navigationbar_theme.dart';
+import 'package:manager/utils/constants.dart';
+import 'package:manager/utils/elevated_button_theme.dart';
+import 'package:manager/utils/text_theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Scheme {

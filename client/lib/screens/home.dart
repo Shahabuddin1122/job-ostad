@@ -314,7 +314,7 @@ class CategoryCard extends StatelessWidget {
       child: Container(
         padding: Theme.of(context).insideCardPadding,
         decoration: BoxDecoration(
-          color: SECONDARY_COLOR,
+          color: PRIMARY_COLOR,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Center(

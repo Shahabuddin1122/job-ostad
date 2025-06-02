@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/constants.dart';
+import 'package:manager/utils/constants.dart';
 
 class TextThemes {
   TextThemes();

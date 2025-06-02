@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/api_settings.dart';
-import 'package:job_ostad/utils/constants.dart';
-import 'package:job_ostad/utils/custom_theme.dart';
-import 'package:job_ostad/widgets/course-item.dart';
+import 'package:manager/utils/api_settings.dart';
+import 'package:manager/utils/constants.dart';
+import 'package:manager/utils/custom_theme.dart';
+import 'package:manager/widgets/course-item.dart';
 
 class Course extends StatefulWidget {
   final Function(int) onClicked;
@@ -80,26 +80,27 @@ class _CourseState extends State<Course> {
                 : allCourses.isEmpty
                 ? const Text("No courses available.")
                 : GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.9,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.9,
+                        ),
+                    itemCount: allCourses.length,
+                    itemBuilder: (context, index) {
+                      final course = allCourses[index];
+                      return GestureDetector(
+                        onTap: () => widget.onClicked(course['id']),
+                        child: CategoryItem(
+                          imagePath: course['course_image'] ?? '',
+                          title: course['title'] ?? 'No Title',
+                        ),
+                      );
+                    },
                   ),
-                  itemCount: allCourses.length,
-                  itemBuilder: (context, index) {
-                    final course = allCourses[index];
-                    return GestureDetector(
-                      onTap: () => widget.onClicked(course['id']),
-                      child: CategoryItem(
-                        imagePath: course['course_image'] ?? '',
-                        title: course['title'] ?? 'No Title',
-                      ),
-                    );
-                  },
-                ),
           ],
         ),
       ),

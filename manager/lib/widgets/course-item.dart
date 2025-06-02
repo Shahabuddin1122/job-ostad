@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/constants.dart';
+import 'package:manager/utils/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CategoryItem extends StatelessWidget {
@@ -72,39 +72,38 @@ class CategoryItem extends StatelessWidget {
                   print("View selected");
                 }
               },
-              itemBuilder:
-                  (BuildContext context) => [
-                    const PopupMenuItem(
-                      value: 'view',
-                      child: Row(
-                        children: [
-                          Icon(Icons.visibility, color: Colors.black),
-                          SizedBox(width: 8),
-                          Text("View"),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Row(
-                        children: [
-                          Icon(Icons.edit, color: Colors.blue),
-                          SizedBox(width: 8),
-                          Text("Edit"),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: Row(
-                        children: [
-                          Icon(Icons.delete, color: Colors.red),
-                          SizedBox(width: 8),
-                          Text("Delete"),
-                        ],
-                      ),
-                    ),
-                  ],
+              itemBuilder: (BuildContext context) => [
+                const PopupMenuItem(
+                  value: 'view',
+                  child: Row(
+                    children: [
+                      Icon(Icons.visibility, color: Colors.black),
+                      SizedBox(width: 8),
+                      Text("View"),
+                    ],
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 'edit',
+                  child: Row(
+                    children: [
+                      Icon(Icons.edit, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text("Edit"),
+                    ],
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 'delete',
+                  child: Row(
+                    children: [
+                      Icon(Icons.delete, color: Colors.red),
+                      SizedBox(width: 8),
+                      Text("Delete"),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ],

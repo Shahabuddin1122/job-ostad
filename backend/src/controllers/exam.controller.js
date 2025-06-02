@@ -50,3 +50,49 @@ exports.get_question = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal server error.' });
     }
 };
+
+exports.update_or_add_questions = async (req, res) => {
+    try {
+        const { quiz_id } = req.body;
+        let questions = JSON.parse(req.body.questions);
+
+        if (!quiz_id) {
+            return res.status(400).json({ success: false, message: "quiz_id is required" });
+        }
+
+        if (!Array.isArray(questions) || questions.length === 0) {
+            return res.status(400).json({ success: false, message: "questions array is required" });
+        }
+
+        // Upload images if any
+        if (req.files && req.files.length > 0) {
+            for (let i = 0; i < questions.length; i++) {
+                if (req.files[i]) {
+                    const uploadedImage = await imgbb(req.files[i]);
+                    questions[i].image = uploadedImage.url;
+                }
+            }
+        }
+
+        const exam_script_id = await Question.getExamScriptIdByQuizId(quiz_id);
+
+        if (!exam_script_id) {
+            return res.status(404).json({ success: false, message: "No exam_script found for this quiz" });
+        }
+
+        for (const q of questions) {
+            if (q.id) {
+                // Existing question → Update
+                await Question.updateQuestion(q);
+            } else {
+                // New question → Add
+                await Question.addSingleQuestion(exam_script_id, q);
+            }
+        }
+
+        res.status(200).json({ success: true, message: "Questions processed successfully" });
+    } catch (error) {
+        console.error("Error updating/adding questions:", error);
+        res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    }
+};

@@ -7,9 +7,9 @@ class TBottomNavigationBarTheme {
   // Light Theme
   static final BottomNavigationBarThemeData lightBottomNavigationBarTheme =
       BottomNavigationBarThemeData(
-        backgroundColor: SECONDARY_BACKGROUND,
+        backgroundColor: PRIMARY_COLOR,
         selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
         showSelectedLabels: true,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,

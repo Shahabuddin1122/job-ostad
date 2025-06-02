@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:job_ostad/utils/api_settings.dart';
-import 'package:job_ostad/utils/constants.dart';
-import 'package:job_ostad/utils/custom_theme.dart';
+import 'package:manager/utils/api_settings.dart';
+import 'package:manager/utils/constants.dart';
+import 'package:manager/utils/custom_theme.dart';
 
 class AddCourse extends StatefulWidget {
   const AddCourse({super.key});
@@ -96,28 +96,29 @@ class _AddCourseState extends State<AddCourse> {
                 onTap: pickImage,
                 child: Center(
                   child: DottedBorder(
-                    color: PRIMARY_COLOR,
-                    strokeWidth: 3,
-                    radius: Radius.circular(5),
-                    dashPattern: [10, 5],
+                    options: RoundedRectDottedBorderOptions(
+                      color: PRIMARY_COLOR,
+                      strokeWidth: 3,
+                      radius: Radius.circular(5),
+                      dashPattern: [10, 5],
+                    ),
                     child: SizedBox(
                       width: double.infinity,
                       height: 200,
-                      child:
-                          imageFile == null
-                              ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.image, size: 45),
-                                  Text("Upload Image"),
-                                ],
-                              )
-                              : Image.file(
-                                imageFile!,
-                                fit: BoxFit.cover,
-                                width: 150,
-                                height: 150,
-                              ),
+                      child: imageFile == null
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.image, size: 45),
+                                Text("Upload Image"),
+                              ],
+                            )
+                          : Image.file(
+                              imageFile!,
+                              fit: BoxFit.cover,
+                              width: 150,
+                              height: 150,
+                            ),
                     ),
                   ),
                 ),
@@ -177,15 +178,14 @@ class _AddCourseState extends State<AddCourse> {
                   style: TextStyle(color: Colors.black, fontSize: 16),
                   underline: SizedBox(),
                   alignment: Alignment.centerLeft,
-                  items:
-                      ['BCS', 'Bank', 'Job Preparation', 'Primary'].map((
-                        String item,
-                      ) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
+                  items: ['BCS', 'Bank', 'Job Preparation', 'Primary'].map((
+                    String item,
+                  ) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedValue = newValue;

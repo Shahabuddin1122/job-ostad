@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:job_ostad/models/top-user.dart';
-import 'package:job_ostad/models/user.dart';
-import 'package:job_ostad/utils/custom_theme.dart';
+import 'package:manager/models/top-user.dart';
+import 'package:manager/models/user.dart';
+import 'package:manager/utils/custom_theme.dart';
 
 class User extends StatelessWidget {
   const User({super.key});

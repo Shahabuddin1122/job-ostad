@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:job_ostad/utils/constants.dart';
+import 'package:manager/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
