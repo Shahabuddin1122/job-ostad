@@ -40,6 +40,16 @@ const Quiz = {
         return results.rows;
     },
 
+    async findById(id){
+        const query = `
+            SELECT * FROM quiz 
+            WHERE id = $1;
+        `;
+        const values = [id]
+        const results = await pool.query(query, values)
+        return results.rows[0];
+    },
+
     async getAllQuizByCourseID(id) {
         const query = `
         SELECT  

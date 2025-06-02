@@ -4,7 +4,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:admin/utils/api_settings.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/utils/custom_theme.dart';
 
@@ -247,6 +246,7 @@ class _AddQuestionState extends State<AddQuestion> {
                       ),
                     ),
                     child: DropdownButton<String>(
+                      isExpanded: true,
                       hint: Text(
                         'Select Subject',
                         style: TextStyle(fontSize: 16, color: Colors.black),
@@ -255,12 +255,36 @@ class _AddQuestionState extends State<AddQuestion> {
                       style: TextStyle(color: Colors.black, fontSize: 16),
                       underline: SizedBox(),
                       alignment: Alignment.centerLeft,
-                      items: ['Bangla', 'English', 'Math'].map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
+                      items:
+                          [
+                            'Bangla Language and Literature',
+                            'English Language and Literature',
+                            'Bangladesh Affairs',
+                            'International Affairs',
+                            'Geography (Bangladesh and World), Environment and Disaster Management',
+                            'General Science',
+                            'Computer and Information Technology',
+                            'Mathematical Reasoning',
+                            'Mental Ability',
+                            'Ethics, Values and Good Governance',
+                          ].map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Container(
+                                width: double.infinity,
+                                child: Text(
+                                  item,
+                                  softWrap: true,
+                                  overflow: TextOverflow.visible,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
                           questions[index]['subject'] = newValue;

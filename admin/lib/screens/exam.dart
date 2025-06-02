@@ -86,6 +86,7 @@ class _ExamState extends State<Exam> {
                             time: exam['total_time'].toString(),
                             title: exam['title'] ?? 'No Title',
                             has_exam_script: exam['has_exam_script'],
+                            onDelete: fetchExams,
                           ),
                         );
                       }).toList(),

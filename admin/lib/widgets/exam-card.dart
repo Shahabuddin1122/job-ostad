@@ -1,3 +1,4 @@
+import 'package:admin/utils/api_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/utils/custom_theme.dart';
@@ -7,6 +8,7 @@ class Examcard extends StatelessWidget {
   final String id, title, desc, time, date;
   final int num_of_question;
   final bool has_exam_script;
+  final VoidCallback onDelete;
   const Examcard({
     required this.id,
     required this.desc,
@@ -16,7 +18,32 @@ class Examcard extends StatelessWidget {
     required this.has_exam_script,
     required this.date,
     super.key,
+    required this.onDelete,
   });
+
+  Future<void> _deleteCourse(BuildContext context) async {
+    ApiSettings apiSettings = ApiSettings(endPoint: 'quiz/delete-quiz/$id');
+
+    try {
+      final response = await apiSettings.deleteMethod();
+      if (response.statusCode == 200) {
+        onDelete();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Exam deleted successfully')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to delete course: ${response.statusCode}'),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +100,7 @@ class Examcard extends StatelessWidget {
                       has_exam_script
                           ? ElevatedButton(
                               onPressed: () {},
-                              child: Text("Update"),
+                              child: Text("Update Quiz"),
                             )
                           : Text(''),
                       ElevatedButton(
@@ -99,7 +126,31 @@ class Examcard extends StatelessWidget {
             ),
           ],
         ),
-        Positioned(right: 10, top: 40, child: Icon(Icons.close)),
+        Positioned(
+          right: 0,
+          top: 30,
+          child: PopupMenuButton<String>(
+            icon: Icon(Icons.more_vert),
+            onSelected: (value) {
+              if (value == 'edit') {
+                Navigator.pushNamed(
+                  context,
+                  '/add-quiz',
+                  arguments: {'callbackQuizId': id.toString()},
+                );
+              } else if (value == 'delete') {
+                _deleteCourse(context);
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(value: 'edit', child: Text('Edit')),
+              const PopupMenuItem<String>(
+                value: 'delete',
+                child: Text('Delete'),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

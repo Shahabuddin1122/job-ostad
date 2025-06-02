@@ -40,7 +40,22 @@ exports.get_quiz_by_category = async (req, res)=>{
 
         const quizItem = await Quiz.findByCategory(category)
         res.json({
-            message: "Quiz created successfully",
+            message: "Successfully Fetched",
+            data: quizItem
+        });
+    }
+    catch (error) {
+        res.status(500).json({"message": "Server error", error: error.message});
+    }
+}
+
+exports.get_quiz_by_id = async (req, res)=>{
+    try {
+        const { quizId } = req.params
+
+        const quizItem = await Quiz.findById(quizId)
+        res.json({
+            message: "Successfully fetched",
             data: quizItem
         });
     }
