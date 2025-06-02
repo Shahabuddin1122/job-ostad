@@ -95,8 +95,10 @@ class _CourseState extends State<Course> {
                       return GestureDetector(
                         onTap: () => widget.onClicked(course['id']),
                         child: CategoryItem(
+                          courseId: course['id'].toString(),
                           imagePath: course['course_image'] ?? '',
                           title: course['title'] ?? 'No Title',
+                          onDelete: fetchCourses,
                         ),
                       );
                     },
