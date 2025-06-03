@@ -99,7 +99,13 @@ class Examcard extends StatelessWidget {
                     children: [
                       has_exam_script
                           ? ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/add-question',
+                                  arguments: [id, num_of_question],
+                                );
+                              },
                               child: Text("Update Quiz"),
                             )
                           : Text(''),
