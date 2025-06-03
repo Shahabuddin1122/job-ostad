@@ -40,6 +40,7 @@ exports.get_question = async (req, res) => {
             id: row.question_id,
             question: row.question,
             options: row.options,
+            answer: row.answer,
             image: row.image,
             subject: row.subject
         }));
