@@ -246,7 +246,6 @@ class _AddQuestionState extends State<AddQuestion> {
         'questions': jsonEncode(questionsData),
       };
 
-      // Use first image (as per cURL)
       File? imageFile = questionImages.isNotEmpty ? questionImages.first : null;
 
       // Send request
