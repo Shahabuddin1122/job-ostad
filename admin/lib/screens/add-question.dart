@@ -206,62 +206,50 @@ class _AddQuestionState extends State<AddQuestion> {
     });
 
     try {
-      // Prepare questions data
-      List<Map<String, dynamic>> questionsData = questions.map((q) {
-        return {
+      List<File> imageFiles = [];
+      List<Map<String, dynamic>> questionsData = [];
+
+      for (int i = 0; i < questions.length; i++) {
+        Map<String, dynamic> q = questions[i];
+        Map<String, dynamic> qData = {
           'id': q['id'],
           'question': q['question'],
           'answer': q['answer'],
           'options': q['options'] ?? <String>[],
           'subject': q['subject'],
         };
-      }).toList();
 
-      // Collect images
-      List<File> questionImages = questions
-          .where((q) => q['image'] != null && q['image'] is File)
-          .map((q) => q['image'] as File)
-          .toList();
+        if (q['image'] != null && q['image'] is File) {
+          qData['imageIndex'] = imageFiles.length;
+          imageFiles.add(q['image'] as File);
+        }
 
-      // Decide whether to create or update based on _hasFetchedQuestions
-      ApiSettings apiSettings;
-      String method;
-      int expectedStatusCode;
-
-      if (_hasFetchedQuestions) {
-        // Update questions (existing and new) using PUT
-        apiSettings = ApiSettings(endPoint: 'exam/update-question');
-        method = 'PUT';
-        expectedStatusCode = 200;
-      } else {
-        // Create new questions using POST
-        apiSettings = ApiSettings(endPoint: 'exam/create-question');
-        method = 'POST';
-        expectedStatusCode = 201;
+        questionsData.add(qData);
       }
 
-      // Prepare fields
-      Map<String, String> fields = {
+      final isUpdate = _hasFetchedQuestions;
+      final apiSettings = ApiSettings(
+        endPoint: isUpdate ? 'exam/update-question' : 'exam/create-question',
+      );
+
+      final fields = {
         'quiz_id': widget.id,
         'questions': jsonEncode(questionsData),
       };
 
-      File? imageFile = questionImages.isNotEmpty ? questionImages.first : null;
-
-      // Send request
-      final response = await (method == 'POST'
-          ? apiSettings.postMultipartMethod(
+      final response = await (isUpdate
+          ? apiSettings.putMultipartMethodWithImages(
               fields: fields,
-              book_image: imageFile,
+              images: imageFiles,
             )
-          : apiSettings.putMultipartMethod(
+          : apiSettings.postMultipartMethodWithImages(
               fields: fields,
-              book_image: imageFile,
+              images: imageFiles,
             ));
 
       final responseBody = await response.stream.bytesToString();
 
-      if (response.statusCode == expectedStatusCode) {
+      if (response.statusCode == (isUpdate ? 200 : 201)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Questions saved successfully!")),
         );
@@ -271,7 +259,7 @@ class _AddQuestionState extends State<AddQuestion> {
         Navigator.popAndPushNamed(context, '/');
       } else {
         throw Exception(
-          'Failed to ${method == 'POST' ? 'create' : 'update'} questions: $responseBody',
+          'Failed to ${isUpdate ? 'update' : 'create'} questions: $responseBody',
         );
       }
     } catch (e) {
