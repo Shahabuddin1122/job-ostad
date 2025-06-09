@@ -82,22 +82,24 @@ exports.update_or_add_questions = async (req, res) => {
     let questions = JSON.parse(req.body.questions);
 
     if (!quiz_id) {
-      return res
-        .status(400)
-        .json({ success: false, message: "quiz_id is required" });
+      return res.status(400).json({ success: false, message: "quiz_id is required" });
     }
 
     if (!Array.isArray(questions) || questions.length === 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "questions array is required" });
+      return res.status(400).json({ success: false, message: "questions array is required" });
     }
 
-    // Upload images if any
-    if (req.files && req.files.length > 0) {
-      for (let i = 0; i < questions.length; i++) {
-        if (req.files[i]) {
-          const uploadedImage = await imgbb(req.files[i]);
+    const imageFiles = req.files || [];
+
+    for (let i = 0; i < questions.length; i++) {
+      const imageIndex = questions[i].imageIndex;
+
+      if (imageIndex !== undefined && imageIndex !== null) {
+        const fieldName = `images[${imageIndex}]`;
+        const matchedFile = imageFiles.find(file => file.fieldname === fieldName);
+
+        if (matchedFile) {
+          const uploadedImage = await imgbb(matchedFile); // Upload to imgbb
           questions[i].image = uploadedImage.url;
         }
       }
@@ -114,17 +116,13 @@ exports.update_or_add_questions = async (req, res) => {
 
     for (const q of questions) {
       if (q.id) {
-        // Existing question → Update
-        await Question.updateQuestion(q);
+        await Question.updateQuestion(q); // Existing question
       } else {
-        // New question → Add
-        await Question.addSingleQuestion(exam_script_id, q);
+        await Question.addSingleQuestion(exam_script_id, q); // New question
       }
     }
 
-    res
-      .status(200)
-      .json({ success: true, message: "Questions processed successfully" });
+    res.status(200).json({ success: true, message: "Questions processed successfully" });
   } catch (error) {
     console.error("Error updating/adding questions:", error);
     res.status(500).json({
