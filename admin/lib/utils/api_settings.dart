@@ -187,4 +187,72 @@ class ApiSettings {
       throw Exception("Multipart upload failed: $e");
     }
   }
+
+  Future<http.StreamedResponse> postMultipartMethodWithImages({
+    required Map<String, String> fields,
+    required List<File> images,
+  }) async {
+    try {
+      String? token = await _getToken();
+
+      var uriObj = Uri.parse(uri);
+      var request = http.MultipartRequest('POST', uriObj);
+
+      if (token != null) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
+
+      request.fields.addAll(fields);
+
+      for (int i = 0; i < images.length; i++) {
+        final file = images[i];
+        final fileName = file.path.split('/').last;
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'images[$i]',
+            file.path,
+            filename: fileName,
+          ),
+        );
+      }
+
+      return await request.send();
+    } catch (e) {
+      throw Exception("Multipart upload failed: $e");
+    }
+  }
+
+  Future<http.StreamedResponse> putMultipartMethodWithImages({
+    required Map<String, String> fields,
+    required List<File> images,
+  }) async {
+    try {
+      String? token = await _getToken();
+
+      var uriObj = Uri.parse(uri);
+      var request = http.MultipartRequest('PUT', uriObj);
+
+      if (token != null) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
+
+      request.fields.addAll(fields);
+
+      for (int i = 0; i < images.length; i++) {
+        final file = images[i];
+        final fileName = file.path.split('/').last;
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'images[$i]',
+            file.path,
+            filename: fileName,
+          ),
+        );
+      }
+
+      return await request.send();
+    } catch (e) {
+      throw Exception("Multipart upload failed: $e");
+    }
+  }
 }
